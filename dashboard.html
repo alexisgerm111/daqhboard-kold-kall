@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kold Kall — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #EEF1F6;
+            --surface: #FFFFFF;
+            --surface-2: #F5F7FA;
+            --border: #E2E7EF;
+            --border-2: #D0D7E3;
+            --blue: #1D4ED8;
+            --blue-light: #EFF4FF;
+            --blue-mid: #DBEAFE;
+            --green: #059669;
+            --green-light: #ECFDF5;
+            --amber: #D97706;
+            --amber-light: #FFFBEB;
+            --red: #DC2626;
+            --red-light: #FEF2F2;
+            --purple: #7C3AED;
+            --purple-light: #F5F3FF;
+            --text-1: #0F172A;
+            --text-2: #334155;
+            --text-3: #64748B;
+            --text-4: #94A3B8;
+            --sidebar-w: 220px;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+            --shadow-md: 0 4px 12px rgba(15,23,42,0.08), 0 2px 4px rgba(15,23,42,0.04);
+        }
+        html { font-size: 14px; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text-1);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* ─── LOGIN SCREEN ────────────────────────────── */
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .login-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            padding: 32px 28px;
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .login-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-1);
+        }
+        .login-sub {
+            font-size: 13px;
+            color: var(--text-3);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .input-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-3);
+        }
+        .input-field {
+            padding: 10px 14px;
+            border: 1px solid var(--border-2);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.15s;
+            font-family: 'Inter', sans-serif;
+        }
+        .input-field:focus {
+            border-color: var(--blue);
+        }
+        .login-btn {
+            padding: 10px 16px;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .login-btn:hover {
+            background: #1E40AF;
+        }
+        .error-msg {
+            color: var(--red);
+            font-size: 12px;
+            text-align: center;
+            display: none;
+        }
+        /* ─── SIDEBAR ────────────────────────────────── */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--text-1);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 14px 0 18px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            gap: 4px;
+        }
+        .sidebar-logo {
+            width: 32px;
+            height: 32px;
+            background: var(--blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            flex-shrink: 0;
+        }
+        .sidebar-logo svg { width: 18px; height: 18px; }
+        .sb-icon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            color: #94A3B8;
+            background: transparent;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: left;
+            margin: 0 8px;
+        }
+        .sb-icon:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .sb-icon.active { background: rgba(29,78,216,0.3); color: #60A5FA; }
+        .sb-icon svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .sidebar-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 16px; }
+        .sidebar-spacer { flex: 1; }
+        .sb-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+        .user-info {
+            color: #fff;
+            font-size: 11px;
+            text-align: center;
+            padding: 0 12px;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-role {
+            color: #94A3B8;
+            font-size: 10px;
+            text-align: center;
+        }
+        /* ─── MAIN ────────────────────────────────────── */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            height: 100vh;
+        }
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 16px; }
+        .team-name { font-size: 13px; font-weight: 600; color: var(--text-1); }
+        .topbar-right { display: flex; align-items: center; gap: 8px; }
+        .launch-btn {
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .launch-btn:hover { background: #1E40AF; }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border-2);
+            color: var(--text-2);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-ghost:hover { background: var(--bg); }
+        /* ─── CONTENT ─────────────────────────────────── */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-1);
+        }
+        .sim-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sim-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: box-shadow 0.15s, transform 0.15s;
+        }
+        .sim-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        .sim-info { display: flex; flex-direction: column; gap: 4px; }
+        .sim-date { font-size: 12px; color: var(--text-3); }
+        .sim-type { font-size: 13px; font-weight: 500; color: var(--text-1); }
+        .sim-meta { display: flex; align-items: center; gap: 12px; }
+        .sim-duration { font-size: 12px; color: var(--text-3); }
+        .sim-note { font-weight: 600; font-size: 14px; padding: 2px 8px; border-radius: 6px; }
+        .sim-note.high { background: var(--green-light); color: var(--green); }
+        .sim-note.medium { background: var(--amber-light); color: var(--amber); }
+        .sim-note.low { background: var(--red-light); color: var(--red); }
+        .filter-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .filter-select {
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-2);
+            background: var(--surface);
+            font-size: 12px;
+            color: var(--text-2);
+            outline: none;
+        }
+        /* ─── RANKING ────────────────────────────────── */
+        .ranking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .rank-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .rank-position {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--blue-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--blue);
+            flex-shrink: 0;
+        }
+        .rank-name { font-weight: 500; font-size: 13px; }
+        .rank-note { font-size: 12px; color: var(--text-3); }
+        /* ─── MODAL ──────────────────────────────────── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            width: 700px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; }
+        .modal-title { font-size: 16px; font-weight: 600; }
+        .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-3); }
+        .transcript-line { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--surface-2); }
+        .transcript-speaker { font-weight: 600; width: 100px; flex-shrink: 0; font-size: 12px; }
+        .transcript-text { font-size: 13px; line-height: 1.5; color: var(--text-2); }
+        .bilan-section { background: var(--surface-2); border-radius: var(--radius-sm); padding: 12px; }
+        .bilan-title { font-weight: 600; margin-bottom: 6px; }
+        .bilan-item { font-size: 13px; margin-bottom: 4px; }
+        /* ─── RESPONSIVE ─────────────────────────────── */
+        @media (max-width: 768px) {
+            :root { --sidebar-w: 64px; }
+            .sb-icon span { display: none; }
+            .user-info, .user-role { display: none; }
+            .main { margin-left: var(--sidebar-w); }
+            .content { padding: 10px; }
+        }
+        @media (max-width: 480px) {
+            .sim-card { flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="login-title">Kold Kall Dashboard</div>
+            <div class="login-sub">Connexion à votre espace</div>
+            <div class="input-group">
+                <label class="input-label">Email</label>
+                <input type="email" class="input-field" id="emailInput" placeholder="vous@exemple.com">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Mot de passe</label>
+                <input type="password" class="input-field" id="passwordInput" placeholder="••••••••">
+            </div>
+            <div class="error-msg" id="errorMsg">Email ou mot de passe invalide.</div>
+            <button class="login-btn" id="loginBtn">Se connecter</button>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar" style="display:none;">
+        <div class="sidebar-logo">
+            <svg viewBox="0 0 18 18" fill="none"><path d="M9 2L15 5.5V12.5L9 16L3 12.5V5.5L9 2Z" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.15)"/><circle cx="9" cy="9" r="2.5" fill="white"/></svg>
+        </div>
+        <div class="sb-icon active" data-view="simulations">
+            <svg viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 6h6M6 9h6M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>Simulations</span>
+        </div>
+        <div class="sb-icon" data-view="ranking">
+            <svg viewBox="0 0 18 18" fill="none"><path d="M3 15V8M7 15V5M11 15v-3M15 15V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M2 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>Classement</span>
+        </div>
+        <div class="sidebar-divider"></div>
+        <div class="sb-icon" id="logoutBtn">
+            <svg viewBox="0 0 18 18" fill="none"><path d="M7 4H3v10h4M9 9h6M12 6l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Déconnexion</span>
+        </div>
+        <div class="sidebar-spacer"></div>
+        <div class="user-info" id="sidebarUserEmail"></div>
+        <div class="user-role" id="sidebarUserRole"></div>
+        <div class="sb-avatar" id="sidebarAvatar">?</div>
+    </nav>
+
+    <!-- MAIN -->
+    <div class="main" style="display:none;" id="mainApp">
+        <header class="topbar">
+            <div class="topbar-left">
+                <span class="team-name" id="teamName">Kold Kall</span>
+            </div>
+            <div class="topbar-right">
+                <button class="launch-btn" id="launchSimBtn">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 2.5l7 3.5-7 3.5V2.5z" fill="white"/></svg>
+                    Lancer une simulation
+                </button>
+                <button class="btn-ghost" id="refreshBtn">🔄 Actualiser</button>
+            </div>
+        </header>
+        <main class="content" id="mainContent">
+            <!-- Rendu dynamique -->
+        </main>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Détail de la simulation</div>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Contenu dynamique -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ CLÉS SUPABASE INTÉGRÉES
+        const SUPABASE_URL = 'https://vjvyzbojcbwmfudkamlh.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqdnl6Ym9qY2J3bWZ1ZGthbWxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTM4MTUsImV4cCI6MjEwMjM4OTgxNX0.KR15ycHhUw0pEUmdR6aFZF_7i6G8_Q1PlJKXruetVaI';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+        let currentProfile = null;
+        let currentView = 'simulations';
+        let selectedUserId = null; // pour le directeur
+
+        // ─── HELPERS ────────────────────────────────────
+        function showLogin(show) {
+            document.getElementById('loginScreen').style.display = show ? 'flex' : 'none';
+            document.getElementById('sidebar').style.display = show ? 'none' : 'flex';
+            document.getElementById('mainApp').style.display = show ? 'none' : 'flex';
+        }
+
+        function showError(msg) {
+            const err = document.getElementById('errorMsg');
+            err.style.display = msg ? 'block' : 'none';
+            err.textContent = msg || '';
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function formatDuration(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+            return `${min} min ${sec}s`;
+        }
+
+        function getNoteClass(note) {
+            if (note >= 80) return 'high';
+            if (note >= 60) return 'medium';
+            return 'low';
+        }
+
+        function getInitials(nom, prenom) {
+            return (prenom?.[0] || '') + (nom?.[0] || '');
+        }
+
+        // ─── AUTHENTIFICATION ───────────────────────────
+        async function handleLogin() {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            if (!email || !password) {
+                showError('Veuillez remplir tous les champs.');
+                return;
+            }
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                showError(error.message);
+                return;
+            }
+
+            currentUser = data.user;
+            await loadProfile();
+        }
+
+        async function loadProfile() {
+            const { data: profile, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .single();
+
+            if (error || !profile) {
+                console.error('Erreur chargement profil:', error);
+                showError('Profil introuvable.');
+                await supabase.auth.signOut();
+                showLogin(true);
+                return;
+            }
+
+            currentProfile = profile;
+            showLogin(false);
+            updateSidebar();
+            loadView('simulations');
+        }
+
+        function updateSidebar() {
+            document.getElementById('sidebarUserEmail').textContent = currentUser.email;
+            document.getElementById('sidebarUserRole').textContent = currentProfile.role === 'commercial' ? 'Commercial' : 'Directeur';
+            document.getElementById('sidebarAvatar').textContent = getInitials(currentProfile.nom, currentProfile.prenom);
+            document.getElementById('teamName').textContent = currentProfile.role === 'directeur' ? 'Vue Directeur' : 'Vue Commercial';
+        }
+
+        async function handleLogout() {
+            await supabase.auth.signOut();
+            currentUser = null;
+            currentProfile = null;
+            selectedUserId = null;
+            showLogin(true);
+        }
+
+        // ─── NAVIGATION ────────────────────────────────
+        document.querySelectorAll('.sb-icon[data-view]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentView = btn.dataset.view;
+                document.querySelectorAll('.sb-icon').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                loadView(currentView);
+            });
+        });
+
+        async function loadView(view) {
+            const content = document.getElementById('mainContent');
+            if (view === 'simulations') {
+                await loadSimulationsView(content);
+            } else if (view === 'ranking') {
+                await loadRankingView(content);
+            }
+        }
+
+        // ─── VUE SIMULATIONS ───────────────────────────
+        async function loadSimulationsView(container) {
+            container.innerHTML = '<div>Chargement...</div>';
+            let query = supabase.from('simulations').select(`
+                *,
+                bilans ( note_globale ),
+                profiles ( nom, prenom )
+            `).order('created_at', { ascending: false });
+
+            if (currentProfile.role === 'commercial') {
+                query = query.eq('user_id', currentUser.id);
+            } else if (currentProfile.role === 'directeur') {
+                // Le directeur voit tout, mais on peut filtrer plus tard
+            }
+
+            const { data: simulations, error } = await query;
+            if (error) {
+                container.innerHTML = `<div>Erreur: ${error.message}</div>`;
+                return;
+            }
+
+            if (simulations.length === 0) {
+                container.innerHTML = '<div>Aucune simulation pour le moment.</div>';
+                return;
+            }
+
+            let html = '<div class="section-header"><div class="section-title">Simulations récentes</div></div>';
+            html += '<div class="sim-list">';
+            simulations.forEach(sim => {
+                const note = sim.bilans?.[0]?.note_globale;
+                const noteClass = note !== undefined ? getNoteClass(note) : 'medium';
+                const noteDisplay = note !== undefined ? `${note}/100` : 'N/A';
+                const userLabel = currentProfile.role === 'directeur' ? ` — ${sim.profiles?.prenom} ${sim.profiles?.nom}` : '';
+                html += `
+                    <div class="sim-card" data-simid="${sim.id}">
+                        <div class="sim-info">
+                            <div class="sim-type">${sim.type_scenario || 'Simulation'}${userLabel}</div>
+                            <div class="sim-date">${formatDate(sim.created_at)}</div>
+                        </div>
+                        <div class="sim-meta">
+                            <span class="sim-duration">${formatDuration(sim.duree_secondes || 0)}</span>
+                            <span class="sim-note ${noteClass}">${noteDisplay}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+
+            // Attacher les événements de clic
+            document.querySelectorAll('.sim-card').forEach(card => {
+                card.addEventListener('click', () => openSimDetail(card.dataset.simid));
+            });
+        }
+
+        async function openSimDetail(simId) {
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalBody = document.getElementById('modalBody');
+            const modalTitle = document.getElementById('modalTitle');
+            modalTitle.textContent = 'Détail de la simulation';
+            modalBody.innerHTML = '<div>Chargement...</div>';
+            modalOverlay.classList.add('active');
+
+            // Charger la simulation + transcription + bilan
+            const { data: sim, error: simError } = await supabase
+                .from('simulations')
+                .select('*')
+                .eq('id', simId)
+                .single();
+
+            if (simError) {
+                modalBody.innerHTML = `<div>Erreur: ${simError.message}</div>`;
+                return;
+            }
+
+            const { data: transcriptions, error: transError } = await supabase
+                .from('transcriptions')
+                .select('*')
+                .eq('simulation_id', simId)
+                .order('horodatage_secondes', { ascending: true });
+
+            if (transError) {
+                modalBody.innerHTML = `<div>Erreur transcription: ${transError.message}</div>`;
+                return;
+            }
+
+            const { data: bilan, error: bilanError } = await supabase
+                .from('bilans')
+                .select('*')
+                .eq('simulation_id', simId)
+                .single();
+
+            let html = '<div>';
+            html += `<p><strong>Type:</strong> ${sim.type_scenario}</p>`;
+            html += `<p><strong>Durée:</strong> ${formatDuration(sim.duree_secondes || 0)}</p>`;
+            html += `<p><strong>Statut:</strong> ${sim.statut}</p>`;
+            if (sim.url_audio) {
+                html += `<p><audio controls src="${sim.url_audio}"></audio></p>`;
+            } else {
+                html += '<p><em>Audio non disponible</em></p>';
+            }
+            html += '<hr>';
+            html += '<div class="bilan-section">';
+            html += '<div class="bilan-title">Bilan</div>';
+            if (bilan) {
+                html += `<div class="bilan-item"><strong>Note globale:</strong> ${bilan.note_globale ?? 'N/A'}/100</div>`;
+                html += `<div class="bilan-item"><strong>Points positifs:</strong> ${bilan.points_positifs || 'Aucun'}</div>`;
+                html += `<div class="bilan-item"><strong>Points négatifs:</strong> ${bilan.points_negatifs || 'Aucun'}</div>`;
+                html += `<div class="bilan-item"><strong>Conseils:</strong> ${bilan.conseils || 'Aucun'}</div>`;
+            } else {
+                html += '<p>Aucun bilan pour cette simulation.</p>';
+            }
+            html += '</div>';
+            html += '<hr>';
+            html += '<div class="bilan-title">Transcription</div>';
+            if (transcriptions.length === 0) {
+                html += '<p>Aucune transcription disponible.</p>';
+            } else {
+                transcriptions.forEach(line => {
+                    const speaker = line.locuteur === 'commercial' ? 'Commercial' : 'IA';
+                    html += `
+                        <div class="transcript-line">
+                            <div class="transcript-speaker">${speaker}</div>
+                            <div class="transcript-text">${line.texte}</div>
+                        </div>
+                    `;
+                });
+            }
+            html += '</div>';
+
+            modalBody.innerHTML = html;
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // ─── VUE CLASSEMENT ────────────────────────────
+        async function loadRankingView(container) {
+            container.innerHTML = '<div>Chargement...</div>';
+            // Classement global basé sur les notes moyennes des simulations de chaque utilisateur
+            const { data: sims, error } = await supabase
+                .from('simulations')
+                .select(`
+                    user_id,
+                    bilans ( note_globale ),
+                    profiles ( nom, prenom )
+                `);
+
+            if (error) {
+                container.innerHTML = `<div>Erreur: ${error.message}</div>`;
+                return;
+            }
+
+            // Calculer moyenne par utilisateur
+            const userStats = {};
+            sims.forEach(sim => {
+                const uid = sim.user_id;
+                if (!userStats[uid]) {
+                    userStats[uid] = { total: 0, count: 0, profile: sim.profiles };
+                }
+                const note = sim.bilans?.[0]?.note_globale;
+                if (note !== undefined) {
+                    userStats[uid].total += note;
+                    userStats[uid].count++;
+                }
+            });
+
+            const ranking = Object.keys(userStats).map(uid => {
+                const stats = userStats[uid];
+                const avg = stats.count > 0 ? Math.round(stats.total / stats.count) : 0;
+                return { uid, avg, profile: stats.profile };
+            }).sort((a, b) => b.avg - a.avg);
+
+            let html = '<div class="section-header"><div class="section-title">Classement global</div></div>';
+            html += '<div class="ranking-grid">';
+            if (ranking.length === 0) {
+                html += '<p>Aucune donnée de classement.</p>';
+            } else {
+                ranking.forEach((item, index) => {
+                    const name = item.profile ? `${item.profile.prenom} ${item.profile.nom}` : 'Utilisateur';
+                    html += `
+                        <div class="rank-card">
+                            <div class="rank-position">${index + 1}</div>
+                            <div>
+                                <div class="rank-name">${name}</div>
+                                <div class="rank-note">${item.avg}/100</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // ─── ÉVÉNEMENTS ────────────────────────────────
+        document.getElementById('loginBtn').addEventListener('click', handleLogin);
+        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+        document.getElementById('refreshBtn').addEventListener('click', () => loadView(currentView));
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalOverlay')) closeModal();
+        });
+
+        document.getElementById('launchSimBtn').addEventListener('click', () => {
+            window.open('https://agent-vocal-39hz.onrender.com/', '_blank');
+        });
+
+        // Vérifier session existante au chargement
+        (async function init() {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                await loadProfile();
+            } else {
+                showLogin(true);
+            }
+        })();
+    </script>
+</body>
+</html>
