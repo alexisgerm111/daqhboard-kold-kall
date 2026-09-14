@@ -466,9 +466,9 @@
     <script>
         // ⚠️ CLÉS SUPABASE INTÉGRÉES
         const SUPABASE_URL = 'https://vjvyzbojcbwmfudkamlh.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqdnl6Ym9qY2J3bWZ1ZGthbWxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTM4MTUsImV4cCI6MjEwMjM4OTgxNX0.KR15ycHhUw0pEUmdR6aFZF_7i6G8_Q1PlJKXruetVaI';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqdnl6Ym9qY2J3bWZ1ZGthbWxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTM4MTUsImV4cCI6MjEwMjM4OTgxNX0.KR15ycHhUw0pEUmdr6aFZF_7i6G8_Q1PlJKXruVaI';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentUser = null;
         let currentProfile = null;
@@ -518,7 +518,7 @@
                 return;
             }
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) {
                 showError(error.message);
                 return;
@@ -529,7 +529,7 @@
         }
 
         async function loadProfile() {
-            const { data: profile, error } = await supabase
+            const { data: profile, error } = await supabaseClient
                 .from('profiles')
                 .select('*')
                 .eq('id', currentUser.id)
@@ -538,7 +538,7 @@
             if (error || !profile) {
                 console.error('Erreur chargement profil:', error);
                 showError('Profil introuvable.');
-                await supabase.auth.signOut();
+                await supabaseClient.auth.signOut();
                 showLogin(true);
                 return;
             }
@@ -557,7 +557,7 @@
         }
 
         async function handleLogout() {
-            await supabase.auth.signOut();
+            await supabaseClient.auth.signOut();
             currentUser = null;
             currentProfile = null;
             selectedUserId = null;
@@ -586,7 +586,7 @@
         // ─── VUE SIMULATIONS ───────────────────────────
         async function loadSimulationsView(container) {
             container.innerHTML = '<div>Chargement...</div>';
-            let query = supabase.from('simulations').select(`
+            let query = supabaseClient.from('simulations').select(`
                 *,
                 bilans ( note_globale ),
                 profiles ( nom, prenom )
@@ -647,7 +647,7 @@
             modalOverlay.classList.add('active');
 
             // Charger la simulation + transcription + bilan
-            const { data: sim, error: simError } = await supabase
+            const { data: sim, error: simError } = await supabaseClient
                 .from('simulations')
                 .select('*')
                 .eq('id', simId)
@@ -658,7 +658,7 @@
                 return;
             }
 
-            const { data: transcriptions, error: transError } = await supabase
+            const { data: transcriptions, error: transError } = await supabaseClient
                 .from('transcriptions')
                 .select('*')
                 .eq('simulation_id', simId)
@@ -669,7 +669,7 @@
                 return;
             }
 
-            const { data: bilan, error: bilanError } = await supabase
+            const { data: bilan, error: bilanError } = await supabaseClient
                 .from('bilans')
                 .select('*')
                 .eq('simulation_id', simId)
@@ -724,7 +724,7 @@
         async function loadRankingView(container) {
             container.innerHTML = '<div>Chargement...</div>';
             // Classement global basé sur les notes moyennes des simulations de chaque utilisateur
-            const { data: sims, error } = await supabase
+            const { data: sims, error } = await supabaseClient
                 .from('simulations')
                 .select(`
                     user_id,
@@ -779,7 +779,7 @@
             container.innerHTML = html;
         }
 
-        // ─── ÉVÉNEMENTS ────────────────────────────────
+        // ─── ÉVÉNEMENTS ───────────────────────────────
         document.getElementById('loginBtn').addEventListener('click', handleLogin);
         document.getElementById('logoutBtn').addEventListener('click', handleLogout);
         document.getElementById('refreshBtn').addEventListener('click', () => loadView(currentView));
@@ -794,7 +794,7 @@
 
         // Vérifier session existante au chargement
         (async function init() {
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
             if (session) {
                 currentUser = session.user;
                 await loadProfile();
