@@ -311,7 +311,11 @@
             if (simErr) { modalBody.innerHTML = `<div>Erreur : ${simErr.message}</div>`; return; }
 
             // ── Audio : URL signée fraîche via server.js (supabaseAdmin) ────
+            // On stocke la signedUrl pour l'attacher après injection du HTML
+            // (Chrome bloque les <audio> cross-origin injectés via innerHTML)
             let audioHtml = '<p><em>Audio non disponible</em></p>';
+            let pendingAudioUrl = null;
+
             if (sim.url_audio) {
                 try {
                     const audioRes = await fetch(
@@ -319,13 +323,9 @@
                     );
                     if (audioRes.ok) {
                         const { signedUrl } = await audioRes.json();
-                        audioHtml = `
-                            <div class="audio-player-wrap">
-                                <audio controls preload="metadata" style="width:100%">
-                                    <source src="${signedUrl}" type="audio/webm">
-                                    Votre navigateur ne supporte pas la lecture audio.
-                                </audio>
-                            </div>`;
+                        pendingAudioUrl = signedUrl;
+                        // Placeholder div — l'élément <audio> sera créé via createElement après
+                        audioHtml = '<div id="audio-player-slot" class="audio-player-wrap"></div>';
                     } else {
                         audioHtml = '<p><em>Impossible de charger l\'audio</em></p>';
                     }
@@ -367,6 +367,20 @@
             }
             html += '</div>';
             modalBody.innerHTML = html;
+
+            // ── Injection audio via createElement (contourne la restriction Chrome) ──
+            if (pendingAudioUrl) {
+                const slot = document.getElementById('audio-player-slot');
+                if (slot) {
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.preload  = 'metadata';
+                    audio.style.width = '100%';
+                    audio.src = pendingAudioUrl;
+                    audio.load();
+                    slot.appendChild(audio);
+                }
+            }
         }
 
         function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
