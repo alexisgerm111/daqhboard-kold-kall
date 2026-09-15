@@ -310,36 +310,27 @@
 
             if (simErr) { modalBody.innerHTML = `<div>Erreur : ${simErr.message}</div>`; return; }
 
-            // ── Point 3 — Audio : régénérer une URL signée fraîche ──────────
+            // ── Audio : URL signée fraîche via server.js (supabaseAdmin) ────
             let audioHtml = '<p><em>Audio non disponible</em></p>';
             if (sim.url_audio) {
-                // Extraire le path depuis l'URL stockée (format : userId/simId.webm)
                 try {
-                    const urlObj   = new URL(sim.url_audio);
-                    // Le path dans le bucket est après "/object/sign/simulation-audio/"
-                    const match    = urlObj.pathname.match(/simulation-audio\/(.+?)(?:\?|$)/);
-                    const filePath = match ? match[1] : null;
-
-                    if (filePath) {
-                        const { data: signed, error: signErr } = await supabaseClient.storage
-                            .from('simulation-audio')
-                            .createSignedUrl(filePath, 60 * 60); // 1h, largement suffisant
-
-                        if (!signErr && signed?.signedUrl) {
-                            audioHtml = `
-                                <div class="audio-player-wrap">
-                                    <audio controls preload="metadata" style="width:100%">
-                                        <source src="${signed.signedUrl}" type="audio/webm">
-                                        Votre navigateur ne supporte pas la lecture audio.
-                                    </audio>
-                                </div>`;
-                        } else {
-                            audioHtml = '<p><em>Impossible de charger l\'audio (URL expirée ou erreur)</em></p>';
-                        }
+                    const audioRes = await fetch(
+                        `https://agent-vocal-39hz.onrender.com/api/simulation/${simId}/audio`
+                    );
+                    if (audioRes.ok) {
+                        const { signedUrl } = await audioRes.json();
+                        audioHtml = `
+                            <div class="audio-player-wrap">
+                                <audio controls preload="metadata" style="width:100%">
+                                    <source src="${signedUrl}" type="audio/webm">
+                                    Votre navigateur ne supporte pas la lecture audio.
+                                </audio>
+                            </div>`;
+                    } else {
+                        audioHtml = '<p><em>Impossible de charger l\'audio</em></p>';
                     }
                 } catch (e) {
-                    // URL malformée ou ancien format — fallback sur l'URL stockée
-                    audioHtml = `<div class="audio-player-wrap"><audio controls preload="metadata" style="width:100%"><source src="${sim.url_audio}" type="audio/webm"></audio></div>`;
+                    audioHtml = '<p><em>Erreur de connexion au serveur audio</em></p>';
                 }
             }
 
@@ -428,7 +419,7 @@
             if (e.target === document.getElementById('modalOverlay')) closeModal();
         });
 
-        // Point 1 — Passer le token Supabase à l'app vocale
+        // Lancer la simulation en passant le token pour éviter le double login
         document.getElementById('launchSimBtn').addEventListener('click', async () => {
             const { data: { session } } = await supabaseClient.auth.getSession();
             const token = session?.access_token;
