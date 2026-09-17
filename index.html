@@ -302,6 +302,7 @@
             phase_choisie: null,
             simulation_precedente_id: null,
             continuite_rdv: null,
+            continuationMode: 'new',
             previousSimulations: []
         };
 
@@ -439,7 +440,7 @@
         // ─── SIMULATIONS ─────────────────────────────────────────────────────
         async function loadSimulationsView(container, autoOpen = true) {
             container.innerHTML = '<div class="empty">Chargement...</div>';
-            let query = supabaseClient.from('simulations').select('id,user_id,created_at,duree_secondes,type_scenario,statut,type_entretien,phase_choisie,b2b_b2c,bilans(note_globale),profiles(nom,prenom)').order('created_at', { ascending: false });
+            let query = supabaseClient.from('simulations').select('id,user_id,created_at,duree_secondes,type_scenario,niveau_difficulte,statut,url_audio,mode_jeu,type_entretien,phase_choisie,b2b_b2c,vendeur_type_entreprise,vendeur_produit,vendeur_url,prospect_role,prospect_type_entreprise,prospect_url,prospect_profile,simulation_precedente_id,continuite_rdv, bilans(note_globale), profiles(nom, prenom)').order('created_at', { ascending: false });
             if (currentProfile?.role === 'commercial') query = query.eq('user_id', currentUser.id);
 
             const { data: simulations, error } = await query;
@@ -560,6 +561,8 @@
             if (simResult.error) { modalBody.innerHTML = `<div class="empty">Erreur : ${escapeHtml(simResult.error.message)}</div>`; return; }
 
             const sim = simResult.data;
+            if (sim.statut === 'preparation') { modalBody.innerHTML = '<div class="empty">Préparation du scénario en cours. Reviens dans quelques instants.</div>'; return; }
+            if (sim.statut === 'erreur_preparation') { modalBody.innerHTML = '<div class="empty">La préparation du scénario a échoué. Consulte les logs Render.</div>'; return; }
             const transcriptions = transResult.data || [];
             const bilan = bilanResult.data;
             const metriques = metricsResult.data || {};
@@ -782,7 +785,7 @@
                     </div>
                     <div class="input-group"><label class="input-label">URL du site vendeur — facultative</label><div class="url-row"><input class="input-field" id="vendeur-url" value="${escapeHtml(wizardState.vendeur_url)}" oninput="wizardState.vendeur_url=this.value" placeholder="https://..."><button class="wizard-analyze" onclick="analyzeWizardUrl('vendeur')">Analyser</button></div><div id="vendeur-analysis" class="analysis-banner"></div></div>
                     <div class="section-kicker" style="margin-top:14px">Prospect</div>
-                    ${b2b ? `<div class="field-grid"><div class="input-group"><label class="input-label">Rôle du prospect</label><select class="wizard-select" onchange="wizardState.prospect_role=this.value"><option value="">Choisir</option>${['drh','dirco','ceo','coo','daf','ops','autre'].map(v => `<option value="${v}" ${wizardState.prospect_role === v ? 'selected' : ''}>${v.toUpperCase()}</option>`).join('')}</select></div><div class="input-group"><label class="input-label">Type d'entreprise</label><input class="input-field" value="${escapeHtml(wizardState.prospect_type_entreprise)}" oninput="wizardState.prospect_type_entreprise=this.value"></div></div><div class="input-group"><label class="input-label">URL de l'entreprise — facultative</label><div class="url-row"><input class="input-field" id="prospect-url" value="${escapeHtml(wizardState.prospect_url)}" oninput="wizardState.prospect_url=this.value" placeholder="https://..."><button class="wizard-analyze" onclick="analyzeWizardUrl('prospect')">Analyser</button></div><div id="prospect-analysis" class="analysis-banner"></div></div>` : `<div class="input-group"><label class="input-label">Profil du prospect</label><textarea class="wizard-textarea" oninput="wizardState.prospect_profile=this.value" placeholder="Situation, contexte et éléments pertinents du consommateur...">${escapeHtml(wizardState.prospect_profile)}</textarea></div>`}
+                    ${b2b ? `<div class="field-grid"><div class="input-group"><label class="input-label">Rôle du prospect</label><select class="wizard-select" onchange="wizardState.prospect_role=this.value"><option value="">Choisir</option>${[['drh','Directeur des Ressources Humaines'],['dirco','Directeur Commercial'],['ceo','CEO / Président'],['coo','Directeur des Opérations / COO'],['daf','Directeur Administratif et Financier'],['ops','Responsable des Opérations'],['autre','Autre']].map(([v,label]) => `<option value="${v}" ${wizardState.prospect_role === v ? 'selected' : ''}>${label}</option>`).join('')}</select></div><div class="input-group"><label class="input-label">Type d'entreprise</label><input class="input-field" value="${escapeHtml(wizardState.prospect_type_entreprise)}" oninput="wizardState.prospect_type_entreprise=this.value"></div></div><div class="input-group"><label class="input-label">URL de l'entreprise — facultative</label><div class="url-row"><input class="input-field" id="prospect-url" value="${escapeHtml(wizardState.prospect_url)}" oninput="wizardState.prospect_url=this.value" placeholder="https://..."><button class="wizard-analyze" onclick="analyzeWizardUrl('prospect')">Analyser</button></div><div id="prospect-analysis" class="analysis-banner"></div></div>` : `<div class="input-group"><label class="input-label">Profil du prospect</label><textarea class="wizard-textarea" oninput="wizardState.prospect_profile=this.value" placeholder="Situation, contexte et éléments pertinents du consommateur...">${escapeHtml(wizardState.prospect_profile)}</textarea></div>`}
                     <div class="step-help">Vérifie et corrige si besoin.</div><div id="wizard-error" class="step-error"></div><div class="step-actions"><button class="btn-secondary" onclick="wizardBack()">Retour</button><button class="btn-primary" onclick="wizardNext()">Continuer</button></div></div>`;
             }
 
@@ -893,11 +896,11 @@
             if (wizardState.step === 1 && !wizardState.b2b_b2c) return fail('Choisis B2B ou B2C.');
 
             if (wizardState.step === 2) {
-                if (!wizardState.vendeur_type_entreprise.trim()) return fail("Le type d'entreprise vendeur est requis.");
-                if (!wizardState.vendeur_produit.trim()) return fail('Le produit / service vendu est requis.');
+                if (!wizardState.vendeur_type_entreprise.trim() && !wizardState.vendeur_url.trim()) return fail("Renseigne le type d'entreprise vendeur ou fournis une URL à analyser.");
+                if (!wizardState.vendeur_produit.trim() && !wizardState.vendeur_url.trim()) return fail("Renseigne le produit / service vendu ou fournis une URL à analyser.");
                 if (wizardState.b2b_b2c === 'b2b') {
                     if (!wizardState.prospect_role) return fail('Choisis le rôle du prospect.');
-                    if (!wizardState.prospect_type_entreprise.trim()) return fail("Le type d'entreprise du prospect est requis.");
+                    if (!wizardState.prospect_type_entreprise.trim() && !wizardState.prospect_url.trim()) return fail("Renseigne le type d'entreprise du prospect ou fournis une URL à analyser.");
                 } else if (!wizardState.prospect_profile.trim()) {
                     return fail('Décris le profil du prospect B2C.');
                 }
@@ -957,7 +960,7 @@
             if (!validateWizardStep()) return;
 
             const button = $('startSimulationBtn');
-            if (button) { button.disabled = true; button.textContent = 'Construction du prospect...'; }
+            if (button) { button.disabled = true; button.textContent = 'Création...'; }
 
             try {
                 const payload = {
