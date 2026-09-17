@@ -35,6 +35,7 @@
         .input-field:focus { border-color: var(--blue); }
         .login-btn { padding: 10px 16px; background: var(--blue); color: white; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
         .login-btn:hover { background: #1E40AF; }
+        .login-btn:disabled { opacity: .6; cursor: wait; }
         .error-msg { color: var(--red); font-size: 12px; text-align: center; display: none; }
         .sidebar { width: var(--sidebar-w); background: var(--text-1); display: flex; flex-direction: column; align-items: stretch; padding: 14px 0 18px; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; gap: 4px; }
         .sidebar-logo { width: 32px; height: 32px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; flex-shrink: 0; }
@@ -55,11 +56,13 @@
         .topbar-right { display: flex; align-items: center; gap: 8px; }
         .launch-btn { background: var(--blue); color: white; border: none; border-radius: var(--radius-sm); padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; display: inline-flex; align-items: center; gap: 6px; }
         .launch-btn:hover { background: #1E40AF; }
+        .launch-btn:disabled { opacity: .6; cursor: wait; }
         .btn-ghost { background: transparent; border: 1px solid var(--border-2); color: var(--text-2); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
         .btn-ghost:hover { background: var(--bg); }
         .content { flex: 1; overflow-y: auto; padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 16px; }
         .section-header { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
         .section-title { font-size: 15px; font-weight: 600; color: var(--text-1); }
+        .section-sub { font-size: 12px; color: var(--text-3); margin-top: 3px; }
         .sim-list { display: flex; flex-direction: column; gap: 10px; }
         .sim-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: box-shadow 0.15s, transform 0.15s; }
         .sim-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
@@ -79,29 +82,143 @@
         .rank-note { font-size: 12px; color: var(--text-3); }
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .modal { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-md); width: 700px; max-width: 90%; max-height: 80vh; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-        .modal-header { display: flex; align-items: center; justify-content: space-between; }
+        .modal { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-md); width: 920px; max-width: 94%; max-height: 90vh; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         .modal-title { font-size: 16px; font-weight: 600; }
         .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-3); }
-        .transcript-line { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--surface-2); }
-        .transcript-speaker { font-weight: 600; width: 100px; flex-shrink: 0; font-size: 12px; }
+        .modal-body { display: flex; flex-direction: column; gap: 14px; }
+        .transcript-box { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+        .transcript-head { padding: 10px 12px; background: var(--surface-2); font-size: 12px; font-weight: 600; }
+        .transcript-list { max-height: 360px; overflow-y: auto; }
+        .transcript-line { display: flex; gap: 12px; padding: 9px 12px; border-bottom: 1px solid var(--surface-2); cursor: pointer; transition: background 0.1s; }
+        .transcript-line:hover { background: var(--blue-light); }
+        .transcript-line.active { background: #DBEAFE; box-shadow: inset 3px 0 0 var(--blue); }
+        .transcript-line.bascule-line { box-shadow: inset 3px 0 0 var(--amber); background: var(--amber-light); }
+        .transcript-speaker { font-weight: 600; width: 86px; flex-shrink: 0; font-size: 11px; }
         .transcript-text { font-size: 13px; line-height: 1.5; color: var(--text-2); }
+        .transcript-time { font-size: 10px; color: var(--text-4); width: 46px; flex-shrink: 0; }
         .bilan-section { background: var(--surface-2); border-radius: var(--radius-sm); padding: 12px; }
         .bilan-title { font-weight: 600; margin-bottom: 6px; }
-        .bilan-item { font-size: 13px; margin-bottom: 4px; }
-        /* Audio player */
+        .bilan-item { font-size: 13px; margin-bottom: 5px; line-height: 1.45; }
         .audio-player-wrap { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
         .audio-player-wrap audio { width: 100%; }
-        .audio-loading { font-size: 12px; color: var(--text-3); font-style: italic; }
+        .empty { font-size: 13px; color: var(--text-3); padding: 20px; text-align: center; }
+
+        /* ─── CONFIGURATION / STEPPER ─────────────────────────────────────── */
+        .launch-stepper { width: 780px; }
+        .stepper-top { display: flex; gap: 8px; margin-bottom: 18px; }
+        .step-indicator { flex: 1; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 11px; color: var(--text-3); text-align: center; }
+        .step-indicator.active { background: var(--blue-light); border-color: var(--blue); color: var(--blue); font-weight: 600; }
+        .step-content { display: none; }
+        .step-content.active { display: block; }
+        .step-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+        .step-subtitle { font-size: 12px; color: var(--text-3); line-height: 1.5; margin-bottom: 14px; }
+        .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+        .choice-card { border: 1px solid var(--border-2); border-radius: var(--radius); padding: 14px; text-align: left; background: var(--surface); cursor: pointer; transition: border-color .15s, background .15s; }
+        .choice-card:hover { border-color: var(--blue); }
+        .choice-card.selected { border-color: var(--blue); background: var(--blue-light); }
+        .choice-title { font-size: 14px; font-weight: 700; }
+        .choice-desc { font-size: 11px; color: var(--text-3); margin-top: 5px; line-height: 1.45; }
+        .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .input-group + .input-group { margin-top: 10px; }
+        .field-grid .input-group { margin-top: 0; }
+        .url-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; }
+        .wizard-textarea { width: 100%; min-height: 100px; resize: vertical; font-family: inherit; padding: 10px 14px; border: 1px solid var(--border-2); border-radius: var(--radius-sm); font-size: 13px; outline: none; }
+        .wizard-select { width: 100%; padding: 10px 14px; border: 1px solid var(--border-2); border-radius: var(--radius-sm); background: var(--surface); font-size: 13px; outline: none; }
+        .wizard-textarea:focus, .wizard-select:focus { border-color: var(--blue); }
+        .wizard-analyze { background: var(--surface); color: var(--text-2); border: 1px solid var(--border-2); border-radius: var(--radius-sm); padding: 10px 12px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .wizard-analyze:disabled { opacity: .6; cursor: wait; }
+        .analysis-banner { display: none; margin-top: 8px; padding: 9px 10px; border-radius: var(--radius-sm); background: var(--blue-light); color: var(--blue); font-size: 12px; line-height: 1.4; }
+        .analysis-banner.active { display: block; }
+        .step-help { font-size: 11px; color: var(--text-3); margin-top: 5px; line-height: 1.4; }
+        .step-error { display: none; margin-top: 10px; padding: 9px 10px; border-radius: var(--radius-sm); background: var(--red-light); color: var(--red); font-size: 12px; line-height: 1.4; }
+        .step-error.active { display: block; }
+        .step-actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+        .btn-primary { background: var(--blue); color: #fff; border: none; border-radius: var(--radius-sm); padding: 9px 14px; font-weight: 600; cursor: pointer; }
+        .btn-primary:disabled { opacity: .6; cursor: wait; }
+        .btn-secondary { background: var(--surface); color: var(--text-2); border: 1px solid var(--border-2); border-radius: var(--radius-sm); padding: 9px 14px; font-weight: 500; cursor: pointer; }
+        .previous-list { display: grid; gap: 8px; max-height: 230px; overflow-y: auto; }
+        .previous-item { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 11px 12px; cursor: pointer; }
+        .previous-item:hover { border-color: var(--blue); }
+        .previous-item.selected { border-color: var(--blue); background: var(--blue-light); }
+        .previous-item.invalid { opacity: .55; }
+        .previous-title { font-size: 13px; font-weight: 600; }
+        .previous-meta { margin-top: 3px; font-size: 11px; color: var(--text-3); }
+        .previous-status { margin-top: 5px; font-size: 10px; font-weight: 600; }
+        .previous-status.ok { color: var(--green); }
+        .previous-status.warn { color: var(--amber); }
+        .continuity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+        .continuity-card { border: 1px solid var(--border-2); border-radius: var(--radius-sm); background: var(--surface); padding: 10px; cursor: pointer; }
+        .continuity-card.selected { border-color: var(--blue); background: var(--blue-light); }
+        .continuity-title { font-size: 12px; font-weight: 700; }
+        .continuity-desc { font-size: 10px; color: var(--text-3); margin-top: 3px; line-height: 1.4; }
+
+        /* ─── DEBRIEF ENRICHI ─────────────────────────────────────────────── */
+        .rich-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+        .rich-tagline { font-size: 19px; font-weight: 800; line-height: 1.3; }
+        .rich-score { font-size: 30px; font-weight: 800; white-space: nowrap; }
+        .rich-sub { font-size: 12px; color: var(--text-3); margin-top: 5px; }
+        .radar-wrap { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; }
+        .radar-legend { display: flex; gap: 14px; font-size: 11px; color: var(--text-3); margin-top: 6px; }
+        .radar-legend span { display: flex; align-items: center; gap: 5px; }
+        .radar-dot { width: 18px; height: 0; border-top: 2px solid var(--blue); display: inline-block; }
+        .radar-dot.dashed { border-top-style: dashed; border-top-color: var(--purple); }
+        .radar-svg { width: 100%; min-height: 280px; }
+        .rich-metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px,1fr)); gap: 10px; }
+        .rich-metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; }
+        .rich-metric-label { font-size: 11px; color: var(--text-3); }
+        .rich-metric-value { font-size: 20px; font-weight: 700; margin-top: 4px; }
+        .rich-metric-help { font-size: 10px; color: var(--text-4); margin-top: 3px; }
+        .accordion { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+        .accordion + .accordion { margin-top: 8px; }
+        .accordion summary { cursor: pointer; padding: 11px 12px; font-weight: 600; background: var(--surface-2); list-style: none; }
+        .accordion summary::-webkit-details-marker { display: none; }
+        .accordion-body { padding: 12px; }
+        .qual-list { display: flex; flex-direction: column; gap: 10px; }
+        .qual-item { padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+        .qual-meta { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; margin-bottom: 5px; }
+        .time-chip { font-size: 10px; color: var(--blue); background: var(--blue-light); border-radius: 999px; padding: 2px 7px; }
+        .confidence-chip { font-size: 10px; color: var(--text-3); background: var(--surface-2); border-radius: 999px; padding: 2px 7px; }
+        .framework-chip { font-size: 10px; color: var(--purple); background: var(--purple-light); border-radius: 999px; padding: 2px 7px; }
+        .qual-text { font-size: 13px; line-height: 1.5; }
+        .ecart-badge { font-size: 10px; font-weight: 700; border-radius: 999px; padding: 3px 7px; text-transform: uppercase; }
+        .ecart-adaptatif { background: var(--green-light); color: var(--green); }
+        .ecart-instinctif { background: var(--amber-light); color: var(--amber); }
+        .ecart-manquant { background: var(--red-light); color: var(--red); }
+        .moment-btn { border: none; background: var(--blue-light); color: var(--blue); border-radius: 999px; padding: 3px 8px; cursor: pointer; font-size: 10px; font-weight: 600; }
+        .distribution-row { display: grid; grid-template-columns: 115px 1fr 48px; gap: 8px; align-items: center; margin-bottom: 8px; }
+        .distribution-row:last-child { margin-bottom: 0; }
+        .distribution-bar { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+        .distribution-fill { height: 100%; background: var(--purple); border-radius: 99px; }
+        .generate-box { display: flex; align-items: center; justify-content: space-between; gap: 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; }
+        .generate-left { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
+        .generate-title { font-size: 12px; font-weight: 700; }
+        .generate-help { font-size: 10px; color: var(--text-3); }
+        .sensitivity-row { display: flex; align-items: center; gap: 9px; }
+        .sensitivity-row input { flex: 1; }
+        .sensitivity-value { min-width: 42px; font-weight: 700; text-align: right; color: var(--blue); }
+        .section-kicker { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-3); font-weight: 700; margin-bottom: 8px; }
+        .analysis-table { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .analysis-cell { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; }
+        .analysis-cell strong { display: block; font-size: 11px; color: var(--text-3); margin-bottom: 4px; }
+        .analysis-cell div { font-size: 13px; line-height: 1.45; }
+        .micro-note { font-size: 10px; color: var(--text-4); margin-top: 5px; }
+
         @media (max-width: 768px) {
             :root { --sidebar-w: 64px; }
             .sb-icon span { display: none; }
             .user-info, .user-role { display: none; }
             .main { margin-left: var(--sidebar-w); }
             .content { padding: 10px; }
+            .field-grid, .analysis-table, .choice-grid, .continuity-grid { grid-template-columns: 1fr; }
+            .launch-stepper { width: 94%; }
+            .generate-box { flex-direction: column; align-items: stretch; }
         }
         @media (max-width: 480px) {
             .sim-card { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .topbar-right { gap: 4px; }
+            .launch-btn { padding: 8px 10px; }
+            .btn-ghost { padding: 8px 9px; }
         }
     </style>
 </head>
@@ -125,22 +242,11 @@
     </div>
 
     <nav class="sidebar" id="sidebar" style="display:none;">
-        <div class="sidebar-logo">
-            <svg viewBox="0 0 18 18" fill="none"><path d="M9 2L15 5.5V12.5L9 16L3 12.5V5.5L9 2Z" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.15)"/><circle cx="9" cy="9" r="2.5" fill="white"/></svg>
-        </div>
-        <div class="sb-icon active" data-view="simulations">
-            <svg viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 6h6M6 9h6M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span>Simulations</span>
-        </div>
-        <div class="sb-icon" data-view="ranking">
-            <svg viewBox="0 0 18 18" fill="none"><path d="M3 15V8M7 15V5M11 15v-3M15 15V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M2 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span>Classement</span>
-        </div>
+        <div class="sidebar-logo"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L15 5.5V12.5L9 16L3 12.5V5.5L9 2Z" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.15)"/><circle cx="9" cy="9" r="2.5" fill="white"/></svg></div>
+        <div class="sb-icon active" data-view="simulations"><svg viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 6h6M6 9h6M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Simulations</span></div>
+        <div class="sb-icon" data-view="ranking"><svg viewBox="0 0 18 18" fill="none"><path d="M3 15V8M7 15V5M11 15v-3M15 15V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M2 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Classement</span></div>
         <div class="sidebar-divider"></div>
-        <div class="sb-icon" id="logoutBtn">
-            <svg viewBox="0 0 18 18" fill="none"><path d="M7 4H3v10h4M9 9h6M12 6l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Déconnexion</span>
-        </div>
+        <div class="sb-icon" id="logoutBtn"><svg viewBox="0 0 18 18" fill="none"><path d="M7 4H3v10h4M9 9h6M12 6l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Déconnexion</span></div>
         <div class="sidebar-spacer"></div>
         <div class="user-info" id="sidebarUserEmail"></div>
         <div class="user-role" id="sidebarUserRole"></div>
@@ -149,9 +255,7 @@
 
     <div class="main" style="display:none;" id="mainApp">
         <header class="topbar">
-            <div class="topbar-left">
-                <span class="team-name" id="teamName">Kold Kall</span>
-            </div>
+            <div class="topbar-left"><span class="team-name" id="teamName">Kold Kall</span></div>
             <div class="topbar-right">
                 <button class="launch-btn" id="launchSimBtn">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 2.5l7 3.5-7 3.5V2.5z" fill="white"/></svg>
@@ -174,279 +278,770 @@
     </div>
 
     <script>
-        const SUPABASE_URL     = 'https://vjvyzbojcbwmfudkamlh.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_H-wuFrWTNgDEP0fwSWnqNg_c8dJMQZM';
-        const supabaseClient   = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_URL = 'https://vjvyzbojcbwmfudkamlh.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_H-wuFrWTNgDEP0fwSWnqNg_c8dJMQZM';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        const SIMULATION_APP_URL = 'https://agent-vocal-39hz.onrender.com';
 
-        let currentUser    = null;
+        let currentUser = null;
         let currentProfile = null;
-        let currentView    = 'simulations';
+        let currentView = 'simulations';
+        let latestAutoOpenedId = null;
 
-        // ─── HELPERS ─────────────────────────────────────────────────────────
+        const wizardState = {
+            step: 1,
+            b2b_b2c: null,
+            vendeur_type_entreprise: '',
+            vendeur_produit: '',
+            vendeur_url: '',
+            prospect_role: '',
+            prospect_type_entreprise: '',
+            prospect_url: '',
+            prospect_profile: '',
+            type_entretien: null,
+            phase_choisie: null,
+            simulation_precedente_id: null,
+            continuite_rdv: null,
+            previousSimulations: []
+        };
+
+        const $ = id => document.getElementById(id);
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         function showLogin(show) {
-            document.getElementById('loginScreen').style.display = show ? 'flex' : 'none';
-            document.getElementById('sidebar').style.display     = show ? 'none' : 'flex';
-            document.getElementById('mainApp').style.display     = show ? 'none' : 'flex';
+            $('loginScreen').style.display = show ? 'flex' : 'none';
+            $('sidebar').style.display = show ? 'none' : 'flex';
+            $('mainApp').style.display = show ? 'none' : 'flex';
         }
+
         function showError(msg) {
-            const err = document.getElementById('errorMsg');
-            err.style.display = msg ? 'block' : 'none';
-            err.textContent   = msg || '';
+            const el = $('errorMsg');
+            el.style.display = msg ? 'block' : 'none';
+            el.textContent = msg || '';
         }
-        function formatDate(d) {
-            const dt = new Date(d);
-            return dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
-                 + ' à ' + dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
         }
-        function formatDuration(s) { return `${Math.floor(s/60)} min ${s%60}s`; }
-        function getNoteClass(n)   { return n >= 7 ? 'high' : n >= 5 ? 'medium' : 'low'; }
-        function getInitials(nom, prenom) { return (prenom?.[0]||'') + (nom?.[0]||''); }
+
+        function formatDuration(seconds) {
+            const s = Math.max(0, Number(seconds) || 0);
+            return `${Math.floor(s / 60)} min ${Math.floor(s % 60)}s`;
+        }
+
+        function fmtSec(seconds) {
+            const s = Math.max(0, Number(seconds) || 0);
+            return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+        }
+
+        function getNoteClass(n) {
+            const score = Number(n) || 0;
+            if (score > 10) return score >= 70 ? 'high' : score >= 50 ? 'medium' : 'low';
+            return score >= 7 ? 'high' : score >= 5 ? 'medium' : 'low';
+        }
+
+        function getInitials(nom, prenom) {
+            return (prenom?.[0] || '') + (nom?.[0] || '');
+        }
+
+        function getSimulationLabel(sim) {
+            if (sim.type_entretien === 'cold_call') return 'Cold Call';
+            return ({ complet: 'Entretien complet', decouverte: 'Découverte', demo: 'Démo', objections_closing: 'Objections & Closing', nego: 'Négociation' }[sim.phase_choisie] || sim.type_scenario || 'Rendez-vous');
+        }
+
+        async function getAccessToken() {
+            const { data } = await supabaseClient.auth.getSession();
+            return data?.session?.access_token || null;
+        }
+
+        async function simulationApi(path, options = {}) {
+            const token = await getAccessToken();
+            const headers = { ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) };
+            return fetch(`${SIMULATION_APP_URL}${path}`, { ...options, headers });
+        }
 
         // ─── AUTH ────────────────────────────────────────────────────────────
         async function handleLogin() {
-            const email    = document.getElementById('emailInput').value.trim();
-            const password = document.getElementById('passwordInput').value.trim();
+            showError('');
+            const email = $('emailInput').value.trim();
+            const password = $('passwordInput').value;
             if (!email || !password) { showError('Veuillez remplir tous les champs.'); return; }
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) { showError(error.message); return; }
-            currentUser = data.user;
-            await loadProfile();
+            const btn = $('loginBtn');
+            btn.disabled = true;
+            btn.textContent = 'Connexion...';
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+                currentUser = data.user;
+                await loadProfile();
+            } catch (err) {
+                console.error('[Dashboard] Connexion :', err);
+                showError(err.message || 'Erreur de connexion');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Se connecter';
+            }
         }
 
         async function loadProfile() {
-            const { data: profile, error } = await supabaseClient
-                .from('profiles').select('*').eq('id', currentUser.id).single();
+            const { data: profile, error } = await supabaseClient.from('profiles').select('*').eq('id', currentUser.id).single();
             if (error || !profile) {
                 showError('Profil introuvable.');
                 await supabaseClient.auth.signOut();
+                currentUser = null;
+                currentProfile = null;
                 showLogin(true);
                 return;
             }
             currentProfile = profile;
             showLogin(false);
             updateSidebar();
-            loadView('simulations');
+            await loadView('simulations');
         }
 
         function updateSidebar() {
-            document.getElementById('sidebarUserEmail').textContent = currentUser.email;
-            document.getElementById('sidebarUserRole').textContent  = currentProfile.role === 'commercial' ? 'Commercial' : 'Directeur';
-            document.getElementById('sidebarAvatar').textContent    = getInitials(currentProfile.nom, currentProfile.prenom);
-            document.getElementById('teamName').textContent         = currentProfile.role === 'directeur' ? 'Vue Directeur' : 'Vue Commercial';
+            $('sidebarUserEmail').textContent = currentUser?.email || '';
+            $('sidebarUserRole').textContent = currentProfile?.role === 'commercial' ? 'Commercial' : 'Directeur';
+            $('sidebarAvatar').textContent = getInitials(currentProfile?.nom, currentProfile?.prenom) || '?';
+            $('teamName').textContent = currentProfile?.role === 'directeur' ? 'Vue Directeur' : 'Vue Commercial';
         }
 
         async function handleLogout() {
             await supabaseClient.auth.signOut();
-            currentUser = null; currentProfile = null;
+            currentUser = null;
+            currentProfile = null;
             showLogin(true);
         }
 
         // ─── NAVIGATION ──────────────────────────────────────────────────────
-        document.querySelectorAll('.sb-icon[data-view]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentView = btn.dataset.view;
-                document.querySelectorAll('.sb-icon').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                loadView(currentView);
-            });
-        });
+        document.querySelectorAll('.sb-icon[data-view]').forEach(btn => btn.addEventListener('click', () => {
+            currentView = btn.dataset.view;
+            document.querySelectorAll('.sb-icon').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            loadView(currentView);
+        }));
+
         async function loadView(view) {
-            const content = document.getElementById('mainContent');
+            const content = $('mainContent');
             if (view === 'simulations') await loadSimulationsView(content);
             else if (view === 'ranking') await loadRankingView(content);
         }
 
         // ─── SIMULATIONS ─────────────────────────────────────────────────────
-        async function loadSimulationsView(container) {
-            container.innerHTML = '<div>Chargement...</div>';
-            let query = supabaseClient.from('simulations').select(`
-                *, bilans ( note_globale ), profiles ( nom, prenom )
-            `).order('created_at', { ascending: false });
-            if (currentProfile.role === 'commercial') query = query.eq('user_id', currentUser.id);
+        async function loadSimulationsView(container, autoOpen = true) {
+            container.innerHTML = '<div class="empty">Chargement...</div>';
+            let query = supabaseClient.from('simulations').select('id,user_id,created_at,duree_secondes,type_scenario,statut,type_entretien,phase_choisie,b2b_b2c,bilans(note_globale),profiles(nom,prenom)').order('created_at', { ascending: false });
+            if (currentProfile?.role === 'commercial') query = query.eq('user_id', currentUser.id);
 
             const { data: simulations, error } = await query;
-            if (error) { container.innerHTML = `<div>Erreur : ${error.message}</div>`; return; }
-            if (!simulations.length) { container.innerHTML = '<div>Aucune simulation pour le moment.</div>'; return; }
+            if (error) { container.innerHTML = `<div class="empty">Erreur : ${escapeHtml(error.message)}</div>`; return; }
+            if (!simulations?.length) { container.innerHTML = '<div class="empty">Aucune simulation pour le moment.</div>'; return; }
 
-            let html = '<div class="section-header"><div class="section-title">Simulations récentes</div></div><div class="sim-list">';
+            let html = '<div class="section-header"><div><div class="section-title">Simulations récentes</div><div class="section-sub">Les analyses détaillées sont accessibles en cliquant sur une simulation.</div></div></div><div class="sim-list">';
             simulations.forEach(sim => {
-                const note      = sim.bilans?.[0]?.note_globale;
-                // note stockée sur 10 côté server.js
+                const note = sim.bilans?.[0]?.note_globale;
                 const noteClass = note != null ? getNoteClass(note) : 'medium';
-                const noteDisp  = note != null ? `${note}/10` : 'N/A';
-                const userLabel = currentProfile.role === 'directeur' ? ` — ${sim.profiles?.prenom} ${sim.profiles?.nom}` : '';
-                html += `
-                    <div class="sim-card" data-simid="${sim.id}">
-                        <div class="sim-info">
-                            <div class="sim-type">${sim.type_scenario || 'Simulation'}${userLabel}</div>
-                            <div class="sim-date">${formatDate(sim.created_at)}</div>
-                        </div>
-                        <div class="sim-meta">
-                            <span class="sim-duration">${formatDuration(sim.duree_secondes || 0)}</span>
-                            <span class="sim-note ${noteClass}">${noteDisp}</span>
-                        </div>
-                    </div>`;
+                const noteDisp = note != null ? (Number(note) > 10 ? `${note}/100` : `${note}/10`) : 'En attente';
+                const userLabel = currentProfile?.role === 'directeur' ? ` — ${sim.profiles?.prenom || ''} ${sim.profiles?.nom || ''}` : '';
+                html += `<div class="sim-card" data-simid="${escapeHtml(sim.id)}"><div class="sim-info"><div class="sim-type">${escapeHtml(getSimulationLabel(sim))}${escapeHtml(userLabel)}</div><div class="sim-date">${formatDate(sim.created_at)} · ${escapeHtml(sim.statut || '—')}</div></div><div class="sim-meta"><span class="sim-duration">${formatDuration(sim.duree_secondes || 0)}</span><span class="sim-note ${noteClass}">${noteDisp}</span></div></div>`;
             });
             html += '</div>';
             container.innerHTML = html;
-            document.querySelectorAll('.sim-card').forEach(card => {
-                card.addEventListener('click', () => openSimDetail(card.dataset.simid));
-            });
-        }
+            container.querySelectorAll('.sim-card').forEach(card => card.addEventListener('click', () => openSimDetail(card.dataset.simid)));
 
-        // ─── DÉTAIL SIMULATION ───────────────────────────────────────────────
-        async function openSimDetail(simId) {
-            const overlay   = document.getElementById('modalOverlay');
-            const modalBody = document.getElementById('modalBody');
-            document.getElementById('modalTitle').textContent = 'Détail de la simulation';
-            modalBody.innerHTML = '<div>Chargement...</div>';
-            overlay.classList.add('active');
-
-            const [{ data: sim, error: simErr }, { data: transcriptions }, { data: bilan }] = await Promise.all([
-                supabaseClient.from('simulations').select('*').eq('id', simId).single(),
-                supabaseClient.from('transcriptions').select('*').eq('simulation_id', simId).order('horodatage_secondes', { ascending: true }),
-                supabaseClient.from('bilans').select('*').eq('simulation_id', simId).single()
-            ]);
-
-            if (simErr) { modalBody.innerHTML = `<div>Erreur : ${simErr.message}</div>`; return; }
-
-            // ── Audio : URL signée fraîche via server.js (supabaseAdmin) ────
-            // On stocke la signedUrl pour l'attacher après injection du HTML
-            // (Chrome bloque les <audio> cross-origin injectés via innerHTML)
-            let audioHtml = '<p><em>Audio non disponible</em></p>';
-            let pendingAudioUrl = null;
-
-            if (sim.url_audio) {
-                try {
-                    const audioRes = await fetch(
-                        `https://agent-vocal-39hz.onrender.com/api/simulation/${simId}/audio`
-                    );
-                    if (audioRes.ok) {
-                        const { signedUrl } = await audioRes.json();
-                        pendingAudioUrl = signedUrl;
-                        // Placeholder div — l'élément <audio> sera créé via createElement après
-                        audioHtml = '<div id="audio-player-slot" class="audio-player-wrap"></div>';
-                    } else {
-                        audioHtml = '<p><em>Impossible de charger l\'audio</em></p>';
-                    }
-                } catch (e) {
-                    audioHtml = '<p><em>Erreur de connexion au serveur audio</em></p>';
+            if (autoOpen) {
+                const target = new URLSearchParams(location.search).get('simulationId');
+                const candidate = target ? simulations.find(s => String(s.id) === String(target)) : null;
+                if (candidate && candidate.id !== latestAutoOpenedId) {
+                    latestAutoOpenedId = candidate.id;
+                    if (target) history.replaceState({}, document.title, location.pathname);
+                    setTimeout(() => openSimDetail(candidate.id), 150);
                 }
             }
+        }
 
-            let html = `
-                <p><strong>Type :</strong> ${sim.type_scenario}</p>
-                <p><strong>Durée :</strong> ${formatDuration(sim.duree_secondes || 0)}</p>
-                <p><strong>Statut :</strong> ${sim.statut}</p>
+        function scoreDiscoveryFromTranscription(transcriptions) {
+            let discoveryQuestions = 0;
+            let phase = 'decouverte';
+            for (const turn of transcriptions || []) {
+                const text = String(turn.texte || '');
+                const normalized = text.toLowerCase();
+                if (/(signature|contrat|prochaine etape|prochaine étape|on signe|on bloque)/i.test(normalized)) phase = 'closing';
+                else if (/(trop cher|pas le temps|pas interesse|pas intéressé|deja un prestataire|déjà un prestataire)/i.test(normalized)) phase = 'objection';
+                else if (/(demo|démonstration|démonstration|fonctionnalité|fonctionnalite|voici notre|notre solution|comment ça marche|comment ca marche)/i.test(normalized)) phase = 'pitch';
+                if (turn.locuteur === 'commercial' && phase === 'decouverte') discoveryQuestions += (text.match(/\?/g) || []).length;
+            }
+            return Math.min(100, discoveryQuestions * 15);
+        }
+
+        function buildRadarScores(metriques, transcriptions) {
+            const questions = Math.min(100, Number(metriques?.ratio_questions_affirmations) || 0);
+            const objections = Math.min(100, Number(metriques?.taux_resolution_objections) || 0);
+            const discovery = scoreDiscoveryFromTranscription(transcriptions);
+            const delay = Number(metriques?.delai_moyen_closing_apres_signal) || 0;
+            const closing = Number(metriques?.nb_signaux_achat) > 0 ? Math.max(0, Math.min(100, 100 - (delay / 60) * 100)) : 0;
+            const rhythmPenalty = (Number(metriques?.nb_interruptions) || 0) * 10 + (Number(metriques?.nb_silences_remplis) || 0) * 5;
+            const rhythm = Math.max(0, Math.min(100, 100 - rhythmPenalty));
+            const engagement = Math.min(100, Math.max(0, Number(metriques?.score_engagement_final) || 0));
+            return [questions, objections, discovery, closing, rhythm, engagement];
+        }
+
+        async function getAverageRadar(sim) {
+            const { data: sims } = await supabaseClient.from('simulations').select('id').eq('user_id', currentUser.id).eq('statut', 'terminee');
+            const ids = (sims || []).map(s => s.id).filter(id => id !== sim.id);
+            if (!ids.length) return null;
+            const { data: metrics } = await supabaseClient.from('metriques').select('*').in('simulation_id', ids);
+            if (!metrics?.length) return null;
+            const sum = [0, 0, 0, 0, 0, 0];
+            metrics.forEach(m => {
+                const delay = Number(m.delai_moyen_closing_apres_signal) || 0;
+                const closing = Number(m.nb_signaux_achat) > 0 ? Math.max(0, Math.min(100, 100 - (delay / 60) * 100)) : 0;
+                const rhythm = Math.max(0, Math.min(100, 100 - ((Number(m.nb_interruptions) || 0) * 10 + (Number(m.nb_silences_remplis) || 0) * 5)));
+                const vals = [Number(m.ratio_questions_affirmations) || 0, Number(m.taux_resolution_objections) || 0, Math.min(100, (Number(m.nb_questions_qualification) || 0) * 15), closing, rhythm, Number(m.score_engagement_final) || 0];
+                vals.forEach((v, i) => sum[i] += v);
+            });
+            return sum.map(v => Math.round(v / metrics.length));
+        }
+
+        function radarSvg(current, average) {
+            const labels = ['Questions', 'Objections', 'Découverte', 'Closing', 'Rythme', 'Engagement'];
+            const cx = 50, cy = 50, radius = 36;
+            const pointsFor = values => values.map((value, index) => {
+                const angle = -Math.PI / 2 + index * (Math.PI * 2 / labels.length);
+                const r = radius * (Math.max(0, Math.min(100, value)) / 100);
+                return `${cx + Math.cos(angle) * r},${cy + Math.sin(angle) * r}`;
+            }).join(' ');
+            const grid = [25, 50, 75, 100].map(level => {
+                const pts = pointsFor(labels.map(() => level));
+                return `<polygon points="${pts}" fill="none" stroke="var(--border-2)" stroke-width="0.35"/>`;
+            }).join('');
+            const axes = labels.map((label, index) => {
+                const angle = -Math.PI / 2 + index * (Math.PI * 2 / labels.length);
+                const x = cx + Math.cos(angle) * radius;
+                const y = cy + Math.sin(angle) * radius;
+                const lx = cx + Math.cos(angle) * 44;
+                const ly = cy + Math.sin(angle) * 44;
+                return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border)" stroke-width="0.3"/><text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="4.1" fill="var(--text-3)">${escapeHtml(label)}</text>`;
+            }).join('');
+            const avgBlock = average ? `<polygon points="${pointsFor(average)}" fill="rgba(124,58,237,.08)" stroke="var(--purple)" stroke-width="1" stroke-dasharray="2 2"/>` : '';
+            return `<svg class="radar-svg" viewBox="0 0 100 100" role="img" aria-label="Radar des compétences"><g>${grid}${axes}${avgBlock}<polygon points="${pointsFor(current)}" fill="rgba(29,78,216,.10)" stroke="var(--blue)" stroke-width="1.2"/></g></svg>`;
+        }
+
+        function formatMetric(value, suffix = '') {
+            const num = Number(value);
+            if (!Number.isFinite(num)) return '—';
+            return `${Math.round(num)}${suffix}`;
+        }
+
+        async function openSimDetail(simId) {
+            const overlay = $('modalOverlay');
+            const modalBody = $('modalBody');
+            $('modalTitle').textContent = 'Débrief de la simulation';
+            modalBody.innerHTML = '<div class="empty">Chargement du débrief...</div>';
+            overlay.classList.add('active');
+
+            const [simResult, transResult, bilanResult, metricsResult, microResult] = await Promise.all([
+                supabaseClient.from('simulations').select('id,user_id,created_at,duree_secondes,type_scenario,niveau_difficulte,statut,url_audio,mode_jeu,type_entretien,phase_choisie,b2b_b2c,vendeur_type_entreprise,vendeur_produit,vendeur_url,prospect_role,prospect_type_entreprise,prospect_url,prospect_profile,simulation_precedente_id,continuite_rdv').eq('id', simId).single(),
+                supabaseClient.from('transcriptions').select('*').eq('simulation_id', simId).order('horodatage_secondes', { ascending: true }),
+                supabaseClient.from('bilans').select('*').eq('simulation_id', simId).single(),
+                supabaseClient.from('metriques').select('*').eq('simulation_id', simId).single(),
+                supabaseClient.from('micro_comportements').select('*').eq('simulation_id', simId).order('horodatage_secondes', { ascending: true })
+            ]);
+
+            if (simResult.error) { modalBody.innerHTML = `<div class="empty">Erreur : ${escapeHtml(simResult.error.message)}</div>`; return; }
+
+            const sim = simResult.data;
+            const transcriptions = transResult.data || [];
+            const bilan = bilanResult.data;
+            const metriques = metricsResult.data || {};
+            const microComportements = microResult.data || [];
+            const qualitative = bilan?.analyse_qualitative || {};
+
+            let pendingAudioUrl = null;
+            let audioHtml = '<div class="audio-player-wrap"><span class="audio-loading">Audio non disponible.</span></div>';
+            if (sim.url_audio) {
+                try {
+                    const audioRes = await simulationApi(`/api/simulation/${encodeURIComponent(simId)}/audio`);
+                    if (audioRes.ok) {
+                        const audioData = await audioRes.json();
+                        pendingAudioUrl = audioData.signedUrl;
+                        audioHtml = '<div id="audio-player-slot" class="audio-player-wrap"></div>';
+                    }
+                } catch (_) {}
+            }
+
+            const currentRadar = buildRadarScores(metriques, transcriptions);
+            const averageRadar = await getAverageRadar(sim);
+            const note = bilan?.note_globale != null ? Number(bilan.note_globale) : null;
+            const scoreClass = note == null ? 'medium' : getNoteClass(note);
+            const tagline = qualitative.tagline || 'Bilan qualitatif à générer';
+
+            let html = `<div class="debrief">
+                <div class="rich-header">
+                    <div><div class="rich-tagline">${escapeHtml(tagline)}</div><div class="rich-sub">${escapeHtml(getSimulationLabel(sim))} · ${sim.b2b_b2c ? sim.b2b_b2c.toUpperCase() : '—'} · ${formatDuration(sim.duree_secondes || 0)}</div></div>
+                    <div class="rich-score ${scoreClass}">${note == null ? '—' : `${note}/100`}</div>
+                </div>
+
+                <div class="radar-wrap">
+                    <div class="section-kicker">Radar multi-axe</div>
+                    ${radarSvg(currentRadar, averageRadar)}
+                    <div class="radar-legend"><span><i class="radar-dot"></i>Session actuelle</span><span><i class="radar-dot dashed"></i>Moyenne utilisateur</span></div>
+                </div>
+
                 ${audioHtml}
-                <hr>
-                <div class="bilan-section">
-                    <div class="bilan-title">Bilan</div>`;
 
-            if (bilan) {
-                html += `
-                    <div class="bilan-item"><strong>Note globale :</strong> ${bilan.note_globale ?? 'N/A'}/10</div>
-                    <div class="bilan-item"><strong>Points positifs :</strong> ${bilan.points_positifs || 'Aucun'}</div>
-                    <div class="bilan-item"><strong>Points négatifs :</strong> ${bilan.points_negatifs || 'Aucun'}</div>
-                    <div class="bilan-item"><strong>Conseils :</strong> ${bilan.conseils || 'Aucun'}</div>`;
-            } else {
-                html += '<p>Aucun bilan pour cette simulation.</p>';
-            }
-            html += '</div><hr><div class="bilan-title">Transcription</div>';
+                <div><div class="section-kicker">Métriques quantitatives</div><div class="rich-metrics-grid">
+                    <div class="rich-metric-card"><div class="rich-metric-label">Parole commercial</div><div class="rich-metric-value">${formatMetric(metriques.ratio_parole_commercial, '%')}</div><div class="rich-metric-help">vs ${formatMetric(metriques.ratio_parole_prospect, '%')} prospect</div></div>
+                    <div class="rich-metric-card"><div class="rich-metric-label">Questions</div><div class="rich-metric-value">${formatMetric(metriques.nb_questions_total)}</div><div class="rich-metric-help">${formatMetric(metriques.nb_questions_ouvertes)} ouvertes</div></div>
+                    <div class="rich-metric-card"><div class="rich-metric-label">Objections</div><div class="rich-metric-value">${formatMetric(metriques.taux_resolution_objections, '%')}</div><div class="rich-metric-help">${formatMetric(metriques.nb_objections_resolues)}/${formatMetric(metriques.nb_objections_total)} résolues</div></div>
+                    <div class="rich-metric-card"><div class="rich-metric-label">Interruptions</div><div class="rich-metric-value">${formatMetric(metriques.nb_interruptions)}</div><div class="rich-metric-help">${formatMetric(metriques.nb_silences_laisses)} silences laissés</div></div>
+                    <div class="rich-metric-card"><div class="rich-metric-label">Signaux d'achat</div><div class="rich-metric-value">${formatMetric(metriques.nb_signaux_exploites)}/${formatMetric(metriques.nb_signaux_achat)}</div><div class="rich-metric-help">exploités</div></div>
+                    <div class="rich-metric-card"><div class="rich-metric-label">Engagement final</div><div class="rich-metric-value">${formatMetric(metriques.score_engagement_final)}/100</div><div class="rich-metric-help">bascule ${metriques.moment_bascule_secondes == null ? '—' : fmtSec(metriques.moment_bascule_secondes)}</div></div>
+                </div></div>`;
 
-            if (!transcriptions?.length) {
-                html += '<p>Aucune transcription disponible.</p>';
-            } else {
-                transcriptions.forEach(line => {
-                    html += `
-                        <div class="transcript-line">
-                            <div class="transcript-speaker">${line.locuteur === 'commercial' ? 'Commercial' : 'IA'}</div>
-                            <div class="transcript-text">${line.texte}</div>
-                        </div>`;
+            html += `<details class="accordion" open><summary>Ce qu'il fait naturellement</summary><div class="accordion-body"><div class="qual-list">`;
+            const naturels = qualitative.comportements_naturels || [];
+            if (!naturels.length) html += '<div class="empty">Bilan non généré.</div>';
+            naturels.forEach(item => {
+                const frameworks = (item.frameworks_associes || []).map(f => `<span class="framework-chip">${escapeHtml(f)}</span>`).join('');
+                html += `<div class="qual-item"><div class="qual-meta"><span class="time-chip">${fmtSec(item.horodatage_secondes)}</span><span class="confidence-chip">Certitude ${formatMetric(item.niveau_certitude)}%</span>${frameworks}</div><div class="qual-text">${escapeHtml(item.description || '')}</div>${item.principe_nomme ? `<div class="micro-note">${escapeHtml(item.principe_nomme)}</div>` : ''}</div>`;
+            });
+            html += '</div></div></details>';
+
+            html += `<details class="accordion"><summary>Ses écarts</summary><div class="accordion-body"><div class="qual-list">`;
+            const ecarts = qualitative.ecarts || [];
+            if (!ecarts.length) html += '<div class="empty">Aucun écart identifié.</div>';
+            ecarts.forEach(item => {
+                const type = ['adaptatif', 'instinctif', 'manquant'].includes(item.type) ? item.type : 'manquant';
+                html += `<div class="qual-item"><div class="qual-meta"><span class="ecart-badge ecart-${type}">${type}</span><span class="time-chip">${fmtSec(item.horodatage_secondes)}</span></div><div class="qual-text">${escapeHtml(item.description || '')}</div><div class="micro-note">Avant : ${escapeHtml(item.effet_avant || '—')} · Après : ${escapeHtml(item.effet_apres || '—')}</div>${item.framework_de_reference ? `<div class="micro-note">Référence : ${escapeHtml(item.framework_de_reference)}</div>` : ''}</div>`;
+            });
+            html += '</div></div></details>';
+
+            html += `<details class="accordion"><summary>Moments de bascule</summary><div class="accordion-body"><div class="qual-list">`;
+            const moments = qualitative.moments_bascule || [];
+            if (!moments.length) html += '<div class="empty">Aucun moment de bascule identifié.</div>';
+            moments.forEach(item => {
+                html += `<div class="qual-item"><div class="qual-meta"><button class="moment-btn" data-moment="${Number(item.horodatage_secondes) || 0}">${fmtSec(item.horodatage_secondes)}</button></div><div class="qual-text"><strong>Déclencheur :</strong> ${escapeHtml(item.declencheur || '—')}<br>${escapeHtml(item.description || '')}</div></div>`;
+            });
+            html += '</div></div></details>';
+
+            const coherence = qualitative.coherence_interne || {};
+            html += `<details class="accordion"><summary>Cohérence interne</summary><div class="accordion-body"><div class="analysis-table">
+                <div class="analysis-cell"><strong>Comportements ancrés</strong><div>${(coherence.comportements_ancres || []).map(escapeHtml).join('<br>') || '—'}</div></div>
+                <div class="analysis-cell"><strong>Comportements situationnels</strong><div>${(coherence.comportements_situationnels || []).map(escapeHtml).join('<br>') || '—'}</div></div>
+                <div class="analysis-cell"><strong>Incohérences</strong><div>${(coherence.incoherences || []).map(escapeHtml).join('<br>') || '—'}</div></div>
+            </div></div></details>`;
+
+            const distribution = qualitative.distribution_tactique || {};
+            html += `<details class="accordion"><summary>Distribution tactique</summary><div class="accordion-body">`;
+            ['questions', 'crac', 'storytelling', 'reframe', 'autres'].forEach(key => {
+                const value = Math.max(0, Math.min(100, Number(distribution[key]) || 0));
+                html += `<div class="distribution-row"><div>${escapeHtml(key)}</div><div class="distribution-bar"><div class="distribution-fill" style="width:${value}%"></div></div><div>${Math.round(value)}%</div></div>`;
+            });
+            html += '</div></details>';
+
+            if ((qualitative.attribution_multi_framework || []).length) {
+                html += `<details class="accordion"><summary>Attribution multi-framework</summary><div class="accordion-body"><div class="qual-list">`;
+                qualitative.attribution_multi_framework.forEach(item => {
+                    html += `<div class="qual-item"><div class="qual-text">${escapeHtml(item.comportement || '')}</div><div class="qual-meta">${(item.frameworks || []).map(f => `<span class="framework-chip">${escapeHtml(f)}</span>`).join('')}</div><div class="micro-note">${escapeHtml(item.interpretation || '')}</div></div>`;
                 });
+                html += '</div></div></details>';
             }
-            html += '</div>';
+
+            html += `<div class="generate-box"><div class="generate-left"><div class="generate-title">Sensibilité aux correspondances framework</div><div class="generate-help">0 = correspondances très solides uniquement · 100 = correspondances larges</div><div class="sensitivity-row"><input id="surAttributionScore" type="range" min="0" max="100" value="50"><span id="surAttributionValue" class="sensitivity-value">50</span></div></div><button class="btn-primary" id="generateBilanBtn">${bilan ? 'Regénérer le bilan' : 'Générer le bilan'}</button></div>`;
+
+            html += `<div class="transcript-box"><div class="transcript-head">Transcription — cliquez sur une phrase pour vous y rendre dans l’audio</div><div class="transcript-list" id="transcriptList">`;
+            if (!transcriptions.length) html += '<div class="empty">Aucune transcription disponible.</div>';
+            const basculeTimes = moments.map(m => Number(m.horodatage_secondes) || 0);
+            transcriptions.forEach((line, i) => {
+                const time = Number(line.horodatage_secondes) || 0;
+                const isBascule = basculeTimes.some(t => Math.abs(t - time) <= 2);
+                html += `<div class="transcript-line ${isBascule ? 'bascule-line' : ''}" data-start="${time}" data-index="${i}"><div class="transcript-time">${fmtSec(time)}</div><div class="transcript-speaker">${line.locuteur === 'commercial' ? 'Commercial' : 'IA'}</div><div class="transcript-text">${escapeHtml(line.texte || '')}${isBascule ? '<span class="bascule-mark">BASCULE</span>' : ''}</div></div>`;
+            });
+            html += '</div></div></div>';
+
             modalBody.innerHTML = html;
 
-            // ── Injection audio via createElement (contourne la restriction Chrome) ──
             if (pendingAudioUrl) {
-                const slot = document.getElementById('audio-player-slot');
+                const slot = $('audio-player-slot');
                 if (slot) {
                     const audio = document.createElement('audio');
                     audio.controls = true;
-                    audio.preload  = 'metadata';
-                    audio.style.width = '100%';
+                    audio.preload = 'metadata';
                     audio.src = pendingAudioUrl;
+                    audio.style.width = '100%';
                     audio.load();
                     slot.appendChild(audio);
                 }
             }
+
+            const audio = modalBody.querySelector('audio');
+            const lines = [...modalBody.querySelectorAll('.transcript-line')];
+            lines.forEach(line => line.addEventListener('click', () => {
+                if (!audio) return;
+                audio.currentTime = Number(line.dataset.start) || 0;
+                audio.play().catch(() => {});
+            }));
+            if (audio) audio.addEventListener('timeupdate', () => {
+                const current = audio.currentTime;
+                lines.forEach(line => {
+                    const start = Number(line.dataset.start) || 0;
+                    line.classList.toggle('active', Math.abs(current - start) < 1.2);
+                });
+            });
+
+            const slider = $('surAttributionScore');
+            const sliderValue = $('surAttributionValue');
+            slider.addEventListener('input', () => { sliderValue.textContent = slider.value; });
+            $('generateBilanBtn').addEventListener('click', async () => {
+                const button = $('generateBilanBtn');
+                button.disabled = true;
+                button.textContent = 'Analyse...';
+                try {
+                    const response = await simulationApi('/api/bilan', { method: 'POST', body: JSON.stringify({ simulationId: simId, surAttributionScore: Number(slider.value) }) });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'Erreur de génération');
+                    await openSimDetail(simId);
+                } catch (err) {
+                    alert(`Erreur lors de la génération du bilan : ${err.message}`);
+                    button.disabled = false;
+                    button.textContent = bilan ? 'Regénérer le bilan' : 'Générer le bilan';
+                }
+            });
+            modalBody.querySelectorAll('.moment-btn').forEach(button => button.addEventListener('click', () => {
+                if (!audio) return;
+                audio.currentTime = Number(button.dataset.moment) || 0;
+                audio.play().catch(() => {});
+            }));
         }
 
-        function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+        function closeModal() { $('modalOverlay').classList.remove('active'); }
+
+        // ─── WIZARD ──────────────────────────────────────────────────────────
+        function resetWizardState() {
+            wizardState.step = 1;
+            wizardState.b2b_b2c = null;
+            wizardState.vendeur_type_entreprise = '';
+            wizardState.vendeur_produit = '';
+            wizardState.vendeur_url = '';
+            wizardState.prospect_role = '';
+            wizardState.prospect_type_entreprise = '';
+            wizardState.prospect_url = '';
+            wizardState.prospect_profile = '';
+            wizardState.type_entretien = null;
+            wizardState.phase_choisie = null;
+            wizardState.simulation_precedente_id = null;
+            wizardState.continuite_rdv = null;
+            wizardState.continuationMode = 'new';
+        }
+
+        async function openSimulationWizard() {
+            resetWizardState();
+            await loadPreviousSimulations();
+            $('modalTitle').textContent = 'Configurer la simulation';
+            renderWizard();
+            $('modalOverlay').classList.add('active');
+        }
+
+        async function loadPreviousSimulations() {
+            let query = supabaseClient.from('simulations').select('id,created_at,type_entretien,phase_choisie,type_scenario,b2b_b2c,statut').eq('statut', 'terminee').order('created_at', { ascending: false }).limit(30);
+            if (currentProfile?.role === 'commercial') query = query.eq('user_id', currentUser.id);
+            const { data } = await query;
+            wizardState.previousSimulations = data || [];
+        }
+
+        function renderWizard() {
+            const indicators = ['Entreprise', 'Contexte', 'Entretien', 'Continuité'];
+            $('modalBody').innerHTML = `<div class="launch-stepper"><div class="stepper-top">${indicators.map((label, i) => `<div class="step-indicator ${i + 1 === wizardState.step ? 'active' : ''}">${i + 1}. ${label}</div>`).join('')}</div>${renderWizardStep()}</div>`;
+        }
+
+        function renderWizardStep() {
+            if (wizardState.step === 1) {
+                return `<div class="step-content active"><div class="step-title">1. B2B ou B2C ?</div><div class="step-subtitle">Le parcours de configuration et la construction du prospect seront adaptés à ce choix.</div><div class="choice-grid">
+                    <button class="choice-card ${wizardState.b2b_b2c === 'b2b' ? 'selected' : ''}" onclick="selectB2bB2c('b2b')"><div class="choice-title">B2B</div><div class="choice-desc">Tu t'adresses à un interlocuteur au sein d'une entreprise.</div></button>
+                    <button class="choice-card ${wizardState.b2b_b2c === 'b2c' ? 'selected' : ''}" onclick="selectB2bB2c('b2c')"><div class="choice-title">B2C</div><div class="choice-desc">Tu t'adresses directement à un consommateur.</div></button>
+                </div><div id="wizard-error" class="step-error"></div><div class="step-actions"><span></span><button class="btn-primary" onclick="wizardNext()" ${wizardState.b2b_b2c ? '' : 'disabled'}>Continuer</button></div></div>`;
+            }
+
+            if (wizardState.step === 2) {
+                const b2b = wizardState.b2b_b2c === 'b2b';
+                return `<div class="step-content active"><div class="step-title">2. Qui es-tu et à qui parles-tu ?</div><div class="step-subtitle">Les champs préremplis restent modifiables. Une URL peut être analysée, mais elle ne révèle jamais les problèmes internes réels d'une entreprise.</div>
+                    <div class="section-kicker">Vendeur</div>
+                    <div class="field-grid">
+                        <div class="input-group"><label class="input-label">Type d'entreprise</label><input class="input-field" value="${escapeHtml(wizardState.vendeur_type_entreprise)}" oninput="wizardState.vendeur_type_entreprise=this.value"></div>
+                        <div class="input-group"><label class="input-label">Produit / service vendu</label><input class="input-field" value="${escapeHtml(wizardState.vendeur_produit)}" oninput="wizardState.vendeur_produit=this.value"></div>
+                    </div>
+                    <div class="input-group"><label class="input-label">URL du site vendeur — facultative</label><div class="url-row"><input class="input-field" id="vendeur-url" value="${escapeHtml(wizardState.vendeur_url)}" oninput="wizardState.vendeur_url=this.value" placeholder="https://..."><button class="wizard-analyze" onclick="analyzeWizardUrl('vendeur')">Analyser</button></div><div id="vendeur-analysis" class="analysis-banner"></div></div>
+                    <div class="section-kicker" style="margin-top:14px">Prospect</div>
+                    ${b2b ? `<div class="field-grid"><div class="input-group"><label class="input-label">Rôle du prospect</label><select class="wizard-select" onchange="wizardState.prospect_role=this.value"><option value="">Choisir</option>${['drh','dirco','ceo','coo','daf','ops','autre'].map(v => `<option value="${v}" ${wizardState.prospect_role === v ? 'selected' : ''}>${v.toUpperCase()}</option>`).join('')}</select></div><div class="input-group"><label class="input-label">Type d'entreprise</label><input class="input-field" value="${escapeHtml(wizardState.prospect_type_entreprise)}" oninput="wizardState.prospect_type_entreprise=this.value"></div></div><div class="input-group"><label class="input-label">URL de l'entreprise — facultative</label><div class="url-row"><input class="input-field" id="prospect-url" value="${escapeHtml(wizardState.prospect_url)}" oninput="wizardState.prospect_url=this.value" placeholder="https://..."><button class="wizard-analyze" onclick="analyzeWizardUrl('prospect')">Analyser</button></div><div id="prospect-analysis" class="analysis-banner"></div></div>` : `<div class="input-group"><label class="input-label">Profil du prospect</label><textarea class="wizard-textarea" oninput="wizardState.prospect_profile=this.value" placeholder="Situation, contexte et éléments pertinents du consommateur...">${escapeHtml(wizardState.prospect_profile)}</textarea></div>`}
+                    <div class="step-help">Vérifie et corrige si besoin.</div><div id="wizard-error" class="step-error"></div><div class="step-actions"><button class="btn-secondary" onclick="wizardBack()">Retour</button><button class="btn-primary" onclick="wizardNext()">Continuer</button></div></div>`;
+            }
+
+            if (wizardState.step === 3) {
+                return `<div class="step-content active"><div class="step-title">3. Quel entretien simuler ?</div><div class="step-subtitle">Un Cold Call démarre sans contexte connu par le prospect. Un RDV donne au prospect le contexte prévu du rendez-vous.</div><div class="choice-grid">
+                    <button class="choice-card ${wizardState.type_entretien === 'cold_call' ? 'selected' : ''}" onclick="selectInterviewType('cold_call')"><div class="choice-title">Cold Call</div><div class="choice-desc">Le prospect ne sait pas qui appelle, pour quelle entreprise ni pourquoi avant que tu le lui révèles.</div></button>
+                    <button class="choice-card ${wizardState.type_entretien === 'rdv' ? 'selected' : ''}" onclick="selectInterviewType('rdv')"><div class="choice-title">RDV</div><div class="choice-desc">Le prospect connaît le contexte du rendez-vous.</div></button>
+                </div>${wizardState.type_entretien === 'rdv' ? `<div style="margin-top:14px" class="input-group"><label class="input-label">Phase</label><select class="wizard-select" onchange="wizardState.phase_choisie=this.value"><option value="">Choisir une phase</option>${[['complet','Entretien complet'],['decouverte','Découverte seule'],['demo','Démo'],['objections_closing','Objections & Closing'],['nego','Négociation']].map(([v,l]) => `<option value="${v}" ${wizardState.phase_choisie === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>` : ''}<div id="wizard-error" class="step-error"></div><div class="step-actions"><button class="btn-secondary" onclick="wizardBack()">Retour</button><button class="btn-primary" onclick="wizardNext()">Continuer</button></div></div>`;
+            }
+
+            const targetPhase = wizardState.phase_choisie || 'cold_call';
+            return `<div class="step-content active"><div class="step-title">4. Nouveau scénario ou continuation ?</div><div class="step-subtitle">Une continuation conserve la mémoire du prospect. Le serveur bloque toute transition incohérente.</div><div class="choice-grid">
+                <button class="choice-card ${!wizardState.simulation_precedente_id ? 'selected' : ''}" onclick="selectContinuationMode('new')"><div class="choice-title">Nouveau scénario</div><div class="choice-desc">Gemini construit une nouvelle persona à partir des informations saisies.</div></button>
+                <button class="choice-card ${wizardState.simulation_precedente_id ? 'selected' : ''}" onclick="selectContinuationMode('continue')"><div class="choice-title">Continuer une simulation précédente</div><div class="choice-desc">La même personne et sa mémoire sont conservées.</div></button>
+            </div>
+            ${wizardState.continuationMode === 'continue' ? renderPreviousSimulations(targetPhase) : ''}
+            <div id="continuity-slot"></div><div id="wizard-error" class="step-error"></div><div class="step-actions"><button class="btn-secondary" onclick="wizardBack()">Retour</button><button id="startSimulationBtn" class="btn-primary" onclick="createSimulation()">Créer la simulation</button></div></div>`;
+        }
+
+        function selectB2bB2c(value) {
+            wizardState.b2b_b2c = value;
+            wizardState.prospect_role = '';
+            wizardState.prospect_type_entreprise = '';
+            wizardState.prospect_url = '';
+            wizardState.prospect_profile = '';
+            renderWizard();
+        }
+
+        function selectInterviewType(value) {
+            wizardState.type_entretien = value;
+            wizardState.phase_choisie = value === 'cold_call' ? null : wizardState.phase_choisie;
+            wizardState.simulation_precedente_id = null;
+            wizardState.continuite_rdv = null;
+            wizardState.continuationMode = 'new';
+            renderWizard();
+        }
+
+        function selectContinuationMode(mode) {
+            wizardState.continuationMode = mode;
+            if (mode === 'new') {
+                wizardState.simulation_precedente_id = null;
+                wizardState.continuite_rdv = null;
+            }
+            renderWizard();
+        }
+
+        function renderPreviousSimulations(targetPhase) {
+            const previous = wizardState.previousSimulations.filter(sim => isClientCompatiblePrevious(sim, targetPhase));
+            if (!previous.length) return '<div class="empty">Aucune simulation précédente compatible avec cette phase.</div>';
+            let html = '<div class="section-kicker" style="margin-top:14px">Simulation précédente</div><div class="previous-list">';
+            previous.forEach(sim => {
+                const requiresNewRdv = sim.type_entretien === 'cold_call';
+                const selected = wizardState.simulation_precedente_id === sim.id;
+                html += `<div class="previous-item ${selected ? 'selected' : ''}" onclick="selectPreviousSimulation('${escapeHtml(sim.id)}')"><div class="previous-title">${escapeHtml(getSimulationLabel(sim))}</div><div class="previous-meta">${formatDate(sim.created_at)} · ${sim.b2b_b2c ? sim.b2b_b2c.toUpperCase() : ''}</div><div class="previous-status ${requiresNewRdv ? 'warn' : 'ok'}">${requiresNewRdv ? 'Continuation autorisée vers RDV après vérification du résultat du Cold Call' : 'Transition compatible'}</div></div>`;
+            });
+            html += '</div>';
+            if (wizardState.simulation_precedente_id) {
+                const sim = wizardState.previousSimulations.find(item => item.id === wizardState.simulation_precedente_id);
+                if (sim && sim.type_entretien === 'rdv') {
+                    html += `<div class="section-kicker" style="margin-top:14px">Continuité du rendez-vous</div><div class="continuity-grid"><button class="continuity-card ${wizardState.continuite_rdv === 'meme_rdv' ? 'selected' : ''}" onclick="selectContinuity('meme_rdv')"><div class="continuity-title">Même rendez-vous</div><div class="continuity-desc">La conversation reprend comme si elle n'avait pas été interrompue.</div></button><button class="continuity-card ${wizardState.continuite_rdv === 'nouveau_rdv' ? 'selected' : ''}" onclick="selectContinuity('nouveau_rdv')"><div class="continuity-title">Nouveau rendez-vous</div><div class="continuity-desc">Le prospect garde la mémoire du précédent rendez-vous.</div></button></div>`;
+                } else {
+                    html += '<div class="step-help">Un Cold Call continué vers un RDV devient un nouveau rendez-vous.</div>';
+                }
+            }
+            return html;
+        }
+
+        function isClientCompatiblePrevious(sim, targetPhase) {
+            if (sim.b2b_b2c && sim.b2b_b2c !== wizardState.b2b_b2c) return false;
+            if (sim.type_entretien === 'cold_call') return wizardState.type_entretien === 'rdv' && ['complet', 'decouverte'].includes(targetPhase);
+            if (wizardState.type_entretien !== 'rdv') return false;
+            if (targetPhase === 'demo') return sim.phase_choisie === 'decouverte';
+            if (targetPhase === 'objections_closing') return sim.phase_choisie === 'demo';
+            if (targetPhase === 'nego') return sim.phase_choisie === 'objections_closing';
+            if (targetPhase === 'complet') return ['decouverte', 'demo', 'objections_closing', 'nego'].includes(sim.phase_choisie);
+            if (targetPhase === 'decouverte') return sim.phase_choisie === 'complet';
+            return false;
+        }
+
+        function selectPreviousSimulation(id) {
+            wizardState.simulation_precedente_id = id;
+            const sim = wizardState.previousSimulations.find(item => item.id === id);
+            wizardState.continuite_rdv = sim?.type_entretien === 'cold_call' ? 'nouveau_rdv' : wizardState.continuite_rdv;
+            renderWizard();
+        }
+
+        function selectContinuity(value) {
+            wizardState.continuite_rdv = value;
+            renderWizard();
+        }
+
+        function wizardBack() {
+            if (wizardState.step > 1) {
+                wizardState.step--;
+                renderWizard();
+            }
+        }
+
+        function validateWizardStep() {
+            const error = $('wizard-error');
+            if (error) { error.classList.remove('active'); error.textContent = ''; }
+
+            const fail = message => {
+                if (error) { error.textContent = message; error.classList.add('active'); }
+                return false;
+            };
+
+            if (wizardState.step === 1 && !wizardState.b2b_b2c) return fail('Choisis B2B ou B2C.');
+
+            if (wizardState.step === 2) {
+                if (!wizardState.vendeur_type_entreprise.trim()) return fail("Le type d'entreprise vendeur est requis.");
+                if (!wizardState.vendeur_produit.trim()) return fail('Le produit / service vendu est requis.');
+                if (wizardState.b2b_b2c === 'b2b') {
+                    if (!wizardState.prospect_role) return fail('Choisis le rôle du prospect.');
+                    if (!wizardState.prospect_type_entreprise.trim()) return fail("Le type d'entreprise du prospect est requis.");
+                } else if (!wizardState.prospect_profile.trim()) {
+                    return fail('Décris le profil du prospect B2C.');
+                }
+            }
+
+            if (wizardState.step === 3) {
+                if (!wizardState.type_entretien) return fail('Choisis Cold Call ou RDV.');
+                if (wizardState.type_entretien === 'rdv' && !wizardState.phase_choisie) return fail('Choisis la phase du RDV.');
+            }
+
+            if (wizardState.step === 4 && wizardState.continuationMode === 'continue' && !wizardState.simulation_precedente_id) return fail('Choisis une simulation précédente.');
+            return true;
+        }
+
+        function wizardNext() {
+            if (!validateWizardStep()) return;
+            if (wizardState.step < 4) {
+                wizardState.step++;
+                if (wizardState.step === 4 && !wizardState.continuationMode) wizardState.continuationMode = 'new';
+                renderWizard();
+            }
+        }
+
+        async function analyzeWizardUrl(target) {
+            const url = target === 'vendeur' ? wizardState.vendeur_url : wizardState.prospect_url;
+            if (!url.trim()) return;
+            const button = document.querySelector(target === 'vendeur' ? '#vendeur-url + .wizard-analyze' : '#prospect-url + .wizard-analyze');
+            if (button) { button.disabled = true; button.textContent = 'Analyse...'; }
+            try {
+                const res = await simulationApi('/api/analyze-url', {
+                    method: 'POST',
+                    body: JSON.stringify({ url: url.trim(), cible: target, b2b_b2c: wizardState.b2b_b2c, prospect_role: wizardState.prospect_role })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Analyse impossible');
+
+                if (target === 'vendeur') {
+                    if (!wizardState.vendeur_type_entreprise && data.type_entreprise) wizardState.vendeur_type_entreprise = data.type_entreprise;
+                    if (!wizardState.vendeur_produit && data.produit_service) wizardState.vendeur_produit = data.produit_service;
+                    renderWizard();
+                    $('vendeur-analysis').textContent = 'Vérifie et corrige si besoin.';
+                    $('vendeur-analysis').classList.add('active');
+                } else {
+                    if (!wizardState.prospect_type_entreprise && data.type_entreprise_prospect) wizardState.prospect_type_entreprise = data.type_entreprise_prospect;
+                    renderWizard();
+                    $('prospect-analysis').textContent = 'Vérifie et corrige si besoin.';
+                    $('prospect-analysis').classList.add('active');
+                }
+            } catch (err) {
+                alert(`Erreur d'analyse URL : ${err.message}`);
+            } finally {
+                if (button) { button.disabled = false; button.textContent = 'Analyser'; }
+            }
+        }
+
+        async function createSimulation() {
+            if (!validateWizardStep()) return;
+
+            const button = $('startSimulationBtn');
+            if (button) { button.disabled = true; button.textContent = 'Construction du prospect...'; }
+
+            try {
+                const payload = {
+                    b2b_b2c: wizardState.b2b_b2c,
+                    vendeur_type_entreprise: wizardState.vendeur_type_entreprise.trim(),
+                    vendeur_produit: wizardState.vendeur_produit.trim(),
+                    vendeur_url: wizardState.vendeur_url.trim() || null,
+                    prospect_role: wizardState.b2b_b2c === 'b2b' ? wizardState.prospect_role : null,
+                    prospect_type_entreprise: wizardState.b2b_b2c === 'b2b' ? wizardState.prospect_type_entreprise.trim() : null,
+                    prospect_url: wizardState.b2b_b2c === 'b2b' ? (wizardState.prospect_url.trim() || null) : null,
+                    prospect_profile: wizardState.b2b_b2c === 'b2c' ? wizardState.prospect_profile.trim() : null,
+                    type_entretien: wizardState.type_entretien,
+                    phase_choisie: wizardState.type_entretien === 'rdv' ? wizardState.phase_choisie : null,
+                    simulation_precedente_id: wizardState.continuationMode === 'continue' ? wizardState.simulation_precedente_id : null,
+                    continuite_rdv: wizardState.continuationMode === 'continue' ? wizardState.continuite_rdv : null
+                };
+
+                const res = await simulationApi('/api/simulation/start', { method: 'POST', body: JSON.stringify(payload) });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Impossible de créer la simulation');
+
+                const token = await getAccessToken();
+                if (!token) throw new Error('Session Supabase introuvable.');
+
+                closeModal();
+                window.location.href = `${SIMULATION_APP_URL}/?token=${encodeURIComponent(token)}&simulationId=${encodeURIComponent(data.simulationId)}`;
+            } catch (err) {
+                const error = $('wizard-error');
+                if (error) { error.textContent = err.message; error.classList.add('active'); }
+                if (button) { button.disabled = false; button.textContent = 'Créer la simulation'; }
+            }
+        }
 
         // ─── CLASSEMENT ──────────────────────────────────────────────────────
         async function loadRankingView(container) {
-            container.innerHTML = '<div>Chargement...</div>';
-            const { data: sims, error } = await supabaseClient.from('simulations').select(`
-                user_id, bilans ( note_globale ), profiles ( nom, prenom )
-            `);
-            if (error) { container.innerHTML = `<div>Erreur : ${error.message}</div>`; return; }
+            container.innerHTML = '<div class="empty">Chargement...</div>';
+            let query = supabaseClient.from('simulations').select('user_id,bilans(note_globale),profiles(nom,prenom)').eq('statut', 'terminee');
+            if (currentProfile?.role === 'commercial') query = query.eq('user_id', currentUser.id);
+            const { data: sims, error } = await query;
+            if (error) { container.innerHTML = `<div class="empty">Erreur : ${escapeHtml(error.message)}</div>`; return; }
 
             const userStats = {};
-            sims.forEach(sim => {
-                const uid  = sim.user_id;
+            (sims || []).forEach(sim => {
+                const uid = sim.user_id;
                 if (!userStats[uid]) userStats[uid] = { total: 0, count: 0, profile: sim.profiles };
                 const note = sim.bilans?.[0]?.note_globale;
-                if (note != null) { userStats[uid].total += note; userStats[uid].count++; }
+                if (note != null) { userStats[uid].total += Number(note); userStats[uid].count++; }
             });
-            const ranking = Object.keys(userStats)
-                .map(uid => ({ uid, avg: userStats[uid].count > 0 ? Math.round(userStats[uid].total / userStats[uid].count) : 0, profile: userStats[uid].profile }))
-                .sort((a, b) => b.avg - a.avg);
 
+            const ranking = Object.keys(userStats).map(uid => ({ uid, avg: userStats[uid].count ? Math.round(userStats[uid].total / userStats[uid].count) : 0, profile: userStats[uid].profile })).sort((a, b) => b.avg - a.avg);
             let html = '<div class="section-header"><div class="section-title">Classement global</div></div><div class="ranking-grid">';
-            if (!ranking.length) {
-                html += '<p>Aucune donnée de classement.</p>';
-            } else {
-                ranking.forEach((item, i) => {
-                    const name = item.profile ? `${item.profile.prenom} ${item.profile.nom}` : 'Utilisateur';
-                    html += `
-                        <div class="rank-card">
-                            <div class="rank-position">${i + 1}</div>
-                            <div>
-                                <div class="rank-name">${name}</div>
-                                <div class="rank-note">${item.avg}/10</div>
-                            </div>
-                        </div>`;
-                });
-            }
+            if (!ranking.length) html += '<p class="empty">Aucune donnée de classement.</p>';
+            else ranking.forEach((item, i) => {
+                const name = item.profile ? `${item.profile.prenom || ''} ${item.profile.nom || ''}`.trim() : 'Utilisateur';
+                html += `<div class="rank-card"><div class="rank-position">${i + 1}</div><div><div class="rank-name">${escapeHtml(name)}</div><div class="rank-note">${item.avg}/100</div></div></div>`;
+            });
             html += '</div>';
             container.innerHTML = html;
         }
 
         // ─── ÉVÉNEMENTS ──────────────────────────────────────────────────────
-        document.getElementById('loginBtn').addEventListener('click', handleLogin);
-        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-        document.getElementById('refreshBtn').addEventListener('click', () => loadView(currentView));
-        document.getElementById('modalClose').addEventListener('click', closeModal);
-        document.getElementById('modalOverlay').addEventListener('click', e => {
-            if (e.target === document.getElementById('modalOverlay')) closeModal();
-        });
-
-        // Lancer la simulation en passant le token pour éviter le double login
-        document.getElementById('launchSimBtn').addEventListener('click', async () => {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            const token = session?.access_token;
-            const base  = 'https://agent-vocal-39hz.onrender.com/';
-            const url   = token ? `${base}?token=${encodeURIComponent(token)}` : base;
-            window.open(url, '_blank');
-        });
+        $('loginBtn').addEventListener('click', handleLogin);
+        $('passwordInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+        $('logoutBtn').addEventListener('click', handleLogout);
+        $('refreshBtn').addEventListener('click', () => loadView(currentView));
+        $('modalClose').addEventListener('click', closeModal);
+        $('modalOverlay').addEventListener('click', e => { if (e.target === $('modalOverlay')) closeModal(); });
+        $('launchSimBtn').addEventListener('click', openSimulationWizard);
 
         // ─── INIT ────────────────────────────────────────────────────────────
         (async () => {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) { currentUser = session.user; await loadProfile(); }
-            else showLogin(true);
+            try {
+                const { data: { session }, error } = await supabaseClient.auth.getSession();
+                if (error) console.error('[Dashboard] getSession:', error);
+                if (session) {
+                    currentUser = session.user;
+                    await loadProfile();
+                } else {
+                    showLogin(true);
+                }
+            } catch (err) {
+                console.error('[Dashboard] Initialisation:', err);
+                showLogin(true);
+            }
         })();
     </script>
 </body>
