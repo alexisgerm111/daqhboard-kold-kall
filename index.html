@@ -54,6 +54,7 @@
   --ease: cubic-bezier(.4,0,.2,1);
 }
 
+/* Active theme vars */
 [data-theme="light"] {
   --bg:       var(--l-bg);
   --surface:  var(--l-surface);
@@ -83,6 +84,9 @@
   --red:   var(--d-red);   --redBg:   var(--d-redBg);
 }
 
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:14px;}
 body{
@@ -98,6 +102,9 @@ button,input,select,textarea{font-family:inherit;}
 ::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
+/* ═══════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════ */
 #login-screen{
   position:fixed;inset:0;
   display:flex;align-items:center;justify-content:center;
@@ -168,6 +175,9 @@ button,input,select,textarea{font-family:inherit;}
   position:absolute;top:20px;right:20px;
 }
 
+/* ═══════════════════════════════════════════
+   THEME TOGGLE (shared)
+═══════════════════════════════════════════ */
 .theme-pill{
   display:inline-flex;align-items:center;gap:2px;
   background:var(--surf2);border:1px solid var(--border);
@@ -182,6 +192,9 @@ button,input,select,textarea{font-family:inherit;}
 }
 .theme-opt.on{background:var(--surface);color:var(--t1);box-shadow:0 1px 4px rgba(0,0,0,.15);}
 
+/* ═══════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════ */
 #app{
   display:none;
   height:100dvh;
@@ -189,6 +202,7 @@ button,input,select,textarea{font-family:inherit;}
   overflow:hidden;
 }
 
+/* ─── TOP NAV ─────────────────────────────── */
 .nav{
   height:52px;flex-shrink:0;
   display:flex;align-items:center;
@@ -251,6 +265,7 @@ button,input,select,textarea{font-family:inherit;}
 }
 .user-name-pill{font-size:12px;font-weight:500;color:var(--t2);}
 
+/* ─── LAUNCH BTN ─────────────────────────── */
 .btn-launch{
   display:inline-flex;align-items:center;gap:7px;
   padding:9px 18px;
@@ -267,6 +282,7 @@ button,input,select,textarea{font-family:inherit;}
 .btn-launch:disabled{opacity:.45;cursor:wait;}
 .btn-launch svg{width:14px;height:14px;}
 
+/* ─── MAIN CONTENT ───────────────────────── */
 .main-content{
   flex:1;overflow-y:auto;
   padding:32px 32px 40px;
@@ -274,6 +290,7 @@ button,input,select,textarea{font-family:inherit;}
   gap:24px;
 }
 
+/* ─── EMPTY HERO ─────────────────────────── */
 .hero-empty{
   flex:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
@@ -294,6 +311,7 @@ button,input,select,textarea{font-family:inherit;}
 }
 .hero-sub{font-size:14px;color:var(--t3);line-height:1.6;max-width:380px;}
 
+/* ─── SESSION JOURNAL ────────────────────── */
 .journal-header{
   display:flex;align-items:baseline;justify-content:space-between;
   gap:12px;
@@ -360,7 +378,6 @@ button,input,select,textarea{font-family:inherit;}
 .session-status.en_cours{background:var(--amberBg);color:var(--amber);}
 .session-status.preparation{background:var(--surf2);color:var(--t3);border:1px solid var(--border);}
 .session-status.erreur_preparation{background:var(--redBg);color:var(--red);}
-.session-status.abandonnee{background:var(--surf3);color:var(--t3);}
 
 .session-dur{
   font-size:13px;color:var(--t3);
@@ -380,6 +397,7 @@ button,input,select,textarea{font-family:inherit;}
 .session-score.low{color:var(--red);}
 .session-score.none{color:var(--t4);font-size:13px;font-weight:500;}
 
+/* ─── RANKING ────────────────────────────── */
 .ranking-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
@@ -409,6 +427,9 @@ button,input,select,textarea{font-family:inherit;}
 .rank-name{font-size:14px;font-weight:600;color:var(--t1);}
 .rank-avg{font-size:12px;color:var(--t3);margin-top:2px;font-variant-numeric:tabular-nums;}
 
+/* ═══════════════════════════════════════════
+   DRAWER (wizard configuration)
+═══════════════════════════════════════════ */
 .drawer-overlay{
   position:fixed;inset:0;
   background:rgba(0,0,0,.5);
@@ -473,6 +494,7 @@ button,input,select,textarea{font-family:inherit;}
   font-size:11px;color:var(--t3);font-weight:500;
 }
 
+/* ─── WIZARD INTERNALS ───────────────────── */
 .step-title{
   font-family:var(--font-display);
   font-size:18px;font-weight:800;
@@ -600,6 +622,7 @@ button,input,select,textarea{font-family:inherit;}
 .cont-name{font-size:12px;font-weight:700;color:var(--t1);}
 .cont-desc{font-size:10px;color:var(--t3);margin-top:3px;line-height:1.5;}
 
+/* Drawer nav buttons */
 .btn-prev{
   padding:9px 18px;
   background:transparent;border:1px solid var(--border);
@@ -620,6 +643,9 @@ button,input,select,textarea{font-family:inherit;}
 .btn-next:active{transform:scale(.98);}
 .btn-next:disabled{opacity:.4;cursor:wait;}
 
+/* ═══════════════════════════════════════════
+   DEBRIEF OVERLAY (full-screen slide-in)
+═══════════════════════════════════════════ */
 .debrief-overlay{
   position:fixed;inset:0;
   background:var(--bg);
@@ -660,6 +686,7 @@ button,input,select,textarea{font-family:inherit;}
   display:flex;flex-direction:column;gap:28px;
 }
 
+/* debrief hero */
 .db-hero{
   display:flex;justify-content:space-between;align-items:flex-start;
   gap:20px;
@@ -684,6 +711,7 @@ button,input,select,textarea{font-family:inherit;}
 .db-score.none{color:var(--t4);font-size:28px;}
 .db-score-label{font-size:12px;color:var(--t3);margin-top:4px;}
 
+/* debrief sections */
 .db-section{
   background:var(--surface);
   border:1px solid var(--border);
@@ -702,6 +730,7 @@ button,input,select,textarea{font-family:inherit;}
 }
 .db-section-body{padding:20px;}
 
+/* radar */
 .radar-svg{width:200px;height:200px;display:block;margin:0 auto;}
 .radar-legend{
   display:flex;gap:16px;justify-content:center;
@@ -710,6 +739,7 @@ button,input,select,textarea{font-family:inherit;}
 .rdot{width:14px;height:0;border-top:2px solid var(--accent);display:inline-block;}
 .rdot.avg{border-top-style:dashed;border-top-color:rgba(167,139,250,.6);}
 
+/* metrics */
 .metrics-flex{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
@@ -725,6 +755,7 @@ button,input,select,textarea{font-family:inherit;}
 .m-label{font-size:11px;color:var(--t3);}
 .m-sub{font-size:10px;color:var(--t4);}
 
+/* accordion */
 .db-accordion{
   border:1px solid var(--border);
   border-radius:12px;overflow:hidden;
@@ -744,6 +775,7 @@ details[open] .db-acc-icon{transform:rotate(45deg);}
 details[open] .db-acc-head{border-bottom:1px solid var(--border);}
 .db-acc-body{padding:16px 20px;display:flex;flex-direction:column;gap:10px;}
 
+/* qual items */
 .qi{
   background:var(--surf2);border:1px solid var(--border);
   border-radius:8px;padding:12px;
@@ -760,5 +792,771 @@ details[open] .db-acc-head{border-bottom:1px solid var(--border);}
 .qi-text{font-size:12px;line-height:1.65;color:var(--t2);}
 .qi-note{font-size:10px;color:var(--t4);margin-top:6px;line-height:1.5;}
 
+/* distribution */
 .dist-rows{display:flex;flex-direction:column;gap:10px;}
-.dist-row{display:grid;grid-template-columns:90px
+.dist-row{display:grid;grid-template-columns:90px 1fr 38px;gap:10px;align-items:center;}
+.dist-key{font-size:12px;color:var(--t2);text-transform:capitalize;}
+.dist-track{height:5px;background:var(--surf3);border-radius:99px;overflow:hidden;}
+.dist-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accentL));border-radius:99px;}
+.dist-pct{font-size:11px;color:var(--t3);text-align:right;font-variant-numeric:tabular-nums;}
+
+/* analysis grid */
+.an-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.an-cell{background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:12px;}
+.an-cell strong{display:block;font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.05em;margin-bottom:6px;text-transform:uppercase;}
+.an-cell div{font-size:12px;line-height:1.6;color:var(--t2);}
+
+/* audio */
+.audio-block{padding:4px 0;}
+.audio-block audio{width:100%;accent-color:var(--accent);}
+.audio-na{padding:16px;text-align:center;font-size:12px;color:var(--t3);}
+
+/* transcript */
+.transcript-wrap{overflow:hidden;}
+.t-head{
+  padding:12px 20px;background:var(--surf2);
+  border-bottom:1px solid var(--border);
+  font-size:11px;color:var(--t3);font-weight:500;
+}
+.t-scroll{max-height:320px;overflow-y:auto;}
+.t-row{
+  display:grid;grid-template-columns:42px 90px 1fr;
+  gap:10px;padding:10px 20px;
+  border-bottom:1px solid var(--surf2);
+  cursor:pointer;transition:background .1s;
+  font-size:12px;
+}
+.t-row:hover{background:var(--surf2);}
+.t-row.active{background:var(--accentBg);box-shadow:inset 3px 0 0 var(--accent);}
+.t-row.bascule{background:var(--amberBg);box-shadow:inset 3px 0 0 var(--amber);}
+.t-time{color:var(--t4);font-size:10px;font-variant-numeric:tabular-nums;padding-top:1px;}
+.t-who{font-weight:600;color:var(--t3);}
+.t-who.c{color:var(--accent);}
+.t-text{color:var(--t2);line-height:1.55;}
+.moment-btn{
+  background:var(--accentBg);color:var(--accent);
+  border:none;border-radius:99px;padding:2px 8px;
+  font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;
+  transition:opacity .15s;
+}
+.moment-btn:hover{opacity:.8;}
+
+/* bilan gen */
+.bilan-gen{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:16px;
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:10px;padding:16px 20px;
+}
+.bg-left{flex:1;min-width:0;}
+.bg-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px;}
+.bg-sub{font-size:11px;color:var(--t3);}
+.sens-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.sens-row input{flex:1;accent-color:var(--accent);}
+.sens-val{font-size:12px;font-weight:700;color:var(--accent);min-width:28px;text-align:right;font-variant-numeric:tabular-nums;}
+.btn-gen{
+  padding:10px 18px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:8px;
+  font-family:var(--font-display);
+  font-size:13px;font-weight:700;cursor:pointer;
+  white-space:nowrap;flex-shrink:0;
+  transition:opacity .15s,transform .1s;
+}
+.btn-gen:hover{opacity:.9;}
+.btn-gen:active{transform:scale(.98);}
+.btn-gen:disabled{opacity:.4;cursor:wait;}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:640px){
+  .main-content{padding:20px 16px;}
+  .debrief-body{padding:24px 16px 48px;}
+  .field-row-2,.pick-grid,.an-grid,.cont-pair{grid-template-columns:1fr;}
+  .session-row{grid-template-columns:4px 1fr auto;gap:0 12px;}
+  .session-dur{display:none;}
+  .db-hero{flex-direction:column;}
+  .db-score{font-size:36px;}
+  .nav-tabs .nav-tab span{display:none;}
+  .bilan-gen{flex-direction:column;align-items:stretch;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     LOGIN
+══════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <p class="login-eyebrow">Kold Kall</p>
+    <h1 class="login-headline">Prêt à<br>t'entraîner ?</h1>
+    <p class="login-sub">Connecte-toi pour accéder à tes simulations et suivre ta progression.</p>
+    <div class="login-form">
+      <div>
+        <label class="f-label">Email</label>
+        <input type="email" class="f-input" id="emailInput" placeholder="toi@exemple.com" autocomplete="email">
+      </div>
+      <div>
+        <label class="f-label">Mot de passe</label>
+        <input type="password" class="f-input" id="passwordInput" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div class="login-err" id="loginErr"></div>
+      <button class="btn-main" id="loginBtn">Entrer</button>
+    </div>
+  </div>
+  <div class="login-theme">
+    <div class="theme-pill">
+      <button class="theme-opt" id="themeLight">☀️</button>
+      <button class="theme-opt" id="themeDark">🌙</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP
+══════════════════════════════════════ -->
+<div id="app">
+
+  <!-- nav -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="logo-dot"></div>
+      Kold Kall
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-view="sessions"><span>Mes sessions</span></button>
+      <button class="nav-tab" data-view="ranking"><span>Classement</span></button>
+    </div>
+    <div class="nav-right">
+      <div class="theme-pill">
+        <button class="theme-opt" id="appThemeLight">☀️</button>
+        <button class="theme-opt" id="appThemeDark">🌙</button>
+      </div>
+      <div class="user-pill" id="userPill">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <span class="user-name-pill" id="userName"></span>
+      </div>
+      <button class="btn-launch" id="launchBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Nouvelle simulation
+      </button>
+    </div>
+  </nav>
+
+  <!-- content -->
+  <div class="main-content" id="mainContent"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     DRAWER (wizard)
+══════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawerOverlay">
+  <div class="drawer" id="drawer">
+    <div class="drawer-head">
+      <span class="drawer-title" id="drawerTitle">Configurer la simulation</span>
+      <button class="drawer-close" id="drawerClose">×</button>
+    </div>
+    <div class="drawer-progress">
+      <div class="drawer-bar" id="drawerBar" style="width:25%"></div>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+    <div class="drawer-foot">
+      <span class="drawer-step-label" id="drawerStepLabel">Étape 1 sur 4</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn-prev" id="drawerPrev" style="display:none">Retour</button>
+        <button class="btn-next" id="drawerNext">Continuer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DEBRIEF OVERLAY
+══════════════════════════════════════ -->
+<div class="debrief-overlay" id="debriefOverlay">
+  <nav class="debrief-nav">
+    <button class="debrief-back" id="debriefBack">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Retour aux sessions
+    </button>
+    <span class="debrief-session-name" id="debriefSessionName"></span>
+    <div style="width:140px"></div>
+  </nav>
+  <div class="debrief-body" id="debriefBody"></div>
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════ */
+const SUPABASE_URL  = 'https://vjvyzbojcbwmfudkamlh.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_H-wuFrWTNgDEP0fwSWnqNg_c8dJMQZM';
+const SIM_URL       = 'https://agent-vocal-39hz.onrender.com';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let me = null, myProfile = null, currentView = 'sessions', latestAutoOpen = null;
+const ws = {
+  step:1, sessionId:null, b2b_b2c:null,
+  v_type:'', v_product:'', v_url:'',
+  p_role:'', p_type:'', p_url:'', p_profile:'',
+  interview:null, phase:null,
+  prev_id:null, cont:null, contMode:'new', prevSims:[]
+};
+
+/* ════════════════════════════════════════
+   UTILS
+════════════════════════════════════════ */
+const $  = id => document.getElementById(id);
+const esc = v => String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+const fmtDate = d => { const dt=new Date(d); return dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})+' · '+dt.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); };
+const fmtDur  = s => { const n=Math.max(0,Number(s)||0); return `${Math.floor(n/60)}m${String(Math.floor(n%60)).padStart(2,'0')}`; };
+const fmtSec  = s => { const n=Math.max(0,Number(s)||0); return `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`; };
+const fmtM    = (v,suf='') => { const n=Number(v); return Number.isFinite(n)?`${Math.round(n)}${suf}`:'—'; };
+const ncls    = n => { const s=Number(n)||0; return s>10?(s>=70?'high':s>=50?'medium':'low'):(s>=7?'high':s>=5?'medium':'low'); };
+const simLabel = sim => { if(sim.type_entretien==='cold_call') return 'Cold Call'; return ({complet:'Entretien complet',decouverte:'Découverte',demo:'Démo',objections_closing:'Objections & Closing',nego:'Négociation'}[sim.phase_choisie]||sim.type_scenario||'Rendez-vous'); };
+const initials = (n,p) => (p?.[0]||'')+(n?.[0]||'');
+
+async function apiCall(path, opts={}) {
+  const {data} = await sb.auth.getSession();
+  const tok = data?.session?.access_token;
+  const hdrs = { ...(opts.body?{'Content-Type':'application/json'}:{}), ...(tok?{Authorization:`Bearer ${tok}`}:{}), ...(opts.headers||{}) };
+  return fetch(`${SIM_URL}${path}`, {...opts, headers:hdrs});
+}
+
+/* ════════════════════════════════════════
+   THEME
+════════════════════════════════════════ */
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  localStorage.setItem('kk-theme', t);
+  ['themeLight','themeDark','appThemeLight','appThemeDark'].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    el.classList.toggle('on', id.includes(t==='light'?'Light':'Dark'));
+  });
+}
+applyTheme(localStorage.getItem('kk-theme')||'dark');
+['themeLight','themeDark','appThemeLight','appThemeDark'].forEach(id => {
+  const el = $(id);
+  if(el) el.addEventListener('click', () => applyTheme(id.includes('Light')?'light':'dark'));
+});
+
+/* ════════════════════════════════════════
+   AUTH
+════════════════════════════════════════ */
+function showLogin(v) {
+  $('login-screen').style.display = v ? 'flex' : 'none';
+  $('app').style.display = v ? 'none' : 'flex';
+}
+function showLoginErr(m) { const e=$('loginErr'); e.style.display=m?'block':'none'; e.textContent=m||''; }
+
+async function handleLogin() {
+  showLoginErr('');
+  const email=$('emailInput').value.trim(), pwd=$('passwordInput').value;
+  if(!email||!pwd){showLoginErr('Remplis les deux champs.');return;}
+  const btn=$('loginBtn'); btn.disabled=true; btn.textContent='Connexion…';
+  try {
+    const {data,error}=await sb.auth.signInWithPassword({email,password:pwd});
+    if(error) throw error;
+    me=data.user; await loadProfile();
+  } catch(e){showLoginErr(e.message||'Erreur de connexion');}
+  finally{btn.disabled=false;btn.textContent='Entrer';}
+}
+
+async function loadProfile() {
+  const {data:p,error}=await sb.from('profiles').select('*').eq('id',me.id).single();
+  if(error||!p){showLoginErr('Profil introuvable.');await sb.auth.signOut();me=null;showLogin(true);return;}
+  myProfile=p; showLogin(false); updateNav(); await renderView('sessions');
+}
+
+function updateNav() {
+  $('userAvatar').textContent = initials(myProfile?.nom,myProfile?.prenom)||'?';
+  $('userName').textContent   = myProfile?.prenom||me?.email?.split('@')[0]||'';
+  $('userPill').title         = myProfile?.role==='directeur'?'Vue directeur':'Vue commercial';
+}
+
+$('loginBtn').addEventListener('click',handleLogin);
+$('passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
+$('userPill').addEventListener('click',async()=>{if(confirm('Déconnexion ?')){await sb.auth.signOut();me=null;myProfile=null;showLogin(true);}});
+
+/* ════════════════════════════════════════
+   NAV
+════════════════════════════════════════ */
+document.querySelectorAll('.nav-tab').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderView(btn.dataset.view);
+}));
+$('launchBtn').addEventListener('click', openDrawer);
+
+async function renderView(view) {
+  currentView=view;
+  if(view==='sessions')  await renderSessions();
+  else if(view==='ranking') await renderRanking();
+}
+
+/* ════════════════════════════════════════
+   SESSIONS
+════════════════════════════════════════ */
+async function renderSessions() {
+  const c=$('mainContent'); c.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Chargement…</div>';
+  let q=sb.from('simulations').select('id,user_id,created_at,duree_secondes,type_scenario,statut,type_entretien,phase_choisie,b2b_b2c,url_audio,bilans(note_globale),profiles(nom,prenom)').order('created_at',{ascending:false});
+  if(myProfile?.role==='commercial') q=q.eq('user_id',me.id);
+  const {data:sims,error}=await q;
+  if(error){c.innerHTML=`<div style="padding:40px;text-align:center;color:var(--red)">${esc(error.message)}</div>`;return;}
+  if(!sims?.length){
+    c.innerHTML=`<div class="hero-empty">
+      <div class="hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></div>
+      <div class="hero-title">Première simulation</div>
+      <p class="hero-sub">Lance ta première session pour commencer à mesurer tes performances commerciales.</p>
+      <button class="btn-launch" onclick="openDrawer()" style="margin-top:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        C'est parti
+      </button>
+    </div>`;
+    return;
+  }
+  let h=`<div class="journal-header"><h2 class="journal-title">Tes sessions</h2><span class="journal-count">${sims.length}</span></div><div class="journal" style="margin-top:16px">`;
+  sims.forEach(s=>{
+    const note=s.bilans?.[0]?.note_globale;
+    const nc=note!=null?ncls(note):'none';
+    const nd=note!=null?(Number(note)>10?`${note}/100`:`${note}/10`):'—';
+    const dirLabel=myProfile?.role==='directeur'&&s.profiles?` <span style="font-weight:400;color:var(--t3)">— ${esc(s.profiles.prenom||'')} ${esc(s.profiles.nom||'')}</span>`:'';
+    h+=`<div class="session-row" data-id="${esc(s.id)}">
+      <div class="session-stripe ${nc}"></div>
+      <div class="session-info">
+        <div class="session-name">${esc(simLabel(s))}${dirLabel}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+          <span class="session-date">${fmtDate(s.created_at)}</span>
+          <span class="session-status ${s.statut||''}">${esc(s.statut||'—')}</span>
+        </div>
+      </div>
+      <span class="session-dur">${fmtDur(s.duree_secondes||0)}</span>
+      <span class="session-score ${nc}">${esc(nd)}</span>
+    </div>`;
+  });
+  h+='</div>';
+  c.innerHTML=h;
+  c.querySelectorAll('.session-row').forEach(r=>r.addEventListener('click',()=>openDebrief(r.dataset.id)));
+  const target=new URLSearchParams(location.search).get('simulationId');
+  const cand=target?sims.find(s=>String(s.id)===String(target)):null;
+  if(cand&&cand.id!==latestAutoOpen){latestAutoOpen=cand.id;if(target)history.replaceState({},document.title,location.pathname);setTimeout(()=>openDebrief(cand.id),200);}
+}
+
+/* ════════════════════════════════════════
+   RADAR
+════════════════════════════════════════ */
+function scDisc(tr){let q=0,ph='disc';for(const t of tr||[]){const tx=String(t.texte||'').toLowerCase();if(/(signature|contrat|on signe|on bloque)/.test(tx))ph='close';else if(/(trop cher|pas le temps|pas interest)/.test(tx))ph='obj';else if(/(demo|notre solution|comment.a marche)/.test(tx))ph='pitch';if(t.locuteur==='commercial'&&ph==='disc')q+=(tx.match(/\?/g)||[]).length;}return Math.min(100,q*15);}
+function buildRadar(m,t){return[Math.min(100,Number(m?.ratio_questions_affirmations)||0),Math.min(100,Number(m?.taux_resolution_objections)||0),scDisc(t),Number(m?.nb_signaux_achat)>0?Math.max(0,Math.min(100,100-(Number(m?.delai_moyen_closing_apres_signal)||0)/60*100)):0,Math.max(0,Math.min(100,100-((Number(m?.nb_interruptions)||0)*10+(Number(m?.nb_silences_remplis)||0)*5))),Math.min(100,Math.max(0,Number(m?.score_engagement_final)||0))];}
+async function avgRadar(simId){const{data:ss}=await sb.from('simulations').select('id').eq('user_id',me.id).eq('statut','terminee');const ids=(ss||[]).map(s=>s.id).filter(id=>id!==simId);if(!ids.length)return null;const{data:mets}=await sb.from('metriques').select('*').in('simulation_id',ids);if(!mets?.length)return null;const sum=[0,0,0,0,0,0];mets.forEach(m=>{const d=Number(m.delai_moyen_closing_apres_signal)||0;const cl=Number(m.nb_signaux_achat)>0?Math.max(0,Math.min(100,100-(d/60)*100)):0;const ry=Math.max(0,Math.min(100,100-((Number(m.nb_interruptions)||0)*10+(Number(m.nb_silences_remplis)||0)*5)));[Number(m.ratio_questions_affirmations)||0,Number(m.taux_resolution_objections)||0,Math.min(100,(Number(m.nb_questions_qualification)||0)*15),cl,ry,Number(m.score_engagement_final)||0].forEach((v,i)=>sum[i]+=v);});return sum.map(v=>Math.round(v/mets.length));}
+function radarSVG(cur,avg){const lb=['Questions','Objections','Découverte','Closing','Rythme','Engagement'],cx=50,cy=50,r=34;const pts=vs=>vs.map((v,i)=>{const a=-Math.PI/2+i*(Math.PI*2/lb.length),rv=r*(Math.max(0,Math.min(100,v))/100);return`${cx+Math.cos(a)*rv},${cy+Math.sin(a)*rv}`;}).join(' ');const grid=[25,50,75,100].map(l=>`<polygon points="${pts(lb.map(()=>l))}" fill="none" stroke="var(--border)" stroke-width="0.4"/>`).join('');const axes=lb.map((l,i)=>{const a=-Math.PI/2+i*(Math.PI*2/lb.length),x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r,lx=cx+Math.cos(a)*43,ly=cy+Math.sin(a)*43;return`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border)" stroke-width="0.35"/><text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="3.8" fill="var(--t3)">${esc(l)}</text>`;}).join('');const av=avg?`<polygon points="${pts(avg)}" fill="rgba(167,139,250,.06)" stroke="rgba(167,139,250,.5)" stroke-width="0.9" stroke-dasharray="2 1.5"/>`:''  ;return`<svg class="radar-svg" viewBox="0 0 100 100"><g>${grid}${axes}${av}<polygon points="${pts(cur)}" fill="var(--accentBg)" stroke="var(--accent)" stroke-width="1.3"/></g></svg>`;}
+
+/* ════════════════════════════════════════
+   DEBRIEF
+════════════════════════════════════════ */
+async function openDebrief(simId) {
+  $('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--t3)">Chargement du débrief…</div>';
+  $('debriefOverlay').classList.add('open');
+
+  const [sR,tR,bR,mR]=await Promise.all([
+    sb.from('simulations').select('*').eq('id',simId).single(),
+    sb.from('transcriptions').select('*').eq('simulation_id',simId).order('horodatage_secondes',{ascending:true}),
+    sb.from('bilans').select('*').eq('simulation_id',simId).single(),
+    sb.from('metriques').select('*').eq('simulation_id',simId).single(),
+  ]);
+
+  if(sR.error){$('debriefBody').innerHTML=`<div style="padding:60px;text-align:center;color:var(--red)">${esc(sR.error.message)}</div>`;return;}
+  const sim=sR.data;
+  $('debriefSessionName').textContent=simLabel(sim);
+
+  if(sim.statut==='preparation'){$('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--t3)">Préparation en cours…</div>';return;}
+  if(sim.statut==='erreur_preparation'){$('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--red)">La préparation a échoué.</div>';return;}
+
+  const tr=tR.data||[], bilan=bR.data, met=mR.data||{}, ql=bilan?.analyse_qualitative||{};
+  const note=bilan?.note_globale!=null?Number(bilan.note_globale):null;
+  const sc=note==null?'none':ncls(note);
+  const curR=buildRadar(met,tr), avgR=await avgRadar(simId);
+
+  let audioHtml=`<div class="audio-na">Audio non disponible</div>`;
+  if(sim.url_audio||sim.statut==='terminee'){
+    try{const ar=await apiCall(`/api/simulation/${encodeURIComponent(simId)}/audio`);if(ar.ok){const ad=await ar.json();audioHtml=`<div class="audio-block"><audio controls preload="metadata" src="${esc(ad.signedUrl)}"></audio></div>`;}}catch(_){}
+  }
+
+  let h=`
+  <div class="db-hero">
+    <div>
+      <div class="db-tagline">${esc(ql.tagline||'Bilan à générer')}</div>
+      <div class="db-meta">${esc(simLabel(sim))} · ${sim.b2b_b2c?sim.b2b_b2c.toUpperCase():'—'} · ${fmtDur(sim.duree_secondes||0)} · ${fmtDate(sim.created_at)}</div>
+    </div>
+    <div class="db-score-block">
+      <div class="db-score ${sc}">${note==null?'—':note}</div>
+      <div class="db-score-label">${note==null?'En attente':'/ 100'}</div>
+    </div>
+  </div>
+
+  <div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Radar de performance</div></div>
+    <div class="db-section-body">
+      ${radarSVG(curR,avgR)}
+      <div class="radar-legend"><span><i class="rdot"></i>Cette session</span><span><i class="rdot avg"></i>Ta moyenne</span></div>
+    </div>
+  </div>
+
+  <div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Enregistrement audio</div></div>
+    <div class="db-section-body" style="padding:12px 20px">${audioHtml}</div>
+  </div>
+
+  <div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Métriques</div></div>
+    <div class="db-section-body">
+      <div class="metrics-flex">
+        <div class="m-cell"><div class="m-val">${fmtM(met.ratio_parole_commercial,'%')}</div><div class="m-label">Parole commercial</div><div class="m-sub">vs ${fmtM(met.ratio_parole_prospect,'%')} prospect</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.nb_questions_total)}</div><div class="m-label">Questions posées</div><div class="m-sub">${fmtM(met.nb_questions_ouvertes)} ouvertes</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.taux_resolution_objections,'%')}</div><div class="m-label">Objections résolues</div><div class="m-sub">${fmtM(met.nb_objections_resolues)} / ${fmtM(met.nb_objections_total)}</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.nb_interruptions)}</div><div class="m-label">Interruptions</div><div class="m-sub">${fmtM(met.nb_silences_laisses)} silences laissés</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.nb_signaux_exploites)}/${fmtM(met.nb_signaux_achat)}</div><div class="m-label">Signaux exploités</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.score_engagement_final)}</div><div class="m-label">Engagement final</div><div class="m-sub">bascule ${met.moment_bascule_secondes==null?'—':fmtSec(met.moment_bascule_secondes)}</div></div>
+      </div>
+    </div>
+  </div>`;
+
+  const nats=ql.comportements_naturels||[];
+  h+=`<details class="db-accordion" open><summary class="db-acc-head"><span class="db-acc-title">Ce qu'il fait naturellement</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
+  if(!nats.length)h+='<div style="font-size:12px;color:var(--t3)">Bilan non généré.</div>';
+  nats.forEach(item=>{const fw=(item.frameworks_associes||[]).map(f=>`<span class="chip chip-f">${esc(f)}</span>`).join('');h+=`<div class="qi"><div class="qi-chips"><span class="chip chip-t">${fmtSec(item.horodatage_secondes)}</span><span class="chip chip-c">${fmtM(item.niveau_certitude)}%</span>${fw}</div><div class="qi-text">${esc(item.description||'')}</div>${item.principe_nomme?`<div class="qi-note">${esc(item.principe_nomme)}</div>`:''}</div>`;});
+  h+='</div></details>';
+
+  const ecarts=ql.ecarts||[];
+  h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Ses écarts</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
+  if(!ecarts.length)h+='<div style="font-size:12px;color:var(--t3)">Aucun écart identifié.</div>';
+  ecarts.forEach(item=>{const tp=['adaptatif','instinctif','manquant'].includes(item.type)?item.type:'manquant';h+=`<div class="qi"><div class="qi-chips"><span class="chip chip-${tp}">${tp}</span><span class="chip chip-t">${fmtSec(item.horodatage_secondes)}</span></div><div class="qi-text">${esc(item.description||'')}</div><div class="qi-note">Avant : ${esc(item.effet_avant||'—')} · Après : ${esc(item.effet_apres||'—')}</div>${item.framework_de_reference?`<div class="qi-note">Réf : ${esc(item.framework_de_reference)}</div>`:''}</div>`;});
+  h+='</div></details>';
+
+  const moments=ql.moments_bascule||[];
+  h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Moments de bascule</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
+  if(!moments.length)h+='<div style="font-size:12px;color:var(--t3)">Aucun moment identifié.</div>';
+  moments.forEach(item=>{h+=`<div class="qi"><div class="qi-chips"><button class="moment-btn" data-m="${Number(item.horodatage_secondes)||0}">${fmtSec(item.horodatage_secondes)}</button></div><div class="qi-text"><strong>Déclencheur :</strong> ${esc(item.declencheur||'—')}<br>${esc(item.description||'')}</div></div>`;});
+  h+='</div></details>';
+
+  const coh=ql.coherence_interne||{};
+  h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Cohérence interne</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body"><div class="an-grid">
+    <div class="an-cell"><strong>Ancrés</strong><div>${(coh.comportements_ancres||[]).map(esc).join('<br>')||'—'}</div></div>
+    <div class="an-cell"><strong>Situationnels</strong><div>${(coh.comportements_situationnels||[]).map(esc).join('<br>')||'—'}</div></div>
+    <div class="an-cell"><strong>Incohérences</strong><div>${(coh.incoherences||[]).map(esc).join('<br>')||'—'}</div></div>
+  </div></div></details>`;
+
+  const dist=ql.distribution_tactique||{};
+  h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Distribution tactique</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body"><div class="dist-rows">`;
+  ['questions','crac','storytelling','reframe','autres'].forEach(k=>{const v=Math.max(0,Math.min(100,Number(dist[k])||0));h+=`<div class="dist-row"><div class="dist-key">${k}</div><div class="dist-track"><div class="dist-fill" style="width:${v}%"></div></div><div class="dist-pct">${Math.round(v)}%</div></div>`;});
+  h+='</div></div></details>';
+
+  if((ql.attribution_multi_framework||[]).length){
+    h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Attribution multi-framework</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
+    ql.attribution_multi_framework.forEach(item=>{h+=`<div class="qi"><div class="qi-text">${esc(item.comportement||'')}</div><div class="qi-chips" style="margin-top:6px">${(item.frameworks||[]).map(f=>`<span class="chip chip-f">${esc(f)}</span>`).join('')}</div><div class="qi-note">${esc(item.interpretation||'')}</div></div>`;});
+    h+='</div></details>';
+  }
+
+  h+=`<div class="bilan-gen">
+    <div class="bg-left">
+      <div class="bg-title">Sensibilité aux correspondances</div>
+      <div class="bg-sub">0 = très solides uniquement · 100 = larges</div>
+      <div class="sens-row"><input id="sensScore" type="range" min="0" max="100" value="50"><span class="sens-val" id="sensVal">50</span></div>
+    </div>
+    <button class="btn-gen" id="genBilan">${bilan?'Regénérer':'Générer le bilan'}</button>
+  </div>`;
+
+  h+=`<div class="db-section"><div class="db-section-head"><div class="db-section-title">Transcription</div></div>
+  <div class="transcript-wrap"><div class="t-head">Clique sur une ligne pour te rendre dans l'audio</div>
+  <div class="t-scroll" id="tScroll">`;
+  if(!tr.length)h+='<div style="padding:20px;text-align:center;font-size:12px;color:var(--t3)">Aucune transcription.</div>';
+  const bTs=moments.map(m=>Number(m.horodatage_secondes)||0);
+  tr.forEach((ln,i)=>{const t=Number(ln.horodatage_secondes)||0,isB=bTs.some(bt=>Math.abs(bt-t)<=2);h+=`<div class="t-row${isB?' bascule':''}" data-t="${t}"><div class="t-time">${fmtSec(t)}</div><div class="t-who ${ln.locuteur==='commercial'?'c':''}">${ln.locuteur==='commercial'?'Commercial':'Prospect'}</div><div class="t-text">${esc(ln.texte||'')}</div></div>`;});
+  h+='</div></div></div>';
+
+  $('debriefBody').innerHTML=h;
+
+  const audio=$('debriefBody').querySelector('audio');
+  $('debriefBody').querySelectorAll('.t-row').forEach(r=>r.addEventListener('click',()=>{if(!audio)return;audio.currentTime=Number(r.dataset.t)||0;audio.play().catch(()=>{});}));
+  if(audio)audio.addEventListener('timeupdate',()=>{const cur=audio.currentTime;$('debriefBody').querySelectorAll('.t-row').forEach(r=>{const s=Number(r.dataset.t)||0;r.classList.toggle('active',Math.abs(cur-s)<1.2);});});
+  $('debriefBody').querySelectorAll('.moment-btn').forEach(b=>b.addEventListener('click',()=>{if(!audio)return;audio.currentTime=Number(b.dataset.m)||0;audio.play().catch(()=>{});}));
+
+  const sl=$('sensScore'),sv=$('sensVal');
+  sl.addEventListener('input',()=>{sv.textContent=sl.value;});
+  $('genBilan').addEventListener('click',async()=>{
+    const btn=$('genBilan');btn.disabled=true;btn.textContent='Analyse…';
+    try{const r=await apiCall('/api/bilan',{method:'POST',body:JSON.stringify({simulationId:simId,surAttributionScore:Number(sl.value)})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Erreur');await openDebrief(simId);}
+    catch(e){alert(`Erreur : ${e.message}`);btn.disabled=false;btn.textContent=bilan?'Regénérer':'Générer le bilan';}
+  });
+}
+
+$('debriefBack').addEventListener('click',()=>$('debriefOverlay').classList.remove('open'));
+
+/* ════════════════════════════════════════
+   RANKING
+════════════════════════════════════════ */
+async function renderRanking() {
+  const c=$('mainContent');c.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Chargement…</div>';
+  let q=sb.from('simulations').select('user_id,bilans(note_globale),profiles(nom,prenom)').eq('statut','terminee');
+  if(myProfile?.role==='commercial')q=q.eq('user_id',me.id);
+  const{data:ss,error}=await q;
+  if(error){c.innerHTML=`<div style="padding:40px;text-align:center;color:var(--red)">${esc(error.message)}</div>`;return;}
+  const us={};
+  (ss||[]).forEach(s=>{const uid=s.user_id;if(!us[uid])us[uid]={tot:0,cnt:0,profile:s.profiles};const n=s.bilans?.[0]?.note_globale;if(n!=null){us[uid].tot+=Number(n);us[uid].cnt++;}});
+  const rank=Object.keys(us).map(uid=>({uid,avg:us[uid].cnt?Math.round(us[uid].tot/us[uid].cnt):0,profile:us[uid].profile})).sort((a,b)=>b.avg-a.avg);
+  let h=`<div class="journal-header"><h2 class="journal-title">Classement</h2><span class="journal-count">${rank.length}</span></div><div class="ranking-grid" style="margin-top:16px">`;
+  if(!rank.length)h+='<div style="font-size:13px;color:var(--t3)">Aucune donnée.</div>';
+  else rank.forEach((item,i)=>{const name=item.profile?`${item.profile.prenom||''} ${item.profile.nom||''}`.trim():'Utilisateur';const rc=i===0?'r1':i===1?'r2':i===2?'r3':'rN';h+=`<div class="rank-entry"><div class="rank-number ${rc}">${i+1}</div><div><div class="rank-name">${esc(name)}</div><div class="rank-avg">${item.avg} / 100</div></div></div>`;});
+  h+='</div>';c.innerHTML=h;
+}
+
+/* ════════════════════════════════════════
+   DRAWER WIZARD
+════════════════════════════════════════ */
+function resetWS(){Object.assign(ws,{step:1,sessionId:null,b2b_b2c:null,v_type:'',v_product:'',v_url:'',p_role:'',p_type:'',p_url:'',p_profile:'',interview:null,phase:null,prev_id:null,cont:null,contMode:'new'});}
+
+async function openDrawer(){
+  resetWS();
+  let q=sb.from('simulations').select('id,created_at,type_entretien,phase_choisie,type_scenario,b2b_b2c,statut').eq('statut','terminee').order('created_at',{ascending:false}).limit(30);
+  if(myProfile?.role==='commercial')q=q.eq('user_id',me.id);
+  const{data}=await q;ws.prevSims=data||[];
+  renderDrawer();
+  $('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer(){$('drawerOverlay').classList.remove('open');}
+$('drawerClose').addEventListener('click',closeDrawer);
+$('drawerOverlay').addEventListener('click',e=>{if(e.target===$('drawerOverlay'))closeDrawer();});
+
+function renderDrawer(){
+  const pct=[25,50,75,100][ws.step-1];
+  $('drawerBar').style.width=`${pct}%`;
+  $('drawerStepLabel').textContent=`Étape ${ws.step} sur 4`;
+  $('drawerPrev').style.display=ws.step>1?'':'none';
+  const showNextBtn = ws.step===2 || ws.step===4;
+  $('drawerNext').style.display = showNextBtn ? '' : 'none';
+  $('drawerNext').textContent=ws.step===4?'Créer la simulation':'Continuer';
+  $('drawerNext').onclick=ws.step<4?drawerNext:createSim;
+  $('drawerPrev').onclick=drawerBack;
+  $('drawerBody').innerHTML=renderDrawerStep();
+}
+
+function pickB2B2C(v){
+  ws.b2b_b2c=v;
+  Object.assign(ws,{p_role:'',p_type:'',p_url:'',p_profile:''});
+  ws.step=2;
+  renderDrawer();
+}
+function pickColdCall(){
+  ws.interview='cold_call';
+  ws.phase=null;
+  ws.prev_id=null;
+  ws.cont=null;
+  ws.contMode='new';
+  ws.step=4;
+  prewarm();
+  renderDrawer();
+}
+function pickRdv(){
+  ws.interview='rdv';
+  ws.prev_id=null;
+  ws.cont=null;
+  ws.contMode='new';
+  renderDrawer();
+}
+function pickRdvPhase(v){
+  ws.phase=v;
+  if(v){
+    ws.step=4;
+    prewarm();
+    renderDrawer();
+  } else {
+    renderDrawer();
+  }
+}
+
+function renderDrawerStep(){
+  if(ws.step===1)return`
+    <div class="step-title">Quel type de vente ?</div>
+    <div class="step-sub">Le scénario et la psychologie du prospect s'adaptent à ton contexte.</div>
+    <div class="pick-grid">
+      <button class="pick-card ${ws.b2b_b2c==='b2b'?'sel':''}" onclick="pickB2B2C('b2b')">
+        <div class="pick-label">B2B</div>
+        <div class="pick-desc">Tu vends à une entreprise. Le prospect a un rôle, des enjeux organisationnels, un budget.</div>
+      </button>
+      <button class="pick-card ${ws.b2b_b2c==='b2c'?'sel':''}" onclick="pickB2B2C('b2c')">
+        <div class="pick-label">B2C</div>
+        <div class="pick-desc">Tu vends à un consommateur. Décision plus émotionnelle, cycle court.</div>
+      </button>
+    </div>
+    <div id="w-err" class="w-error"></div>`;
+
+  if(ws.step===2){const b2b=ws.b2b_b2c==='b2b';return`
+    <div class="step-title">Toi et ton prospect</div>
+    <div class="step-sub">Plus tu es précis, plus le scénario sera réaliste.</div>
+    <div class="section-sep">Ce que tu vends</div>
+    <div class="field-row-2">
+      <div class="field-block"><label class="d-label">Ton type d'entreprise</label><input class="d-input" value="${esc(ws.v_type)}" oninput="ws.v_type=this.value" placeholder="Ex : SaaS RH, Cabinet conseil…"></div>
+      <div class="field-block"><label class="d-label">Produit ou service</label><input class="d-input" value="${esc(ws.v_product)}" oninput="ws.v_product=this.value" placeholder="Ex : Logiciel de formation…"></div>
+    </div>
+    <div class="field-block">
+      <label class="d-label">URL de ton site — facultatif, aide à construire le contexte</label>
+      <div class="url-pair"><input class="d-input" id="v-url" value="${esc(ws.v_url)}" oninput="ws.v_url=this.value" placeholder="https://…"><button class="btn-analyze" onclick="analyzeUrl('v')">Analyser</button></div>
+      <div class="analyze-result" id="v-res"></div>
+    </div>
+    <div class="section-sep">Ton prospect</div>
+    ${b2b?`
+    <div class="field-row-2">
+      <div class="field-block"><label class="d-label">Rôle</label><select class="d-select" onchange="ws.p_role=this.value"><option value="">Choisir…</option>${[['drh','DRH'],['dirco','Directeur Commercial'],['ceo','CEO / Président'],['coo','Directeur des Opérations'],['daf','DAF'],['ops','Resp. Opérations'],['autre','Autre']].map(([v,l])=>`<option value="${v}" ${ws.p_role===v?'selected':''}>${l}</option>`).join('')}</select></div>
+      <div class="field-block"><label class="d-label">Secteur ou type d'entreprise</label><input class="d-input" value="${esc(ws.p_type)}" oninput="ws.p_type=this.value" placeholder="Ex : PME industrielle…"></div>
+    </div>
+    <div class="field-block">
+      <label class="d-label">URL de son entreprise — facultatif</label>
+      <div class="url-pair"><input class="d-input" id="p-url" value="${esc(ws.p_url)}" oninput="ws.p_url=this.value" placeholder="https://…"><button class="btn-analyze" onclick="analyzeUrl('p')">Analyser</button></div>
+      <div class="analyze-result" id="p-res"></div>
+    </div>`:`
+    <div class="field-block"><label class="d-label">Profil du prospect</label><textarea class="d-textarea" oninput="ws.p_profile=this.value" placeholder="Age, situation, ce qu'il cherche, ses freins éventuels…">${esc(ws.p_profile)}</textarea></div>`}
+    <div id="w-err" class="w-error"></div>`;}
+
+  if(ws.step===3)return`
+    <div class="step-title">Type d'entretien</div>
+    <div class="step-sub">Le Cold Call part de zéro. Le RDV donne au prospect le contexte du rendez-vous avant de commencer.</div>
+    <div class="pick-grid">
+      <button class="pick-card ${ws.interview==='cold_call'?'sel':''}" onclick="pickColdCall()">
+        <div class="pick-label">Cold Call</div>
+        <div class="pick-desc">Le prospect découvre tout au fil de la conversation. Prise de contact à froid.</div>
+      </button>
+      <button class="pick-card ${ws.interview==='rdv'?'sel':''}" onclick="pickRdv()">
+        <div class="pick-label">Rendez-vous</div>
+        <div class="pick-desc">Le prospect sait pourquoi vous vous parlez. Il attend une démonstration ou une discussion.</div>
+      </button>
+    </div>
+    ${ws.interview==='rdv'?`<div class="field-block" style="margin-top:16px"><label class="d-label">Phase à travailler</label><select class="d-select" onchange="pickRdvPhase(this.value)"><option value="">Choisir…</option>${[['complet','Entretien complet'],['decouverte','Découverte'],['demo','Démo produit'],['objections_closing','Objections & Closing'],['nego','Négociation']].map(([v,l])=>`<option value="${v}" ${ws.phase===v?'selected':''}>${l}</option>`).join('')}</select></div>`:''}
+    <div id="w-err" class="w-error"></div>`;
+
+  const tp=ws.phase||'cold_call';
+  return`
+    <div class="step-title">Nouveau ou suite ?</div>
+    <div class="step-sub">Une suite conserve la mémoire et la relation avec le même prospect.</div>
+    <div class="pick-grid">
+      <button class="pick-card ${!ws.prev_id?'sel':''}" onclick="ws.contMode='new';ws.prev_id=null;ws.cont=null;renderDrawer()">
+        <div class="pick-label">Nouveau scénario</div>
+        <div class="pick-desc">Gemini crée un prospect inédit à partir de tes informations.</div>
+      </button>
+      <button class="pick-card ${ws.prev_id?'sel':''}" onclick="ws.contMode='continue';renderDrawer()">
+        <div class="pick-label">Continuer</div>
+        <div class="pick-desc">Même prospect, même historique, tension qui reprend où elle s'était arrêtée.</div>
+      </button>
+    </div>
+    ${ws.contMode==='continue'?renderPrevSims(tp):''}
+    <div id="w-err" class="w-error"></div>`;
+}
+
+function renderPrevSims(tp){
+  const prev=ws.prevSims.filter(s=>isCompat(s,tp));
+  if(!prev.length)return'<div style="margin-top:12px;font-size:12px;color:var(--t3)">Aucune simulation précédente compatible.</div>';
+  let h='<div class="section-sep" style="margin-top:16px">Choisir la simulation précédente</div><div class="prev-list">';
+  prev.forEach(s=>{const isCC=s.type_entretien==='cold_call',sel=ws.prev_id===s.id;
+    h+=`<div class="prev-item ${sel?'sel':''}" onclick="ws.prev_id='${esc(s.id)}';${isCC?"ws.cont='nouveau_rdv';":''}renderDrawer()">
+      <div class="prev-item-name">${esc(simLabel(s))}</div>
+      <div class="prev-item-meta">${fmtDate(s.created_at)} · ${s.b2b_b2c?s.b2b_b2c.toUpperCase():''}</div>
+      <div class="prev-item-compat ${isCC?'compat-warn':'compat-ok'}">${isCC?'Continuation → RDV après résultat du Cold Call':'Transition compatible'}</div>
+    </div>`;
+  });
+  h+='</div>';
+  if(ws.prev_id){const s=ws.prevSims.find(x=>x.id===ws.prev_id);if(s&&s.type_entretien==='rdv'){h+=`<div class="section-sep" style="margin-top:16px">Comment reprendre ?</div><div class="cont-pair"><button class="cont-card ${ws.cont==='meme_rdv'?'sel':''}" onclick="ws.cont='meme_rdv';renderDrawer()"><div class="cont-name">Même rendez-vous</div><div class="cont-desc">La conversation reprend là où elle s'était arrêtée.</div></button><button class="cont-card ${ws.cont==='nouveau_rdv'?'sel':''}" onclick="ws.cont='nouveau_rdv';renderDrawer()"><div class="cont-name">Nouveau rendez-vous</div><div class="cont-desc">Le prospect garde la mémoire mais c'est un nouvel appel.</div></button></div>`;}else{h+='<div style="margin-top:8px;font-size:11px;color:var(--t3)">Un Cold Call continué devient automatiquement un nouveau RDV.</div>';}}
+  return h;
+}
+
+function isCompat(s,tp){
+  if(s.b2b_b2c&&s.b2b_b2c!==ws.b2b_b2c)return false;
+  if(s.type_entretien==='cold_call')return ws.interview==='rdv'&&['complet','decouverte'].includes(tp);
+  if(ws.interview!=='rdv')return false;
+  if(tp==='demo')return s.phase_choisie==='decouverte';
+  if(tp==='objections_closing')return s.phase_choisie==='demo';
+  if(tp==='nego')return s.phase_choisie==='objections_closing';
+  if(tp==='complet')return['decouverte','demo','objections_closing','nego'].includes(s.phase_choisie);
+  if(tp==='decouverte')return s.phase_choisie==='complet';
+  return false;
+}
+
+async function analyzeUrl(tgt){
+  const url=tgt==='v'?ws.v_url:ws.p_url;
+  if(!url.trim())return;
+  const inputId=tgt==='v'?'v-url':'p-url',resId=tgt==='v'?'v-res':'p-res';
+  const btn=document.querySelector(`#${inputId}+.btn-analyze`);
+  if(btn){btn.disabled=true;btn.textContent='Analyse…';}
+  try{
+    const r=await apiCall('/api/analyze-url',{method:'POST',body:JSON.stringify({url:url.trim(),cible:tgt==='v'?'vendeur':'prospect',b2b_b2c:ws.b2b_b2c,prospect_role:ws.p_role})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error||'Impossible');
+    if(tgt==='v'){if(!ws.v_type&&d.type_entreprise)ws.v_type=d.type_entreprise;if(!ws.v_product&&d.produit_service)ws.v_product=d.produit_service;}
+    else{if(!ws.p_type&&d.type_entreprise_prospect)ws.p_type=d.type_entreprise_prospect;}
+    renderDrawer();const res=$(resId);if(res){res.textContent='Analyse terminée — vérifie et corrige.';res.classList.add('show');}
+  }catch(e){alert(`Erreur : ${e.message}`);}
+  finally{if(btn){btn.disabled=false;btn.textContent='Analyser';}}
+}
+
+function wErr(msg){const e=$('w-err');if(e){e.textContent=msg;e.classList.add('show');}return false;}
+function validateStep(){
+  const err=$('w-err');if(err)err.classList.remove('show');
+  if(ws.step===1&&!ws.b2b_b2c)return wErr('Choisis B2B ou B2C.');
+  if(ws.step===2){
+    if(!ws.v_type.trim()&&!ws.v_url.trim())return wErr("Renseigne ton type d'entreprise ou fournis une URL.");
+    if(!ws.v_product.trim()&&!ws.v_url.trim())return wErr('Renseigne ton produit / service.');
+    if(ws.b2b_b2c==='b2b'){if(!ws.p_role)return wErr('Choisis le rôle du prospect.');if(!ws.p_type.trim()&&!ws.p_url.trim())return wErr("Renseigne le secteur du prospect ou fournis une URL.");}
+    else if(!ws.p_profile.trim())return wErr('Décris le profil du prospect B2C.');
+  }
+  if(ws.step===3){if(!ws.interview)return wErr('Choisis Cold Call ou RDV.');if(ws.interview==='rdv'&&!ws.phase)return wErr('Choisis une phase.');}
+  if(ws.step===4&&ws.contMode==='continue'&&!ws.prev_id)return wErr('Choisis une simulation précédente.');
+  return true;
+}
+
+function drawerNext(){if(!validateStep())return;ws.step++;if(ws.step===4){if(!ws.contMode)ws.contMode='new';prewarm();}renderDrawer();}
+function drawerBack(){if(ws.step>1){ws.step--;renderDrawer();}}
+
+function prewarm(){
+  if(ws.prev_id)return;
+  if(!ws.sessionId)ws.sessionId=(crypto.randomUUID&&crypto.randomUUID())||`s_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  apiCall('/api/simulation/prewarm',{method:'POST',body:JSON.stringify({sessionId:ws.sessionId,b2b_b2c:ws.b2b_b2c,vendeur_type_entreprise:ws.v_type.trim(),vendeur_produit:ws.v_product.trim(),vendeur_url:ws.v_url.trim()||null,prospect_role:ws.b2b_b2c==='b2b'?ws.p_role:null,prospect_type_entreprise:ws.b2b_b2c==='b2b'?ws.p_type.trim():null,prospect_url:ws.b2b_b2c==='b2b'?(ws.p_url.trim()||null):null,prospect_profile:ws.b2b_b2c==='b2c'?ws.p_profile.trim():null,type_entretien:ws.interview,phase_choisie:ws.interview==='rdv'?ws.phase:null})}).catch(()=>{});
+}
+
+/* ── CREATE — handshake AVANT création ── */
+async function createSim(){
+  if(!validateStep())return;
+  const btn=$('drawerNext');btn.disabled=true;btn.textContent='Création…';
+  try{
+    const payload={sessionId:ws.contMode==='new'?(ws.sessionId||null):null,b2b_b2c:ws.b2b_b2c,vendeur_type_entreprise:ws.v_type.trim(),vendeur_produit:ws.v_product.trim(),vendeur_url:ws.v_url.trim()||null,prospect_role:ws.b2b_b2c==='b2b'?ws.p_role:null,prospect_type_entreprise:ws.b2b_b2c==='b2b'?ws.p_type.trim():null,prospect_url:ws.b2b_b2c==='b2b'?(ws.p_url.trim()||null):null,prospect_profile:ws.b2b_b2c==='b2c'?ws.p_profile.trim():null,type_entretien:ws.interview,phase_choisie:ws.interview==='rdv'?ws.phase:null,simulation_precedente_id:ws.contMode==='continue'?ws.prev_id:null,continuite_rdv:ws.contMode==='continue'?ws.cont:null};
+
+    // ÉTAPE 1 — handshake d'abord
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session?.access_token||!session?.refresh_token)throw new Error('Session expirée.');
+    const hR=await fetch(`${SIM_URL}/api/auth/handshake`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({refresh_token:session.refresh_token})});
+    if(!hR.ok)throw new Error('Connexion au serveur impossible — réessaie dans quelques secondes.');
+    const{code}=await hR.json();
+
+    // ÉTAPE 2 — création simulation
+    const r=await apiCall('/api/simulation/start',{method:'POST',body:JSON.stringify(payload)});
+    const d=await r.json();if(!r.ok)throw new Error(d.error||'Erreur création');
+
+    // ÉTAPE 3 — redirect
+    closeDrawer();
+    window.location.href=`${SIM_URL}/?code=${encodeURIComponent(code)}&simulationId=${encodeURIComponent(d.simulationId)}`;
+  }catch(e){
+    const err=$('w-err');if(err){err.textContent=e.message;err.classList.add('show');}
+    btn.disabled=false;btn.textContent='Créer la simulation';
+  }
+}
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+(async()=>{
+  try{const{data:{session},error}=await sb.auth.getSession();if(error)console.error(error);if(session){me=session.user;await loadProfile();}else showLogin(true);}
+  catch(e){console.error(e);showLogin(true);}
+})();
+</script>
+</body>
+</html>
