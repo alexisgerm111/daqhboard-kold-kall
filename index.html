@@ -1,336 +1,435 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Kold Kall</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kold Kall — Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--font-display:'Plus Jakarta Sans',system-ui,sans-serif;--font-body:'Inter',system-ui,sans-serif;
---l-bg:#F5F3EE;--l-surface:#FFFFFF;--l-surf2:#EFECE6;--l-surf3:#E4E0D7;--l-border:#DDD9CF;
---l-accent:#6D28D9;--l-accentL:#7C3AED;--l-accentBg:#F0EBFF;
---l-t1:#1A1322;--l-t2:#3D3550;--l-t3:#7B7290;--l-t4:#ADA8BC;
---l-green:#059669;--l-greenBg:#ECFDF5;--l-amber:#B45309;--l-amberBg:#FFFBEB;--l-red:#DC2626;--l-redBg:#FEF2F2;
---d-bg:#0D0B14;--d-surface:#141128;--d-surf2:#1D1A32;--d-surf3:#252242;--d-border:#2E2A4A;
---d-accent:#A78BFA;--d-accentL:#C4B5FD;--d-accentBg:rgba(167,139,250,.12);
---d-t1:#F0EEFF;--d-t2:#B8B2D4;--d-t3:#736D92;--d-t4:#3E3960;
---d-green:#34D399;--d-greenBg:rgba(52,211,153,.1);--d-amber:#FCD34D;--d-amberBg:rgba(252,211,77,.1);
---d-red:#F87171;--d-redBg:rgba(248,113,113,.1);--ease:cubic-bezier(.4,0,.2,1);}
-[data-theme="light"]{--bg:var(--l-bg);--surface:var(--l-surface);--surf2:var(--l-surf2);--surf3:var(--l-surf3);--border:var(--l-border);--accent:var(--l-accent);--accentL:var(--l-accentL);--accentBg:var(--l-accentBg);--t1:var(--l-t1);--t2:var(--l-t2);--t3:var(--l-t3);--t4:var(--l-t4);--green:var(--l-green);--greenBg:var(--l-greenBg);--amber:var(--l-amber);--amberBg:var(--l-amberBg);--red:var(--l-red);--redBg:var(--l-redBg);}
-[data-theme="dark"]{--bg:var(--d-bg);--surface:var(--d-surface);--surf2:var(--d-surf2);--surf3:var(--d-surf3);--border:var(--d-border);--accent:var(--d-accent);--accentL:var(--d-accentL);--accentBg:var(--d-accentBg);--t1:var(--d-t1);--t2:var(--d-t2);--t3:var(--d-t3);--t4:var(--d-t4);--green:var(--d-green);--greenBg:var(--d-greenBg);--amber:var(--d-amber);--amberBg:var(--d-amberBg);--red:var(--d-red);--redBg:var(--d-redBg);}
+:root{
+  --stone-50:#FAFAF9;--stone-100:#F2F1EF;--stone-200:#E8E6E3;
+  --white:#FFFFFF;
+  --sage:#3B6B50;--sage-mid:#4E8A68;--sage-light:#EEF5F1;--sage-border:#C4DDD0;
+  --ink:#18181B;--ink-2:#3F3F46;--muted:#71717A;--muted-2:#A1A1AA;
+  --border:#E4E4E7;--border-2:#D4D4D8;
+  --amber:#B45309;--amber-bg:#FFFBEB;--amber-border:#FDE68A;
+  --red:#B91C1C;--red-bg:#FEF2F2;
+  --blue:#1D4ED8;--blue-bg:#EFF6FF;
+  --radius-sm:6px;--radius:10px;--radius-lg:16px;
+  --shadow-xs:0 1px 2px rgba(24,24,27,0.04);
+  --shadow-sm:0 1px 3px rgba(24,24,27,0.06),0 1px 2px rgba(24,24,27,0.04);
+  --shadow-md:0 4px 16px rgba(24,24,27,0.07),0 2px 4px rgba(24,24,27,0.04);
+  --shadow-lg:0 12px 40px rgba(24,24,27,0.10),0 4px 12px rgba(24,24,27,0.06);
+  --ease:cubic-bezier(.4,0,.2,1);
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{font-size:14px;}
-body{font-family:var(--font-body);background:var(--bg);color:var(--t1);min-height:100dvh;-webkit-font-smoothing:antialiased;transition:background .25s var(--ease),color .25s var(--ease);overflow:hidden;}
+html{font-size:14px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--stone-50);color:var(--ink);min-height:100vh;overflow:hidden;}
 button,input,select,textarea{font-family:inherit;}
 ::-webkit-scrollbar{width:10px;height:10px;}
-::-webkit-scrollbar-track{background:var(--surf2);border-radius:6px;}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;min-height:40px;}
-::-webkit-scrollbar-thumb:hover{background:var(--t4);}
-*{scrollbar-width:thin;scrollbar-color:var(--border) var(--surf2);}
-#login-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:9999;}
-.login-wrap{width:min(380px,92vw);display:flex;flex-direction:column;gap:0;}
-.login-eyebrow{font-family:var(--font-display);font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:10px;}
-.login-headline{font-family:var(--font-display);font-size:32px;font-weight:800;line-height:1.1;letter-spacing:-.5px;color:var(--t1);margin-bottom:6px;}
-.login-sub{font-size:13px;color:var(--t3);line-height:1.6;margin-bottom:32px;}
-.login-form{display:flex;flex-direction:column;gap:14px;}
-.f-label{display:block;font-size:11px;font-weight:600;color:var(--t3);margin-bottom:5px;letter-spacing:.02em;}
-.f-input{width:100%;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--t1);font-size:14px;outline:none;transition:border-color .15s,box-shadow .15s;}
-.f-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentBg);}
-.f-input::placeholder{color:var(--t4);}
-.login-err{font-size:12px;color:var(--red);background:var(--redBg);padding:8px 12px;border-radius:6px;display:none;}
-.btn-main{width:100%;padding:13px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:-.1px;transition:opacity .15s,transform .1s;}
-.btn-main:hover{opacity:.92;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:6px;}
+::-webkit-scrollbar-thumb:hover{background:var(--muted-2);}
+
+/* ── LOGIN ─────────────────────────────────── */
+#login-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--stone-50);z-index:900;transition:opacity .25s,transform .25s;}
+#login-screen.hidden{opacity:0;pointer-events:none;transform:scale(.98);}
+.login-wrap{width:min(400px,92vw);}
+.login-brand{display:flex;align-items:center;gap:10px;margin-bottom:32px;}
+.login-logo{width:36px;height:36px;background:var(--sage);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.login-logo svg{width:20px;height:20px;}
+.login-brand-name{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.02em;}
+.login-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;box-shadow:var(--shadow-md);}
+.login-title{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.f-label{display:block;font-size:12px;font-weight:500;color:var(--ink-2);margin-bottom:5px;}
+.f-input{width:100%;padding:9px 12px;background:var(--white);border:1px solid var(--border-2);border-radius:var(--radius-sm);color:var(--ink);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s;}
+.f-input:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(59,107,80,0.10);}
+.f-input::placeholder{color:var(--muted-2);}
+.field{margin-bottom:14px;}
+.login-err{display:none;margin-top:8px;padding:8px 12px;background:var(--red-bg);border:1px solid rgba(185,28,28,0.15);border-radius:6px;font-size:12px;color:var(--red);}
+.login-err.show{display:block;}
+.btn-main{width:100%;padding:11px 20px;background:var(--sage);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px;transition:background .15s,transform .1s;}
+.btn-main:hover{background:var(--sage-mid);}
 .btn-main:active{transform:scale(.98);}
-.btn-main:disabled{opacity:.45;cursor:wait;}
-.login-theme{position:absolute;top:20px;right:20px;}
-.theme-pill{display:inline-flex;align-items:center;gap:2px;background:var(--surf2);border:1px solid var(--border);border-radius:99px;padding:3px;cursor:pointer;}
-.theme-opt{width:28px;height:28px;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:13px;transition:background .15s,color .15s;color:var(--t3);background:transparent;border:none;cursor:pointer;}
-.theme-opt.on{background:var(--surface);color:var(--t1);box-shadow:0 1px 4px rgba(0,0,0,.15);}
-#app{display:none;height:100dvh;flex-direction:column;overflow:hidden;}
-.nav{height:52px;flex-shrink:0;display:flex;align-items:center;padding:0 24px;gap:0;border-bottom:1px solid var(--border);background:var(--surface);position:relative;z-index:50;}
-.nav-logo{font-family:var(--font-display);font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--t1);display:flex;align-items:center;gap:8px;margin-right:32px;flex-shrink:0;}
-.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);}
-.nav-tabs{display:flex;gap:0;flex:1;}
-.nav-tab{padding:0 16px;height:52px;display:flex;align-items:center;font-size:13px;font-weight:500;color:var(--t3);border:none;background:transparent;cursor:pointer;position:relative;transition:color .15s;border-bottom:2px solid transparent;margin-bottom:-1px;}
-.nav-tab:hover{color:var(--t1);}
-.nav-tab.active{color:var(--t1);font-weight:600;border-bottom-color:var(--accent);}
-.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
-.user-pill{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 5px;background:var(--surf2);border:1px solid var(--border);border-radius:99px;cursor:pointer;transition:background .15s;}
-.user-pill:hover{background:var(--surf3);}
-.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accentL));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;}
-.user-name-pill{font-size:12px;font-weight:500;color:var(--t2);}
-.btn-launch{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s;white-space:nowrap;flex-shrink:0;}
-.btn-launch:hover{opacity:.9;}
+.btn-main:disabled{opacity:.5;cursor:wait;}
+
+/* ── APP ─────────────────────────────────────── */
+#app{display:none;height:100vh;flex-direction:column;}
+#app.visible{display:flex;}
+.topbar{height:56px;flex-shrink:0;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:0;position:relative;z-index:50;}
+.topbar-brand{display:flex;align-items:center;gap:9px;margin-right:40px;flex-shrink:0;}
+.topbar-logo{width:28px;height:28px;background:var(--sage);border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.topbar-logo svg{width:16px;height:16px;}
+.topbar-name{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;letter-spacing:-.02em;}
+.topbar-nav{display:flex;gap:2px;flex:1;}
+.nav-item{padding:6px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border:none;background:none;transition:color .15s,background .15s;}
+.nav-item:hover{color:var(--ink);background:var(--stone-100);}
+.nav-item.active{color:var(--ink);background:var(--stone-100);font-weight:600;}
+.topbar-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.user-pill{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;background:var(--stone-100);border:1px solid var(--border);border-radius:99px;cursor:pointer;transition:background .15s;}
+.user-pill:hover{background:var(--stone-200);}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:var(--sage-light);border:1.5px solid var(--sage-border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--sage);flex-shrink:0;}
+.user-name-pill{font-size:12px;font-weight:500;color:var(--ink-2);}
+.btn-launch{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;background:var(--sage);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s,transform .1s;white-space:nowrap;flex-shrink:0;}
+.btn-launch:hover{background:var(--sage-mid);}
 .btn-launch:active{transform:scale(.98);}
-.btn-launch:disabled{opacity:.45;cursor:wait;}
-.btn-launch svg{width:14px;height:14px;}
-.main-content{flex:1;overflow-y:auto;padding:32px 32px 40px;display:flex;flex-direction:column;gap:24px;}
-.hero-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;padding:60px 20px;}
-.hero-icon{width:64px;height:64px;border-radius:16px;background:var(--accentBg);display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
-.hero-icon svg{width:32px;height:32px;color:var(--accent);}
-.hero-title{font-family:var(--font-display);font-size:24px;font-weight:800;letter-spacing:-.4px;color:var(--t1);}
-.hero-sub{font-size:14px;color:var(--t3);line-height:1.6;max-width:380px;}
-.journal-header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
-.journal-title{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--t1);}
-.journal-count{font-size:12px;color:var(--t3);background:var(--surf2);border:1px solid var(--border);padding:3px 10px;border-radius:99px;}
-.journal{display:flex;flex-direction:column;gap:2px;}
-.session-row{display:grid;grid-template-columns:4px 1fr auto auto auto;align-items:center;gap:0 20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px 16px 0;cursor:pointer;transition:border-color .15s,transform .12s,box-shadow .15s;overflow:hidden;position:relative;}
-.session-row:hover{border-color:var(--accent);transform:translateX(2px);box-shadow:0 4px 20px rgba(0,0,0,.12);}
-.session-stripe{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:10px 0 0 10px;transition:opacity .15s;}
-.session-stripe.high{background:var(--green);}
+.btn-launch svg{width:13px;height:13px;}
+
+.main-content{flex:1;overflow-y:auto;padding:32px 32px 40px;}
+
+/* ── SESSIONS ─────────────────────────────────── */
+.page-header{margin-bottom:24px;}
+.page-title{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;}
+.page-sub{font-size:13px;color:var(--muted);}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow-xs);}
+.stat-label{font-size:11px;font-weight:500;color:var(--muted);margin-bottom:8px;}
+.stat-value{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1;}
+.stat-delta{font-size:11px;color:var(--sage);font-weight:500;margin-top:5px;}
+.stat-delta.neg{color:var(--red);}
+
+.paused-banner{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);padding:14px 18px;margin-bottom:18px;}
+.paused-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--amber);margin-bottom:10px;}
+.paused-list{display:flex;flex-direction:column;gap:8px;}
+.paused-item{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;}
+.paused-item-info{flex:1;min-width:0;}
+.paused-item-name{font-size:13px;font-weight:600;color:var(--ink);}
+.paused-item-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.btn-resume{padding:6px 14px;background:var(--sage);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s;font-family:'DM Sans',sans-serif;}
+.btn-resume:hover{background:var(--sage-mid);}
+.btn-resume:disabled{opacity:.5;cursor:wait;}
+
+.journal-header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.journal-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.02em;}
+.journal-count{font-size:12px;color:var(--muted);background:var(--stone-100);border:1px solid var(--border);padding:3px 10px;border-radius:99px;}
+.filter-row{display:flex;gap:6px;}
+.filter-chip{padding:5px 12px;border-radius:99px;border:1px solid var(--border-2);font-size:12px;color:var(--muted);cursor:pointer;background:var(--white);transition:all .15s;}
+.filter-chip.active{border-color:var(--sage);background:var(--sage-light);color:var(--sage);font-weight:500;}
+.filter-chip:hover:not(.active){background:var(--stone-100);color:var(--ink);}
+
+.session-list{display:flex;flex-direction:column;gap:8px;}
+.session-row{display:grid;grid-template-columns:4px 1fr auto auto auto;align-items:center;gap:0 20px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px 16px 0;cursor:pointer;transition:border-color .15s,transform .12s,box-shadow .15s;overflow:hidden;position:relative;}
+.session-row:hover{border-color:var(--sage);transform:translateX(2px);box-shadow:var(--shadow-sm);}
+.session-stripe{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:var(--radius) 0 0 var(--radius);}
+.session-stripe.high{background:var(--sage);}
 .session-stripe.medium{background:var(--amber);}
 .session-stripe.low{background:var(--red);}
-.session-stripe.none{background:var(--border);}
+.session-stripe.none{background:var(--border-2);}
 .session-info{padding-left:20px;}
-.session-name{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--t1);letter-spacing:-.1px;margin-bottom:4px;}
-.session-date{font-size:12px;color:var(--t3);}
+.session-name{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;}
+.session-meta{font-size:12px;color:var(--muted);}
 .session-status{font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px;white-space:nowrap;}
-.session-status.terminee{background:var(--greenBg);color:var(--green);}
-.session-status.en_cours{background:var(--amberBg);color:var(--amber);}
-.session-status.preparation{background:var(--surf2);color:var(--t3);border:1px solid var(--border);}
-.session-status.erreur_preparation{background:var(--redBg);color:var(--red);}
-.session-dur{font-size:13px;color:var(--t3);font-variant-numeric:tabular-nums;white-space:nowrap;}
-.session-score{font-family:var(--font-display);font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:60px;text-align:right;}
-.session-score.high{color:var(--green);}
+.session-status.terminee{background:var(--sage-light);color:var(--sage);}
+.session-status.en_cours{background:var(--amber-bg);color:var(--amber);}
+.session-status.en_pause{background:var(--amber-bg);color:var(--amber);}
+.session-status.preparation{background:var(--stone-100);color:var(--muted);border:1px solid var(--border);}
+.session-status.erreur_preparation{background:var(--red-bg);color:var(--red);}
+.session-dur{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.session-score{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:60px;text-align:right;}
+.session-score.high{color:var(--sage);}
 .session-score.medium{color:var(--amber);}
 .session-score.low{color:var(--red);}
-.session-score.none{color:var(--t4);font-size:13px;font-weight:500;}
-.ranking-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
-.rank-entry{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:center;gap:14px;transition:border-color .15s,transform .12s;}
-.rank-entry:hover{border-color:var(--accent);transform:translateY(-2px);}
-.rank-number{font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-.5px;min-width:36px;text-align:center;line-height:1;}
-.rank-number.r1{color:var(--amber);}
-.rank-number.r2{color:var(--t3);}
-.rank-number.r3{color:var(--amber);opacity:.6;}
-.rank-number.rN{color:var(--t4);font-size:20px;}
-.rank-name{font-size:14px;font-weight:600;color:var(--t1);}
-.rank-avg{font-size:12px;color:var(--t3);margin-top:2px;font-variant-numeric:tabular-nums;}
-.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s var(--ease);backdrop-filter:blur(2px);}
-.drawer-overlay.open{opacity:1;pointer-events:all;}
-.drawer{position:fixed;right:0;top:0;bottom:0;width:min(560px,100vw);background:var(--surface);border-left:1px solid var(--border);z-index:101;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s var(--ease);overflow:hidden;}
-.drawer-overlay.open .drawer{transform:translateX(0);}
-.drawer-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.drawer-title{font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--t1);}
-.drawer-close{width:32px;height:32px;background:var(--surf2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t3);font-size:18px;transition:background .15s,color .15s;}
-.drawer-close:hover{background:var(--surf3);color:var(--t1);}
-.drawer-progress{height:3px;background:var(--surf3);flex-shrink:0;}
-.drawer-bar{height:100%;background:var(--accent);transition:width .35s var(--ease);border-radius:0 99px 99px 0;}
-.drawer-body{flex:1;overflow-y:scroll;padding:24px;}
-.drawer-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-shrink:0;background:var(--surface);}
-.drawer-step-label{font-size:11px;color:var(--t3);font-weight:500;}
-.step-title{font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:-.3px;color:var(--t1);margin-bottom:6px;}
-.step-sub{font-size:13px;color:var(--t3);line-height:1.65;margin-bottom:24px;}
+.session-score.none{color:var(--muted-2);font-size:13px;font-weight:500;}
+
+.empty-state{text-align:center;padding:80px 20px;color:var(--muted);}
+.empty-state svg{width:56px;height:56px;margin-bottom:16px;color:var(--border-2);}
+.empty-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.empty-sub{font-size:14px;color:var(--muted);margin-bottom:20px;}
+
+/* ── RANKING ─────────────────────────────────── */
+.ranking-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.rank-entry{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:14px;transition:border-color .15s,transform .12s;}
+.rank-entry:hover{border-color:var(--sage);transform:translateY(-2px);}
+.rank-number{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.03em;min-width:36px;text-align:center;line-height:1;color:var(--muted-2);}
+.rank-number.r1{color:var(--sage);}
+.rank-number.r2{color:var(--muted);}
+.rank-number.r3{color:var(--amber);}
+.rank-name{font-size:14px;font-weight:600;}
+.rank-avg{font-size:12px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums;}
+
+/* ── MODAL WIZARD (centered) ──────────────────── */
+.wizard-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.35);display:flex;align-items:center;justify-content:center;z-index:300;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(2px);}
+.wizard-overlay.open{opacity:1;pointer-events:all;}
+.wizard-modal{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:min(600px,96vw);max-height:90vh;display:flex;flex-direction:column;transform:scale(.97) translateY(8px);transition:transform .25s var(--ease);overflow:hidden;}
+.wizard-overlay.open .wizard-modal{transform:scale(1) translateY(0);}
+.wizard-header{padding:22px 24px 0;position:relative;}
+.wizard-close{position:absolute;top:16px;right:18px;width:28px;height:28px;border-radius:50%;border:none;background:var(--stone-100);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:background .15s;}
+.wizard-close:hover{background:var(--stone-200);color:var(--ink);}
+.wizard-progress{display:flex;gap:6px;margin-bottom:22px;}
+.progress-step{flex:1;height:3px;border-radius:99px;background:var(--stone-200);transition:background .3s;}
+.progress-step.done{background:var(--sage);}
+.progress-step.active{background:var(--sage-mid);}
+.wizard-step-label{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500;}
+.wizard-step-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;}
+.wizard-step-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+.wizard-body{padding:0 24px 24px;overflow-y:auto;flex:1;}
+.wizard-footer{padding:16px 24px;border-top:1px solid var(--border);background:var(--stone-50);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-shrink:0;}
+.wiz-step-counter{font-size:12px;color:var(--muted);}
+.btn-wiz-back{padding:8px 16px;border:1px solid var(--border-2);border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--ink-2);background:var(--white);cursor:pointer;transition:all .15s;}
+.btn-wiz-back:hover{background:var(--stone-100);}
+.btn-wiz-next{padding:8px 20px;background:var(--sage);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;}
+.btn-wiz-next:hover{background:var(--sage-mid);}
+.btn-wiz-next:disabled{opacity:.5;cursor:wait;}
+
 .pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.pick-card{border:1.5px solid var(--border);border-radius:10px;padding:16px;background:var(--surf2);cursor:pointer;text-align:left;transition:border-color .15s,background .15s,transform .1s;}
-.pick-card:hover{border-color:var(--accent);background:var(--surface);}
-.pick-card.sel{border-color:var(--accent);background:var(--accentBg);}
-.pick-card:active{transform:scale(.98);}
-.pick-label{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--t1);margin-bottom:4px;}
-.pick-desc{font-size:11px;color:var(--t3);line-height:1.5;}
-.section-sep{font-size:11px;font-weight:600;color:var(--t3);letter-spacing:.05em;margin:20px 0 10px;display:flex;align-items:center;gap:10px;}
+.pick-card{padding:16px;border:1.5px solid var(--border-2);border-radius:var(--radius);cursor:pointer;background:var(--white);text-align:left;transition:border-color .15s,background .15s,transform .1s;}
+.pick-card:hover{border-color:var(--sage-border);background:var(--sage-light);}
+.pick-card.sel{border-color:var(--sage);background:var(--sage-light);}
+.pick-card:active{transform:scale(.99);}
+.pick-label{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;margin-bottom:4px;}
+.pick-desc{font-size:12px;color:var(--muted);line-height:1.45;}
+
+.section-sep{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em;margin:18px 0 12px;display:flex;align-items:center;gap:8px;text-transform:uppercase;}
 .section-sep::after{content:'';flex:1;height:1px;background:var(--border);}
 .field-block{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
 .field-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.d-label{font-size:11px;font-weight:600;color:var(--t3);letter-spacing:.02em;}
-.d-input{width:100%;padding:9px 12px;background:var(--surf2);border:1px solid var(--border);border-radius:8px;color:var(--t1);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s;}
-.d-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentBg);}
-.d-input::placeholder{color:var(--t4);}
-.d-select{width:100%;padding:9px 12px;background:var(--surf2);border:1px solid var(--border);border-radius:8px;color:var(--t1);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237B7290' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
-.d-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentBg);}
-.d-textarea{width:100%;min-height:90px;resize:vertical;padding:9px 12px;background:var(--surf2);border:1px solid var(--border);border-radius:8px;color:var(--t1);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s;line-height:1.6;}
-.d-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentBg);}
-.d-textarea::placeholder{color:var(--t4);}
+.d-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.02em;}
+.d-input,.d-select{width:100%;padding:9px 12px;background:var(--white);border:1px solid var(--border-2);border-radius:var(--radius-sm);color:var(--ink);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s;}
+.d-input:focus,.d-select:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(59,107,80,0.10);}
+.d-input::placeholder{color:var(--muted-2);}
+.d-textarea{width:100%;min-height:88px;resize:vertical;padding:9px 12px;background:var(--white);border:1px solid var(--border-2);border-radius:var(--radius-sm);color:var(--ink);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s;line-height:1.6;}
+.d-textarea:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(59,107,80,0.10);}
+.d-textarea::placeholder{color:var(--muted-2);}
+.d-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2371717A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
 .url-pair{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;}
-.btn-analyze{padding:9px 14px;background:var(--surf2);border:1px solid var(--border);border-radius:8px;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s,background .15s;}
-.btn-analyze:hover{border-color:var(--accent);color:var(--accent);}
-.btn-analyze:disabled{opacity:.45;cursor:wait;}
-.analyze-result{display:none;margin-top:7px;padding:8px 12px;background:var(--accentBg);border:1px solid rgba(167,139,250,.2);border-radius:7px;font-size:12px;color:var(--accent);line-height:1.5;}
+.btn-analyze{padding:9px 14px;background:var(--stone-100);border:1px solid var(--border-2);border-radius:var(--radius-sm);color:var(--ink-2);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;}
+.btn-analyze:hover{border-color:var(--sage);color:var(--sage);}
+.btn-analyze:disabled{opacity:.5;cursor:wait;}
+.analyze-result{display:none;margin-top:7px;padding:8px 12px;background:var(--sage-light);border:1px solid var(--sage-border);border-radius:var(--radius-sm);font-size:12px;color:var(--sage);line-height:1.5;}
 .analyze-result.show{display:block;}
-.w-error{display:none;margin-top:14px;padding:9px 12px;background:var(--redBg);border:1px solid rgba(248,113,113,.2);border-radius:7px;font-size:12px;color:var(--red);}
+.w-error{display:none;margin-top:14px;padding:9px 12px;background:var(--red-bg);border:1px solid rgba(185,28,28,0.15);border-radius:var(--radius-sm);font-size:12px;color:var(--red);}
 .w-error.show{display:block;}
 .prev-list{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;}
-.prev-item{border:1.5px solid var(--border);border-radius:8px;background:var(--surf2);padding:10px 12px;cursor:pointer;transition:border-color .15s,background .15s;}
-.prev-item:hover{border-color:var(--accent);}
-.prev-item.sel{border-color:var(--accent);background:var(--accentBg);}
-.prev-item-name{font-size:13px;font-weight:600;color:var(--t1);}
-.prev-item-meta{font-size:11px;color:var(--t3);margin-top:2px;}
-.btn-prev{padding:9px 18px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s,border-color .15s;}
-.btn-prev:hover{background:var(--surf2);}
-.btn-next{padding:9px 22px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s;}
-.btn-next:hover{opacity:.9;}
-.btn-next:active{transform:scale(.98);}
-.btn-next:disabled{opacity:.4;cursor:wait;}
-.intensite-block{background:var(--surf2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;}
+.prev-item{border:1.5px solid var(--border-2);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;cursor:pointer;transition:border-color .15s,background .15s;}
+.prev-item:hover{border-color:var(--sage-border);}
+.prev-item.sel{border-color:var(--sage);background:var(--sage-light);}
+.prev-item-name{font-size:13px;font-weight:600;color:var(--ink);}
+.prev-item-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.intensite-block{background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
 .intensite-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.intensite-label{font-size:13px;font-weight:700;color:var(--t1);}
-.intensite-value{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--accent);}
-.intensite-slider{width:100%;accent-color:var(--accent);margin-bottom:8px;}
-.intensite-scale{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);font-weight:600;}
-.intensite-desc{font-size:11px;color:var(--t3);margin-top:8px;line-height:1.5;text-align:center;font-style:italic;}
-.saved-info{font-size:11px;color:var(--green);background:var(--greenBg);padding:6px 10px;border-radius:6px;margin-top:8px;display:none;}
+.intensite-label{font-size:13px;font-weight:700;}
+.intensite-value{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;color:var(--sage);}
+.intensite-slider{width:100%;accent-color:var(--sage);margin-bottom:8px;touch-action:none;cursor:pointer;}
+.intensite-scale{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-weight:600;}
+.intensite-desc{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;text-align:center;font-style:italic;}
+.saved-info{font-size:11px;color:var(--sage);background:var(--sage-light);border:1px solid var(--sage-border);padding:6px 10px;border-radius:6px;margin-top:8px;display:none;}
 .saved-info.show{display:block;}
-.btn-small{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 12px;background:var(--surf3);border:1px solid var(--border);border-radius:7px;font-size:11px;font-weight:600;color:var(--t2);cursor:pointer;transition:all .15s;}
-.btn-small:hover{background:var(--surface);color:var(--accent);border-color:var(--accent);}
+.btn-small{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 12px;background:var(--stone-100);border:1px solid var(--border-2);border-radius:7px;font-size:11px;font-weight:600;color:var(--ink-2);cursor:pointer;transition:all .15s;}
+.btn-small:hover{background:var(--white);color:var(--sage);border-color:var(--sage);}
 .final-create-block{margin-top:20px;padding-top:20px;border-top:1px solid var(--border);display:none;}
 .final-create-block.show{display:block;}
-.btn-create{width:100%;padding:13px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s;}
-.btn-create:hover{opacity:.9;}
+.btn-create{width:100%;padding:13px 20px;background:var(--sage);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s,transform .1s;}
+.btn-create:hover{background:var(--sage-mid);}
 .btn-create:active{transform:scale(.98);}
 .btn-create:disabled{opacity:.5;cursor:wait;}
-.debrief-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;transform:translateY(100%);transition:transform .35s var(--ease);overflow-y:scroll;display:flex;flex-direction:column;}
-.debrief-overlay.open{transform:translateY(0);}
-.debrief-nav{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:52px;display:flex;align-items:center;justify-content:space-between;z-index:10;flex-shrink:0;}
-.debrief-back{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--t2);background:none;border:none;cursor:pointer;transition:color .15s;}
-.debrief-back:hover{color:var(--t1);}
+
+/* ── DEBRIEF SIDE PANEL ────────────────────── */
+.debrief-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.35);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px);}
+.debrief-overlay.open{opacity:1;pointer-events:all;}
+.debrief-panel{position:fixed;top:0;right:0;bottom:0;width:min(840px,96vw);background:var(--white);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .30s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;overflow:hidden;z-index:201;}
+.debrief-overlay.open .debrief-panel{transform:translateX(0);}
+.debrief-topbar{flex-shrink:0;padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--white);}
+.debrief-back{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;background:none;border:none;padding:0;transition:color .15s;}
+.debrief-back:hover{color:var(--ink);}
 .debrief-back svg{width:16px;height:16px;}
-.debrief-session-name{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--t1);}
-.debrief-actions{display:flex;gap:8px;}
-.btn-save-persona{padding:8px 14px;background:var(--surf2);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--t2);cursor:pointer;transition:all .15s;}
-.btn-save-persona:hover{border-color:var(--accent);color:var(--accent);}
-.debrief-body{max-width:860px;width:100%;margin:0 auto;padding:40px 32px 60px;display:flex;flex-direction:column;gap:28px;}
+.debrief-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.btn-ghost{padding:6px 12px;border:1px solid var(--border-2);border-radius:var(--radius-sm);font-size:12px;font-weight:500;color:var(--ink-2);background:var(--white);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
+.btn-ghost:hover{background:var(--stone-100);border-color:var(--muted-2);}
+.btn-ghost svg{width:13px;height:13px;}
+.btn-ghost.primary{background:var(--sage);color:#fff;border-color:var(--sage);}
+.btn-ghost.primary:hover{background:var(--sage-mid);}
+.debrief-body{flex:1;overflow-y:auto;padding:28px 32px 60px;display:flex;flex-direction:column;gap:24px;}
+
 .db-hero{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;}
-.db-tagline{font-family:var(--font-display);font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-.5px;color:var(--t1);max-width:520px;}
-.db-meta{font-size:12px;color:var(--t3);margin-top:8px;line-height:1.6;}
+.db-tagline{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;line-height:1.2;letter-spacing:-.03em;color:var(--ink);max-width:520px;}
+.db-meta{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6;}
 .db-score-block{text-align:right;flex-shrink:0;}
-.db-score{font-family:var(--font-display);font-size:48px;font-weight:800;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums;}
-.db-score.high{color:var(--green);}
+.db-score{font-family:'DM Sans',sans-serif;font-size:48px;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums;}
+.db-score.high{color:var(--sage);}
 .db-score.medium{color:var(--amber);}
 .db-score.low{color:var(--red);}
-.db-score.none{color:var(--t4);font-size:28px;}
-.db-score-label{font-size:12px;color:var(--t3);margin-top:4px;}
-.db-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-.db-section-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.db-section-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--t1);letter-spacing:-.1px;}
+.db-score.none{color:var(--muted-2);font-size:28px;}
+.db-score-label{font-size:12px;color:var(--muted);margin-top:4px;}
+
+.db-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.db-section-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--stone-50);}
+.db-section-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:-.01em;}
 .db-section-body{padding:20px;}
-.radar-svg{width:220px;height:220px;display:block;margin:0 auto;}
-.radar-legend{display:flex;gap:16px;justify-content:center;font-size:11px;color:var(--t3);margin-top:10px;}
-.rdot{width:14px;height:0;border-top:2px solid var(--accent);display:inline-block;}
-.rdot.avg{border-top-style:dashed;border-top-color:rgba(167,139,250,.6);}
+
+/* Audio player custom */
+.audio-player{background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:0;display:flex;align-items:center;gap:14px;}
+.audio-btn{width:36px;height:36px;border-radius:50%;background:var(--sage);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.audio-btn:hover{background:var(--sage-mid);}
+.audio-btn svg{width:16px;height:16px;}
+.audio-track{flex:1;height:4px;background:var(--border-2);border-radius:99px;position:relative;cursor:pointer;overflow:visible;}
+.audio-fill{height:100%;background:var(--sage);border-radius:99px;width:0%;pointer-events:none;}
+.audio-thumb{width:12px;height:12px;border-radius:50%;background:var(--sage);border:2px solid var(--white);box-shadow:var(--shadow-sm);position:absolute;top:50%;transform:translate(-50%,-50%);pointer-events:none;left:0%;}
+.audio-time{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+/* Radar */
+.radar-svg{width:240px;height:240px;display:block;margin:0 auto;}
+.radar-legend{display:flex;gap:16px;justify-content:center;font-size:11px;color:var(--muted);margin-top:10px;}
+.rdot{width:14px;height:0;border-top:2px solid var(--sage);display:inline-block;}
+.rdot.avg{border-top-style:dashed;border-top-color:var(--muted-2);}
 .radar-axes-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;font-size:11px;}
-.radar-axes-legend .item{background:var(--surf2);border:1px solid var(--border);border-radius:6px;padding:6px 8px;}
-.radar-axes-legend .k{color:var(--t3);font-weight:600;font-size:10px;}
-.radar-axes-legend .v{font-family:var(--font-display);font-weight:800;color:var(--t1);font-size:14px;margin-top:2px;}
-.radar-axes-legend .v.na{color:var(--t4);font-style:italic;font-weight:500;}
-.metrics-flex{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;}
-.m-cell{display:flex;flex-direction:column;gap:3px;}
-.m-val{font-family:var(--font-display);font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--t1);letter-spacing:-.5px;line-height:1;}
-.m-label{font-size:11px;color:var(--t3);}
-.m-sub{font-size:10px;color:var(--t4);}
-.db-accordion{border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-.db-accordion+.db-accordion{margin-top:8px;}
-.db-acc-head{padding:14px 20px;background:var(--surface);display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;transition:background .15s;}
-.db-acc-head:hover{background:var(--surf2);}
-.db-acc-title{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--t1);}
-.db-acc-icon{font-size:18px;color:var(--t3);font-weight:400;transition:transform .2s;}
+.radar-axes-legend .item{background:var(--stone-50);border:1px solid var(--border);border-radius:6px;padding:6px 8px;}
+.radar-axes-legend .k{color:var(--muted);font-weight:600;font-size:10px;}
+.radar-axes-legend .v{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--ink);font-size:14px;margin-top:2px;}
+.radar-axes-legend .v.na{color:var(--muted-2);font-style:italic;font-weight:500;}
+
+/* Métriques */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
+.m-cell{display:flex;flex-direction:column;gap:3px;padding:10px 12px;background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius-sm);}
+.m-val{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1;}
+.m-label{font-size:11px;color:var(--muted);}
+.m-sub{font-size:10px;color:var(--muted-2);}
+
+/* Serpentine */
+.serpentine-wrap{margin-top:8px;}
+.serpentine-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.serpentine-toggle{display:flex;gap:2px;background:var(--stone-100);border:1px solid var(--border);border-radius:99px;padding:2px;}
+.serp-tab{padding:5px 12px;border-radius:99px;border:none;background:transparent;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
+.serp-tab.active{background:var(--white);color:var(--ink);box-shadow:var(--shadow-xs);}
+.serp-svg{width:100%;height:130px;display:block;}
+.serp-info{font-size:11px;color:var(--muted);text-align:center;margin-top:6px;}
+
+/* Accordions */
+.db-acc{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.db-acc+.db-acc{margin-top:8px;}
+.db-acc summary{padding:14px 20px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;background:var(--white);transition:background .15s;}
+.db-acc summary:hover{background:var(--stone-50);}
+.db-acc summary::-webkit-details-marker{display:none;}
+.db-acc-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;}
+.db-acc-icon{font-size:18px;color:var(--muted);font-weight:400;transition:transform .2s;}
 details[open] .db-acc-icon{transform:rotate(45deg);}
-details[open] .db-acc-head{border-bottom:1px solid var(--border);}
-.db-acc-body{padding:16px 20px;display:flex;flex-direction:column;gap:10px;}
-.qi{background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:12px;}
+details[open] summary{border-bottom:1px solid var(--border);}
+.db-acc-body{padding:16px 20px;display:flex;flex-direction:column;gap:10px;background:var(--white);}
+
+.qi{background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;}
 .qi-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
 .chip{font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;}
-.chip-t{background:var(--accentBg);color:var(--accent);}
-.chip-c{background:var(--surf3);color:var(--t3);border:1px solid var(--border);}
-.chip-f{background:rgba(109,40,217,.1);color:#7C3AED;}
-[data-theme="dark"] .chip-f{background:rgba(167,139,250,.15);color:var(--accent);}
-.chip-adapt{background:var(--greenBg);color:var(--green);}
-.chip-inst{background:var(--amberBg);color:var(--amber);}
-.chip-mank{background:var(--redBg);color:var(--red);}
-.qi-text{font-size:12px;line-height:1.65;color:var(--t2);}
-.qi-note{font-size:10px;color:var(--t4);margin-top:6px;line-height:1.5;}
+.chip-t{background:var(--sage-light);color:var(--sage);}
+.chip-c{background:var(--stone-200);color:var(--muted);}
+.chip-f{background:var(--sage-light);color:var(--sage-mid);}
+.chip-adapt{background:var(--sage-light);color:var(--sage);}
+.chip-inst{background:var(--amber-bg);color:var(--amber);}
+.chip-mank{background:var(--red-bg);color:var(--red);}
+.qi-text{font-size:12px;line-height:1.65;color:var(--ink-2);}
+.qi-note{font-size:11px;color:var(--muted-2);margin-top:6px;line-height:1.5;}
+.moment-btn{background:var(--sage-light);color:var(--sage);border:none;border-radius:99px;padding:2px 8px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+.moment-btn:hover{opacity:.75;}
+
 .dist-rows{display:flex;flex-direction:column;gap:10px;}
 .dist-row{display:grid;grid-template-columns:90px 1fr 38px;gap:10px;align-items:center;}
-.dist-key{font-size:12px;color:var(--t2);text-transform:capitalize;}
-.dist-track{height:5px;background:var(--surf3);border-radius:99px;overflow:hidden;}
-.dist-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accentL));border-radius:99px;}
-.dist-pct{font-size:11px;color:var(--t3);text-align:right;font-variant-numeric:tabular-nums;}
-.an-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.an-cell{background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:12px;}
-.an-cell strong{display:block;font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.05em;margin-bottom:6px;text-transform:uppercase;}
-.an-cell div{font-size:12px;line-height:1.6;color:var(--t2);}
-.audio-block{padding:4px 0;}
-.audio-block audio{width:100%;accent-color:var(--accent);}
-.audio-na{padding:16px;text-align:center;font-size:12px;color:var(--t3);}
-.transcript-wrap{overflow:hidden;}
-.t-head{padding:12px 20px;background:var(--surf2);border-bottom:1px solid var(--border);font-size:11px;color:var(--t3);font-weight:500;}
-.t-scroll{max-height:320px;overflow-y:scroll;}
-.t-row{display:grid;grid-template-columns:42px 90px 1fr;gap:10px;padding:10px 20px;border-bottom:1px solid var(--surf2);cursor:pointer;transition:background .1s;font-size:12px;}
-.t-row:hover{background:var(--surf2);}
-.t-row.active{background:var(--accentBg);box-shadow:inset 3px 0 0 var(--accent);}
-.t-row.bascule{background:var(--amberBg);box-shadow:inset 3px 0 0 var(--amber);}
-.t-time{color:var(--t4);font-size:10px;font-variant-numeric:tabular-nums;padding-top:1px;}
-.t-who{font-weight:600;color:var(--t3);}
-.t-who.c{color:var(--accent);}
-.t-text{color:var(--t2);line-height:1.55;}
-.moment-btn{background:var(--accentBg);color:var(--accent);border:none;border-radius:99px;padding:2px 8px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s;}
-.moment-btn:hover{opacity:.8;}
-.bilan-gen{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--surf2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;}
+.dist-key{font-size:12px;color:var(--ink-2);text-transform:capitalize;}
+.dist-track{height:5px;background:var(--stone-200);border-radius:99px;overflow:hidden;}
+.dist-fill{height:100%;background:linear-gradient(90deg,var(--sage),var(--sage-mid));border-radius:99px;}
+.dist-pct{font-size:11px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;}
+
+.coh-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.coh-cell{background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;}
+.coh-cell strong{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px;text-transform:uppercase;}
+.coh-cell div{font-size:12px;line-height:1.6;color:var(--ink-2);}
+
+/* Transcription */
+.t-list{max-height:400px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);}
+.t-row{display:grid;grid-template-columns:44px 96px 1fr;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;font-size:12px;transition:background .1s;}
+.t-row:last-child{border-bottom:none;}
+.t-row:hover{background:var(--stone-50);}
+.t-row.active{background:var(--sage-light);box-shadow:inset 3px 0 0 var(--sage);}
+.t-row.bascule{background:var(--amber-bg);box-shadow:inset 3px 0 0 var(--amber);}
+.t-time{font-size:10px;color:var(--muted-2);font-variant-numeric:tabular-nums;padding-top:1px;}
+.t-who{font-weight:600;color:var(--muted);}
+.t-who.c{color:var(--sage);}
+.t-text{color:var(--ink-2);line-height:1.55;}
+
+/* Bilan generation */
+.bilan-gen{display:flex;align-items:center;gap:16px;background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;}
 .bg-left{flex:1;min-width:0;}
-.bg-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px;}
-.bg-sub{font-size:11px;color:var(--t3);}
+.bg-title{font-size:13px;font-weight:700;margin-bottom:4px;}
+.bg-sub{font-size:11px;color:var(--muted);}
 .sens-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
-.sens-row input{flex:1;accent-color:var(--accent);}
-.sens-val{font-size:12px;font-weight:700;color:var(--accent);min-width:28px;text-align:right;font-variant-numeric:tabular-nums;}
-.btn-gen{padding:10px 18px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity .15s,transform .1s;}
-.btn-gen:hover{opacity:.9;}
+.sens-row input[type=range]{flex:1;accent-color:var(--sage);}
+.sens-val{font-size:12px;font-weight:700;color:var(--sage);min-width:28px;text-align:right;font-variant-numeric:tabular-nums;}
+.btn-gen{padding:10px 18px;background:var(--sage);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s,transform .1s;}
+.btn-gen:hover{background:var(--sage-mid);}
 .btn-gen:active{transform:scale(.98);}
-.btn-gen:disabled{opacity:.4;cursor:wait;}
-@media(max-width:640px){
-.main-content{padding:20px 16px;}
-.debrief-body{padding:24px 16px 48px;}
-.field-row-2,.pick-grid,.an-grid{grid-template-columns:1fr;}
-.session-row{grid-template-columns:4px 1fr auto;gap:0 12px;}
-.session-dur{display:none;}
-.db-hero{flex-direction:column;}
-.db-score{font-size:36px;}
-.nav-tabs .nav-tab span{display:none;}
-.bilan-gen{flex-direction:column;align-items:stretch;}
-.radar-axes-legend{grid-template-columns:1fr 1fr;}
+.btn-gen:disabled{opacity:.5;cursor:wait;}
+
+/* Toast */
+.kk-toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120%);max-width:min(520px,calc(100vw - 32px));padding:13px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;text-align:center;background:rgba(24,24,27,0.95);color:#fff;box-shadow:var(--shadow-lg);z-index:9999;opacity:0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s;}
+.kk-toast.visible{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto;}
+.kk-toast.error{background:linear-gradient(135deg,rgba(185,28,28,0.96),rgba(153,27,27,0.96));}
+.kk-toast.success{background:linear-gradient(135deg,rgba(59,107,80,0.96),rgba(78,138,104,0.96));}
+.kk-toast.warning{background:linear-gradient(135deg,rgba(180,83,9,0.96),rgba(146,64,14,0.96));}
+
+@media(max-width:900px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .debrief-panel{width:96vw;}
+  .metrics-grid{grid-template-columns:repeat(2,1fr);}
+  .field-row-2,.pick-grid,.coh-grid{grid-template-columns:1fr;}
+  .radar-axes-legend{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .main-content{padding:16px;}
+  .topbar{padding:0 16px;}
+  .user-name-pill{display:none;}
+  .session-row{grid-template-columns:4px 1fr auto;gap:0 12px;}
+  .session-dur,.session-status{display:none;}
+  .debrief-body{padding:20px 16px 48px;}
+  .db-tagline{font-size:18px;}
+  .db-score{font-size:36px;}
+  .debrief-actions .btn-ghost span{display:none;}
 }
 </style>
 </head>
 <body>
 
+<!-- ══ LOGIN ══════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-wrap">
-    <p class="login-eyebrow">Kold Kall</p>
-    <h1 class="login-headline">Prêt à<br>t'entraîner ?</h1>
-    <p class="login-sub">Connecte-toi pour accéder à tes simulations et suivre ta progression.</p>
-    <div class="login-form">
-      <div>
+    <div class="login-brand">
+      <div class="login-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+      </div>
+      <span class="login-brand-name">Kold Kall</span>
+    </div>
+    <div class="login-card">
+      <h1 class="login-title">Connexion</h1>
+      <p class="login-sub">Accédez à votre espace d'entraînement</p>
+      <div class="field">
         <label class="f-label">Email</label>
         <input type="email" class="f-input" id="emailInput" placeholder="toi@exemple.com" autocomplete="email">
       </div>
-      <div>
+      <div class="field">
         <label class="f-label">Mot de passe</label>
         <input type="password" class="f-input" id="passwordInput" placeholder="••••••••" autocomplete="current-password">
       </div>
       <div class="login-err" id="loginErr"></div>
-      <button class="btn-main" id="loginBtn">Entrer</button>
-    </div>
-  </div>
-  <div class="login-theme">
-    <div class="theme-pill">
-      <button class="theme-opt" id="themeLight">☀️</button>
-      <button class="theme-opt" id="themeDark">🌙</button>
+      <button class="btn-main" id="loginBtn">Se connecter</button>
     </div>
   </div>
 </div>
 
+<!-- ══ APP ══════════════════════════════════════ -->
 <div id="app">
-  <nav class="nav">
-    <div class="nav-logo"><div class="logo-dot"></div>Kold Kall</div>
-    <div class="nav-tabs">
-      <button class="nav-tab active" data-view="sessions"><span>Mes sessions</span></button>
-      <button class="nav-tab" data-view="ranking"><span>Classement</span></button>
-    </div>
-    <div class="nav-right">
-      <div class="theme-pill">
-        <button class="theme-opt" id="appThemeLight">☀️</button>
-        <button class="theme-opt" id="appThemeDark">🌙</button>
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
       </div>
+      <span class="topbar-name">Kold Kall</span>
+    </div>
+    <nav class="topbar-nav">
+      <button class="nav-item active" data-view="sessions">Mes sessions</button>
+      <button class="nav-item" data-view="ranking">Classement</button>
+    </nav>
+    <div class="topbar-right">
       <div class="user-pill" id="userPill">
         <div class="user-avatar" id="userAvatar">?</div>
         <span class="user-name-pill" id="userName"></span>
@@ -340,50 +439,70 @@ details[open] .db-acc-head{border-bottom:1px solid var(--border);}
         Nouvelle simulation
       </button>
     </div>
-  </nav>
-  <div class="main-content" id="mainContent"></div>
+  </header>
+  <main class="main-content" id="mainContent"></main>
 </div>
 
-<div class="drawer-overlay" id="drawerOverlay">
-  <div class="drawer" id="drawer">
-    <div class="drawer-head">
-      <span class="drawer-title" id="drawerTitle">Configurer la simulation</span>
-      <button class="drawer-close" id="drawerClose">×</button>
-    </div>
-    <div class="drawer-progress"><div class="drawer-bar" id="drawerBar" style="width:25%"></div></div>
-    <div class="drawer-body" id="drawerBody"></div>
-    <div class="drawer-foot">
-      <span class="drawer-step-label" id="drawerStepLabel">Étape 1 sur 4</span>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn-prev" id="drawerPrev" style="display:none">Retour</button>
-        <button class="btn-next" id="drawerNext">Continuer</button>
+<!-- ══ WIZARD MODAL ═══════════════════════════════ -->
+<div class="wizard-overlay" id="wizardOverlay">
+  <div class="wizard-modal" id="wizardModal">
+    <div class="wizard-header">
+      <button class="wizard-close" id="wizardClose">
+        <svg viewBox="0 0 14 14" fill="none" width="14" height="14"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="wizard-progress" id="wizardProgress">
+        <div class="progress-step active"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
       </div>
+      <div class="wizard-step-label" id="wizardStepLabel">Étape 1 sur 4</div>
+      <h2 class="wizard-step-title" id="wizardStepTitle">Contexte de vente</h2>
+      <p class="wizard-step-sub" id="wizardStepSub">Quel type de vente allez-vous simuler ?</p>
+    </div>
+    <div class="wizard-body" id="wizardBody"></div>
+    <div class="wizard-footer">
+      <button class="btn-wiz-back" id="wizBack" style="visibility:hidden">Retour</button>
+      <span class="wiz-step-counter" id="wizCounter">1 / 4</span>
+      <button class="btn-wiz-next" id="wizNext">Continuer</button>
     </div>
   </div>
 </div>
 
+<!-- ══ DEBRIEF SIDE PANEL ═════════════════════════ -->
 <div class="debrief-overlay" id="debriefOverlay">
-  <nav class="debrief-nav">
-    <button class="debrief-back" id="debriefBack">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Retour aux sessions
-    </button>
-    <span class="debrief-session-name" id="debriefSessionName"></span>
-    <div class="debrief-actions">
-      <button class="btn-save-persona" id="btnSavePersona">💾 Sauvegarder le persona</button>
+  <div class="debrief-panel" id="debriefPanel">
+    <div class="debrief-topbar">
+      <button class="debrief-back" id="debriefBack">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Retour
+      </button>
+      <div class="debrief-actions" id="debriefActions"></div>
     </div>
-  </nav>
-  <div class="debrief-body" id="debriefBody"></div>
+    <div class="debrief-body" id="debriefBody"></div>
+  </div>
 </div>
 
 <script>
+// ═══════════════════════════════════════════════════════════════════
+//  CONSTANTES
+// ═══════════════════════════════════════════════════════════════════
 const SUPABASE_URL='https://vjvyzbojcbwmfudkamlh.supabase.co';
 const SUPABASE_KEY='sb_publishable_H-wuFrWTNgDEP0fwSWnqNg_c8dJMQZM';
 const SIM_URL='https://agent-vocal-39hz.onrender.com';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
+const INTENSITE_DESCS={1:'Très ouvert, facile à convaincre',2:'Plutôt ouvert, quelques réserves',3:'Neutre : ni ouvert ni fermé',4:'Méfiant, demande à être convaincu',5:'Très difficile, exigeant voire agressif'};
+
+// ═══════════════════════════════════════════════════════════════════
+//  ÉTAT
+// ═══════════════════════════════════════════════════════════════════
 let me=null,myProfile=null,currentView='sessions',latestAutoOpen=null;
 let currentDebriefSimId=null;
+let currentAudio=null;
+let pausedSims=[];
+let allSims=[];
+let currentSimFilter='all';
 
 const ws={
   step:1,sessionId:null,b2b_b2c:null,
@@ -399,6 +518,9 @@ const ws={
   savedVendeurs:[]
 };
 
+// ═══════════════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════════════
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 const fmtDate=d=>{const dt=new Date(d);return dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})+' · '+dt.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});};
@@ -406,9 +528,17 @@ const fmtDur=s=>{const n=Math.max(0,Number(s)||0);return `${Math.floor(n/60)}m${
 const fmtSec=s=>{const n=Math.max(0,Number(s)||0);return `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`;};
 const fmtM=(v,suf='')=>{const n=Number(v);return Number.isFinite(n)?`${Math.round(n)}${suf}`:'—';};
 const ncls=n=>{const s=Number(n)||0;return s>=70?'high':s>=50?'medium':'low';};
-const simLabel=sim=>{if(sim.type_entretien==='cold_call')return 'Cold Call';return ({complet:'Entretien complet',decouverte:'Découverte',demo:'Démo',objections_closing:'Objections & Closing',nego:'Négociation'}[sim.phase_choisie]||sim.type_scenario||'Rendez-vous');};
 const initials=(n,p)=>(p?.[0]||'')+(n?.[0]||'');
-const INTENSITE_DESCS={1:'Très ouvert, facile à convaincre',2:'Plutôt ouvert, quelques réserves',3:'Neutre : ni ouvert ni fermé',4:'Méfiant, demande à être convaincu',5:'Très difficile, exigeant voire agressif'};
+const simLabel=sim=>{if(sim.type_entretien==='cold_call')return 'Cold Call';return ({complet:'Entretien complet',decouverte:'Découverte',demo:'Démo',objections_closing:'Objections & Closing',nego:'Négociation'}[sim.phase_choisie]||sim.type_scenario||'Rendez-vous');};
+
+function showToast(message,type='error',durationMs=6000){
+  let toast=$('kk-toast');
+  if(!toast){toast=document.createElement('div');toast.id='kk-toast';document.body.appendChild(toast);}
+  toast.textContent=message;
+  toast.className=`kk-toast ${type} visible`;
+  clearTimeout(toast._t);
+  toast._t=setTimeout(()=>toast.classList.remove('visible'),durationMs);
+}
 
 async function apiCall(path,opts={}){
   const{data}=await sb.auth.getSession();
@@ -417,21 +547,40 @@ async function apiCall(path,opts={}){
   return fetch(`${SIM_URL}${path}`,{...opts,headers:hdrs});
 }
 
-function applyTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem('kk-theme',t);['themeLight','themeDark','appThemeLight','appThemeDark'].forEach(id=>{const el=$(id);if(!el)return;el.classList.toggle('on',id.includes(t==='light'?'Light':'Dark'));});}
-applyTheme(localStorage.getItem('kk-theme')||'dark');
-['themeLight','themeDark','appThemeLight','appThemeDark'].forEach(id=>{const el=$(id);if(el)el.addEventListener('click',()=>applyTheme(id.includes('Light')?'light':'dark'));});
+function downloadUrl(url,filename){
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;a.target='_blank';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
 
-function showLogin(v){$('login-screen').style.display=v?'flex':'none';$('app').style.display=v?'none':'flex';}
-function showLoginErr(m){const e=$('loginErr');e.style.display=m?'block':'none';e.textContent=m||'';}
+async function downloadAsBlob(url,filename){
+  try{
+    const res=await fetch(url);
+    const blob=await res.blob();
+    const burl=URL.createObjectURL(blob);
+    downloadUrl(burl,filename);
+    setTimeout(()=>URL.revokeObjectURL(burl),3000);
+  }catch(e){showToast('Téléchargement impossible : '+e.message,'error');}
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════════════════════════
+function showLogin(v){$('login-screen').classList.toggle('hidden',!v);$('app').classList.toggle('visible',!v);}
+function showLoginErr(m){const e=$('loginErr');e.classList.toggle('show',!!m);e.textContent=m||'';}
 
 async function handleLogin(){
   showLoginErr('');
   const email=$('emailInput').value.trim(),pwd=$('passwordInput').value;
   if(!email||!pwd){showLoginErr('Remplis les deux champs.');return;}
   const btn=$('loginBtn');btn.disabled=true;btn.textContent='Connexion…';
-  try{const{data,error}=await sb.auth.signInWithPassword({email,password:pwd});if(error)throw error;me=data.user;await loadProfile();}
-  catch(e){showLoginErr(e.message||'Erreur de connexion');}
-  finally{btn.disabled=false;btn.textContent='Entrer';}
+  try{
+    const{data,error}=await sb.auth.signInWithPassword({email,password:pwd});
+    if(error)throw error;
+    me=data.user;
+    await loadProfile();
+  }catch(e){showLoginErr(e.message||'Erreur de connexion');}
+  finally{btn.disabled=false;btn.textContent='Se connecter';}
 }
 
 async function loadProfile(){
@@ -443,313 +592,206 @@ async function loadProfile(){
 function updateNav(){
   $('userAvatar').textContent=initials(myProfile?.nom,myProfile?.prenom)||'?';
   $('userName').textContent=myProfile?.prenom||me?.email?.split('@')[0]||'';
-  $('userPill').title=myProfile?.role==='directeur'?'Vue directeur':'Vue commercial';
+  $('userPill').title=`${myProfile?.prenom||''} ${myProfile?.nom||''} — ${myProfile?.role||'commercial'}`;
 }
 
 $('loginBtn').addEventListener('click',handleLogin);
 $('passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
 $('userPill').addEventListener('click',async()=>{if(confirm('Déconnexion ?')){await sb.auth.signOut();me=null;myProfile=null;showLogin(true);}});
 
-document.querySelectorAll('.nav-tab').forEach(btn=>btn.addEventListener('click',()=>{
-  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderView(btn.dataset.view);
 }));
-$('launchBtn').addEventListener('click',openDrawer);
+$('launchBtn').addEventListener('click',openWizard);
 
 async function renderView(view){currentView=view;if(view==='sessions')await renderSessions();else if(view==='ranking')await renderRanking();}
 
+// ═══════════════════════════════════════════════════════════════════
+//  SESSIONS
+// ═══════════════════════════════════════════════════════════════════
 async function renderSessions(){
-  const c=$('mainContent');c.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Chargement…</div>';
+  const c=$('mainContent');
+  c.innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Chargement…</div>';
+  pausedSims=[];
+
+  // Simus en pause
+  try{
+    const pr=await apiCall('/api/simulation/list-paused');
+    if(pr.ok){const pd=await pr.json();pausedSims=pd.simulations||[];}
+  }catch(_){}
+
+  // Toutes les simus
   let q=sb.from('simulations').select('id,user_id,created_at,duree_secondes,type_scenario,statut,type_entretien,phase_choisie,b2b_b2c,url_audio,bilans(note_globale),profiles(nom,prenom)').order('created_at',{ascending:false});
   if(myProfile?.role==='commercial')q=q.eq('user_id',me.id);
   const{data:sims,error}=await q;
-  if(error){c.innerHTML=`<div style="padding:40px;text-align:center;color:var(--red)">${esc(error.message)}</div>`;return;}
-  if(!sims?.length){
-    c.innerHTML=`<div class="hero-empty">
-      <div class="hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></div>
-      <div class="hero-title">Première simulation</div>
-      <p class="hero-sub">Lance ta première session pour commencer à mesurer tes performances commerciales.</p>
-      <button class="btn-launch" onclick="openDrawer()" style="margin-top:8px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+  if(error){c.innerHTML=`<div style="padding:60px;text-align:center;color:var(--red)">${esc(error.message)}</div>`;return;}
+  allSims=sims||[];
+
+  let pausedHtml='';
+  if(pausedSims.length){
+    pausedHtml=`<div class="paused-banner">
+      <div class="paused-title">⏸ ${pausedSims.length} simulation${pausedSims.length>1?'s':''} en pause</div>
+      <div class="paused-list">
+        ${pausedSims.map(s=>`
+          <div class="paused-item">
+            <div class="paused-item-info">
+              <div class="paused-item-name">${esc(simLabel(s))}</div>
+              <div class="paused-item-meta">${fmtDate(s.created_at)}</div>
+            </div>
+            <button class="btn-resume" data-id="${esc(s.id)}">Reprendre</button>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  const finished=allSims.filter(s=>s.statut==='terminee');
+  const avgScore=finished.length?Math.round(finished.reduce((s,x)=>s+(Number(x.bilans?.[0]?.note_globale)||0),0)/finished.filter(x=>x.bilans?.[0]?.note_globale!=null).length||1):0;
+  const best=finished.reduce((m,x)=>Math.max(m,Number(x.bilans?.[0]?.note_globale)||0),0);
+
+  let statsHtml='';
+  if(finished.length){
+    statsHtml=`<div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Score moyen</div><div class="stat-value">${avgScore||'—'}</div></div>
+      <div class="stat-card"><div class="stat-label">Sessions terminées</div><div class="stat-value">${finished.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Meilleur score</div><div class="stat-value">${best||'—'}</div></div>
+      <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">${allSims.length}</div></div>
+    </div>`;
+  }
+
+  if(!allSims.length&&!pausedSims.length){
+    c.innerHTML=`${pausedHtml}<div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+      <div class="empty-title">Aucune session</div>
+      <p class="empty-sub">Lance ta première simulation pour commencer à mesurer tes performances.</p>
+      <button class="btn-launch" onclick="openWizard()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         C'est parti
       </button>
     </div>`;
+    bindResumeBtns();
     return;
   }
-  let h=`<div class="journal-header"><h2 class="journal-title">Tes sessions</h2><span class="journal-count">${sims.length}</span></div><div class="journal" style="margin-top:16px">`;
-  sims.forEach(s=>{
+
+  let filtered=allSims;
+  if(currentSimFilter==='cold_call')filtered=allSims.filter(s=>s.type_entretien==='cold_call');
+  else if(currentSimFilter==='rdv')filtered=allSims.filter(s=>s.type_entretien==='rdv');
+  else if(currentSimFilter==='terminee')filtered=allSims.filter(s=>s.statut==='terminee');
+
+  let h=`<div class="page-header">
+    <h1 class="page-title">Mes sessions</h1>
+    <p class="page-sub">Suivez votre progression et accédez aux débriefs détaillés</p>
+  </div>
+  ${statsHtml}
+  ${pausedHtml}`;
+
+  h+=`<div class="journal-header">
+    <h2 class="journal-title">Historique</h2>
+    <div class="filter-row">
+      <button class="filter-chip ${currentSimFilter==='all'?'active':''}" data-filter="all">Tout</button>
+      <button class="filter-chip ${currentSimFilter==='cold_call'?'active':''}" data-filter="cold_call">Cold Call</button>
+      <button class="filter-chip ${currentSimFilter==='rdv'?'active':''}" data-filter="rdv">RDV</button>
+      <button class="filter-chip ${currentSimFilter==='terminee'?'active':''}" data-filter="terminee">Terminées</button>
+    </div>
+  </div>
+  <div class="session-list">`;
+
+  if(!filtered.length)h+=`<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune session dans ce filtre.</div>`;
+  else filtered.forEach(s=>{
     const note=s.bilans?.[0]?.note_globale;
     const nc=note!=null?ncls(note):'none';
-    const nd=note!=null?`${note}/100`:'—';
-    const dirLabel=myProfile?.role==='directeur'&&s.profiles?` <span style="font-weight:400;color:var(--t3)">— ${esc(s.profiles.prenom||'')} ${esc(s.profiles.nom||'')}</span>`:'';
+    const nd=note!=null?`${note}`:'—';
+    const dirLabel=myProfile?.role!=='commercial'&&s.profiles?` — ${esc(s.profiles.prenom||'')} ${esc(s.profiles.nom||'')}`:'';
     h+=`<div class="session-row" data-id="${esc(s.id)}">
       <div class="session-stripe ${nc}"></div>
       <div class="session-info">
         <div class="session-name">${esc(simLabel(s))}${dirLabel}</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
-          <span class="session-date">${fmtDate(s.created_at)}</span>
-          <span class="session-status ${s.statut||''}">${esc(s.statut||'—')}</span>
-        </div>
+        <div class="session-meta">${fmtDate(s.created_at)}</div>
       </div>
       <span class="session-dur">${fmtDur(s.duree_secondes||0)}</span>
+      <span class="session-status ${s.statut||''}">${esc(s.statut||'—')}</span>
       <span class="session-score ${nc}">${esc(nd)}</span>
     </div>`;
   });
   h+='</div>';
+
   c.innerHTML=h;
+
+  c.querySelectorAll('.filter-chip').forEach(chip=>chip.addEventListener('click',()=>{
+    currentSimFilter=chip.dataset.filter;
+    renderSessions();
+  }));
   c.querySelectorAll('.session-row').forEach(r=>r.addEventListener('click',()=>openDebrief(r.dataset.id)));
+
+  bindResumeBtns();
+
   const target=new URLSearchParams(location.search).get('simulationId');
-  const cand=target?sims.find(s=>String(s.id)===String(target)):null;
+  const cand=target?allSims.find(s=>String(s.id)===String(target)):null;
   if(cand&&cand.id!==latestAutoOpen){latestAutoOpen=cand.id;if(target)history.replaceState({},document.title,location.pathname);setTimeout(()=>openDebrief(cand.id),200);}
 }
 
-function scDisc(tr){let q=0,ph='disc';for(const t of tr||[]){const tx=String(t.texte||'').toLowerCase();if(/(signature|contrat|on signe|on bloque)/.test(tx))ph='close';else if(/(trop cher|pas le temps|pas interest)/.test(tx))ph='obj';else if(/(demo|notre solution|comment.a marche)/.test(tx))ph='pitch';if(t.locuteur==='commercial'&&ph==='disc')q+=(tx.match(/\?/g)||[]).length;}return Math.min(100,q*15);}
-
-function buildRadar(met,tr){
-  const fallback=[
-    Math.min(100,Number(met?.ratio_questions_affirmations)||0),
-    Math.min(100,Number(met?.taux_resolution_objections)||0),
-    scDisc(tr),
-    Number(met?.nb_signaux_achat)>0?Math.max(0,Math.min(100,100-(Number(met?.delai_moyen_closing_apres_signal)||0)/60*100)):0,
-    Math.max(0,Math.min(100,100-((Number(met?.nb_interruptions)||0)*10+(Number(met?.nb_silences_remplis)||0)*5))),
-    Math.min(100,Math.max(0,Number(met?.score_engagement_final)||0))
-  ];
-  const useQuali=['radar_questions','radar_objections','radar_decouverte','radar_closing','radar_rythme','radar_pratiques'].some(k=>met?.[k]!=null);
-  if(!useQuali)return fallback;
-  const quali=[met.radar_questions,met.radar_objections,met.radar_decouverte,met.radar_closing,met.radar_rythme,met.radar_pratiques];
-  return fallback.map((v,i)=>{
-    if(quali[i]==null)return v;
-    return Math.round((v+Number(quali[i]))/2);
-  });
-}
-
-async function avgRadar(simId){
-  const{data:ss}=await sb.from('simulations').select('id').eq('user_id',me.id).eq('statut','terminee');
-  const ids=(ss||[]).map(s=>s.id).filter(id=>id!==simId);
-  if(!ids.length)return null;
-  const{data:mets}=await sb.from('metriques').select('*').in('simulation_id',ids);
-  if(!mets?.length)return null;
-  const sum=[0,0,0,0,0,0];
-  mets.forEach(m=>{
-    const d=Number(m.delai_moyen_closing_apres_signal)||0;
-    const cl=Number(m.nb_signaux_achat)>0?Math.max(0,Math.min(100,100-(d/60)*100)):0;
-    const ry=Math.max(0,Math.min(100,100-((Number(m.nb_interruptions)||0)*10+(Number(m.nb_silences_remplis)||0)*5)));
-    const base=[Number(m.ratio_questions_affirmations)||0,Number(m.taux_resolution_objections)||0,Math.min(100,(Number(m.nb_questions_qualification)||0)*15),cl,ry,Number(m.score_engagement_final)||0];
-    const quali=[m.radar_questions,m.radar_objections,m.radar_decouverte,m.radar_closing,m.radar_rythme,m.radar_pratiques];
-    base.forEach((v,i)=>{
-      let val=v;
-      if(quali[i]!=null)val=Math.round((v+Number(quali[i]))/2);
-      sum[i]+=val;
+function bindResumeBtns(){
+  document.querySelectorAll('.btn-resume').forEach(btn=>{
+    btn.addEventListener('click',async()=>{
+      const id=btn.dataset.id;
+      btn.disabled=true;btn.textContent='…';
+      await resumeSimulation(id);
+      btn.disabled=false;btn.textContent='Reprendre';
     });
   });
-  return sum.map(v=>Math.round(v/mets.length));
 }
 
-function radarSVG(cur,avg){
-  const lb=['Questions','Objections','Découverte','Closing','Rythme','Pratiques'],cx=50,cy=50,r=34;
-  const pts=vs=>vs.map((v,i)=>{const a=-Math.PI/2+i*(Math.PI*2/lb.length),rv=r*(Math.max(0,Math.min(100,v))/100);return`${cx+Math.cos(a)*rv},${cy+Math.sin(a)*rv}`;}).join(' ');
-  const grid=[25,50,75,100].map(l=>`<polygon points="${pts(lb.map(()=>l))}" fill="none" stroke="var(--border)" stroke-width="0.4"/>`).join('');
-  const axes=lb.map((l,i)=>{const a=-Math.PI/2+i*(Math.PI*2/lb.length),x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r,lx=cx+Math.cos(a)*43,ly=cy+Math.sin(a)*43;return`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border)" stroke-width="0.35"/><text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="3.8" fill="var(--t3)">${esc(l)}</text>`;}).join('');
-  const av=avg?`<polygon points="${pts(avg)}" fill="rgba(167,139,250,.06)" stroke="rgba(167,139,250,.5)" stroke-width="0.9" stroke-dasharray="2 1.5"/>`:'';
-  return`<svg class="radar-svg" viewBox="0 0 100 100"><g>${grid}${axes}${av}<polygon points="${pts(cur)}" fill="var(--accentBg)" stroke="var(--accent)" stroke-width="1.3"/></g></svg>`;
-}
-
-async function openDebrief(simId){
-  currentDebriefSimId=simId;
-  $('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--t3)">Chargement du débrief…</div>';
-  $('debriefOverlay').classList.add('open');
-
-  const[sR,tR,bR,mR]=await Promise.all([
-    sb.from('simulations').select('*').eq('id',simId).single(),
-    sb.from('transcriptions').select('*').eq('simulation_id',simId).order('horodatage_secondes',{ascending:true}),
-    sb.from('bilans').select('*').eq('simulation_id',simId).single(),
-    sb.from('metriques').select('*').eq('simulation_id',simId).single(),
-  ]);
-
-  if(sR.error){$('debriefBody').innerHTML=`<div style="padding:60px;text-align:center;color:var(--red)">${esc(sR.error.message)}</div>`;return;}
-  const sim=sR.data;
-  $('debriefSessionName').textContent=simLabel(sim);
-
-  if(sim.statut==='preparation'){$('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--t3)">Préparation en cours…</div>';return;}
-  if(sim.statut==='erreur_preparation'){$('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--red)">La préparation a échoué.</div>';return;}
-
-  const tr=tR.data||[],bilan=bR.data,met=mR.data||{},ql=bilan?.analyse_qualitative||{};
-  const note=bilan?.note_globale!=null?Number(bilan.note_globale):null;
-  const sc=note==null?'none':ncls(note);
-  const curR=buildRadar(met,tr),avgR=await avgRadar(simId);
-
-  let audioHtml=`<div class="audio-na">Audio non disponible</div>`;
-  if(sim.url_audio||sim.statut==='terminee'){
-    try{const ar=await apiCall(`/api/simulation/${encodeURIComponent(simId)}/audio`);if(ar.ok){const ad=await ar.json();audioHtml=`<div class="audio-block"><audio controls preload="metadata" src="${esc(ad.signedUrl)}"></audio></div>`;}}catch(_){}
-  }
-
-  const axisLabels=['Questions','Objections','Découverte','Closing','Rythme','Pratiques'];
-  const qualiVals=[met.radar_questions,met.radar_objections,met.radar_decouverte,met.radar_closing,met.radar_rythme,met.radar_pratiques];
-  let axesLegend='<div class="radar-axes-legend">';
-  axisLabels.forEach((lbl,i)=>{
-    const q=qualiVals[i];
-    const v=q!=null?`${Math.round(q)}/100`:'—';
-    const cls=q!=null?'v':'v na';
-    axesLegend+=`<div class="item"><div class="k">${esc(lbl)}</div><div class="${cls}">${v}</div></div>`;
-  });
-  axesLegend+='</div>';
-
-  let h=`
-  <div class="db-hero">
-    <div>
-      <div class="db-tagline">${esc(ql.tagline||'Bilan à générer')}</div>
-      <div class="db-meta">${esc(simLabel(sim))} · ${sim.b2b_b2c?sim.b2b_b2c.toUpperCase():'—'} · ${fmtDur(sim.duree_secondes||0)} · ${fmtDate(sim.created_at)}</div>
-    </div>
-    <div class="db-score-block">
-      <div class="db-score ${sc}">${note==null?'—':note}</div>
-      <div class="db-score-label">${note==null?'En attente':'/ 100'}</div>
-    </div>
-  </div>
-
-  <div class="db-section">
-    <div class="db-section-head"><div class="db-section-title">Radar de performance</div></div>
-    <div class="db-section-body">
-      ${radarSVG(curR,avgR)}
-      <div class="radar-legend"><span><i class="rdot"></i>Cette session</span><span><i class="rdot avg"></i>Ta moyenne</span></div>
-      ${axesLegend}
-    </div>
-  </div>
-
-  <div class="db-section">
-    <div class="db-section-head"><div class="db-section-title">Enregistrement audio</div></div>
-    <div class="db-section-body" style="padding:12px 20px">${audioHtml}</div>
-  </div>
-
-  <div class="db-section">
-    <div class="db-section-head"><div class="db-section-title">Métriques</div></div>
-    <div class="db-section-body">
-      <div class="metrics-flex">
-        <div class="m-cell"><div class="m-val">${fmtM(met.ratio_parole_commercial,'%')}</div><div class="m-label">Parole commercial</div><div class="m-sub">vs ${fmtM(met.ratio_parole_prospect,'%')} prospect</div></div>
-        <div class="m-cell"><div class="m-val">${fmtM(met.nb_questions_total)}</div><div class="m-label">Questions posées</div><div class="m-sub">${fmtM(met.nb_questions_ouvertes)} ouvertes</div></div>
-        <div class="m-cell"><div class="m-val">${fmtM(met.taux_resolution_objections,'%')}</div><div class="m-label">Objections résolues</div><div class="m-sub">${fmtM(met.nb_objections_resolues)} / ${fmtM(met.nb_objections_total)}</div></div>
-        <div class="m-cell"><div class="m-val">${fmtM(met.nb_interruptions)}</div><div class="m-label">Interruptions</div><div class="m-sub">${fmtM(met.nb_silences_laisses)} silences laissés</div></div>
-        <div class="m-cell"><div class="m-val">${fmtM(met.nb_signaux_exploites)}/${fmtM(met.nb_signaux_achat)}</div><div class="m-label">Signaux exploités</div></div>
-        <div class="m-cell"><div class="m-val">${fmtM(met.score_engagement_final)}</div><div class="m-label">Engagement final</div><div class="m-sub">bascule ${met.moment_bascule_secondes==null?'—':fmtSec(met.moment_bascule_secondes)}</div></div>
-      </div>
-    </div>
-  </div>`;
-
-  const nats=ql.comportements_naturels||[];
-  h+=`<details class="db-accordion" open><summary class="db-acc-head"><span class="db-acc-title">Ce qu'il fait naturellement</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
-  if(!nats.length)h+='<div style="font-size:12px;color:var(--t3)">Bilan non généré.</div>';
-  nats.forEach(item=>{const fw=(item.frameworks_associes||[]).map(f=>`<span class="chip chip-f">${esc(f)}</span>`).join('');h+=`<div class="qi"><div class="qi-chips"><span class="chip chip-t">${fmtSec(item.horodatage_secondes)}</span><span class="chip chip-c">${fmtM(item.niveau_certitude)}%</span>${fw}</div><div class="qi-text">${esc(item.description||'')}</div>${item.principe_nomme?`<div class="qi-note">${esc(item.principe_nomme)}</div>`:''}</div>`;});
-  h+='</div></details>';
-
-  const ecarts=ql.ecarts||[];
-  h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Ses écarts</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
-  if(!ecarts.length)h+='<div style="font-size:12px;color:var(--t3)">Aucun écart identifié.</div>';
-  ecarts.forEach(item=>{const tp=['adaptatif','instinctif','manquant'].includes(item.type)?item.type:'manquant';h+=`<div class="qi"><div class="qi-chips"><span class="chip chip-${tp}">${tp}</span><span class="chip chip-t">${fmtSec(item.horodatage_secondes)}</span></div><div class="qi-text">${esc(item.description||'')}</div><div class="qi-note">Avant : ${esc(item.effet_avant||'—')} · Après : ${esc(item.effet_apres||'—')}</div>${item.framework_de_reference?`<div class="qi-note">Réf : ${esc(item.framework_de_reference)}</div>`:''}</div>`;});
-  h+='</div></details>';
-
-  const moments=ql.moments_bascule||[];
-  h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Moments de bascule</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
-  if(!moments.length)h+='<div style="font-size:12px;color:var(--t3)">Aucun moment identifié.</div>';
-  moments.forEach(item=>{h+=`<div class="qi"><div class="qi-chips"><button class="moment-btn" data-m="${Number(item.horodatage_secondes)||0}">${fmtSec(item.horodatage_secondes)}</button></div><div class="qi-text"><strong>Déclencheur :</strong> ${esc(item.declencheur||'—')}<br>${esc(item.description||'')}</div></div>`;});
-  h+='</div></details>';
-
-  const coh=ql.coherence_interne||{};
-  h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Cohérence interne</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body"><div class="an-grid">
-    <div class="an-cell"><strong>Ancrés</strong><div>${(coh.comportements_ancres||[]).map(esc).join('<br>')||'—'}</div></div>
-    <div class="an-cell"><strong>Situationnels</strong><div>${(coh.comportements_situationnels||[]).map(esc).join('<br>')||'—'}</div></div>
-    <div class="an-cell"><strong>Incohérences</strong><div>${(coh.incoherences||[]).map(esc).join('<br>')||'—'}</div></div>
-  </div></div></details>`;
-
-  const dist=ql.distribution_tactique||{};
-  h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Distribution tactique</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body"><div class="dist-rows">`;
-  ['questions','crac','storytelling','reframe','autres'].forEach(k=>{const v=Math.max(0,Math.min(100,Number(dist[k])||0));h+=`<div class="dist-row"><div class="dist-key">${k}</div><div class="dist-track"><div class="dist-fill" style="width:${v}%"></div></div><div class="dist-pct">${Math.round(v)}%</div></div>`;});
-  h+='</div></div></details>';
-
-  if((ql.attribution_multi_framework||[]).length){
-    h+=`<details class="db-accordion"><summary class="db-acc-head"><span class="db-acc-title">Attribution multi-framework</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
-    ql.attribution_multi_framework.forEach(item=>{h+=`<div class="qi"><div class="qi-text">${esc(item.comportement||'')}</div><div class="qi-chips" style="margin-top:6px">${(item.frameworks||[]).map(f=>`<span class="chip chip-f">${esc(f)}</span>`).join('')}</div><div class="qi-note">${esc(item.interpretation||'')}</div></div>`;});
-    h+='</div></details>';
-  }
-
-  h+=`<div class="bilan-gen">
-    <div class="bg-left">
-      <div class="bg-title">Sensibilité aux correspondances</div>
-      <div class="bg-sub">0 = très solides uniquement · 100 = larges</div>
-      <div class="sens-row"><input id="sensScore" type="range" min="0" max="100" value="50"><span class="sens-val" id="sensVal">50</span></div>
-    </div>
-    <button class="btn-gen" id="genBilan">${bilan?'Regénérer':'Générer le bilan'}</button>
-  </div>`;
-
-  h+=`<div class="db-section"><div class="db-section-head"><div class="db-section-title">Transcription</div></div>
-  <div class="transcript-wrap"><div class="t-head">Clique sur une ligne pour te rendre dans l'audio</div>
-  <div class="t-scroll" id="tScroll">`;
-  if(!tr.length)h+='<div style="padding:20px;text-align:center;font-size:12px;color:var(--t3)">Aucune transcription.</div>';
-  const bTs=moments.map(m=>Number(m.horodatage_secondes)||0);
-  tr.forEach((ln,i)=>{const t=Number(ln.horodatage_secondes)||0,isB=bTs.some(bt=>Math.abs(bt-t)<=2);h+=`<div class="t-row${isB?' bascule':''}" data-t="${t}"><div class="t-time">${fmtSec(t)}</div><div class="t-who ${ln.locuteur==='commercial'?'c':''}">${ln.locuteur==='commercial'?'Commercial':'Prospect'}</div><div class="t-text">${esc(ln.texte||'')}</div></div>`;});
-  h+='</div></div></div>';
-
-  $('debriefBody').innerHTML=h;
-
-  const audio=$('debriefBody').querySelector('audio');
-  $('debriefBody').querySelectorAll('.t-row').forEach(r=>r.addEventListener('click',()=>{if(!audio)return;audio.currentTime=Number(r.dataset.t)||0;audio.play().catch(()=>{});}));
-  if(audio)audio.addEventListener('timeupdate',()=>{const cur=audio.currentTime;$('debriefBody').querySelectorAll('.t-row').forEach(r=>{const s=Number(r.dataset.t)||0;r.classList.toggle('active',Math.abs(cur-s)<1.2);});});
-  $('debriefBody').querySelectorAll('.moment-btn').forEach(b=>b.addEventListener('click',()=>{if(!audio)return;audio.currentTime=Number(b.dataset.m)||0;audio.play().catch(()=>{});}));
-
-  const sl=$('sensScore'),sv=$('sensVal');
-  sl.addEventListener('input',()=>{sv.textContent=sl.value;});
-  $('genBilan').addEventListener('click',async()=>{
-    const btn=$('genBilan');btn.disabled=true;btn.textContent='Analyse…';
-    try{
-      const r=await apiCall('/api/bilan',{method:'POST',body:JSON.stringify({simulationId:simId,surAttributionScore:Number(sl.value)})});
-      const d=await r.json();
-      if(!r.ok)throw new Error(d.error||'Erreur');
-      await openDebrief(simId);
-    }catch(e){
-      alert(`Erreur : ${e.message}`);
-      btn.disabled=false;
-      btn.textContent=bilan?'Regénérer':'Générer le bilan';
-    }
-  });
-}
-
-$('debriefBack').addEventListener('click',()=>$('debriefOverlay').classList.remove('open'));
-
-$('btnSavePersona').addEventListener('click',async()=>{
-  if(!currentDebriefSimId)return;
-  const nom=prompt('Nom du persona (pour le retrouver plus tard) :','');
-  if(nom===null)return;
+async function resumeSimulation(simulationId){
   try{
-    const r=await apiCall('/api/personas/save',{method:'POST',body:JSON.stringify({simulationId:currentDebriefSimId,nomPersona:nom.trim()||null})});
+    const r=await apiCall('/api/simulation/resume',{method:'POST',body:JSON.stringify({simulationId})});
     const d=await r.json();
-    if(!r.ok)throw new Error(d.error||'Erreur');
-    alert('✅ Persona sauvegardé.');
-  }catch(e){alert(`Erreur : ${e.message}`);}
-});
+    if(!r.ok)throw new Error(d.error||'Erreur reprise');
 
+    const{data:{session}}=await sb.auth.getSession();
+    if(!session?.access_token||!session?.refresh_token)throw new Error('Session expirée.');
+    const hR=await fetch(`${SIM_URL}/api/auth/handshake`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({refresh_token:session.refresh_token})});
+    if(!hR.ok)throw new Error('Connexion serveur impossible.');
+    const{code}=await hR.json();
+
+    window.location.href=`${SIM_URL}/?code=${encodeURIComponent(code)}&simulationId=${encodeURIComponent(simulationId)}&resume=1`;
+  }catch(e){
+    showToast('Reprise impossible : '+e.message,'error');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  RANKING
+// ═══════════════════════════════════════════════════════════════════
 async function renderRanking(){
-  const c=$('mainContent');c.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Chargement…</div>';
+  const c=$('mainContent');
+  c.innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Chargement…</div>';
   let q=sb.from('simulations').select('user_id,bilans(note_globale),profiles(nom,prenom)').eq('statut','terminee');
   if(myProfile?.role==='commercial')q=q.eq('user_id',me.id);
   const{data:ss,error}=await q;
-  if(error){c.innerHTML=`<div style="padding:40px;text-align:center;color:var(--red)">${esc(error.message)}</div>`;return;}
+  if(error){c.innerHTML=`<div style="padding:60px;text-align:center;color:var(--red)">${esc(error.message)}</div>`;return;}
   const us={};
   (ss||[]).forEach(s=>{const uid=s.user_id;if(!us[uid])us[uid]={tot:0,cnt:0,profile:s.profiles};const n=s.bilans?.[0]?.note_globale;if(n!=null){us[uid].tot+=Number(n);us[uid].cnt++;}});
-  const rank=Object.keys(us).map(uid=>({uid,avg:us[uid].cnt?Math.round(us[uid].tot/us[uid].cnt):0,profile:us[uid].profile})).sort((a,b)=>b.avg-a.avg);
-  let h=`<div class="journal-header"><h2 class="journal-title">Classement</h2><span class="journal-count">${rank.length}</span></div><div class="ranking-grid" style="margin-top:16px">`;
-  if(!rank.length)h+='<div style="font-size:13px;color:var(--t3)">Aucune donnée.</div>';
-  else rank.forEach((item,i)=>{const name=item.profile?`${item.profile.prenom||''} ${item.profile.nom||''}`.trim():'Utilisateur';const rc=i===0?'r1':i===1?'r2':i===2?'r3':'rN';h+=`<div class="rank-entry"><div class="rank-number ${rc}">${i+1}</div><div><div class="rank-name">${esc(name)}</div><div class="rank-avg">${item.avg} / 100</div></div></div>`;});
-  h+='</div>';c.innerHTML=h;
+  const rank=Object.keys(us).map(uid=>({uid,avg:us[uid].cnt?Math.round(us[uid].tot/us[uid].cnt):0,profile:us[uid].profile,cnt:us[uid].cnt})).sort((a,b)=>b.avg-a.avg);
+
+  let h=`<div class="page-header">
+    <h1 class="page-title">Classement</h1>
+    <p class="page-sub">Score moyen sur les sessions terminées</p>
+  </div>
+  <div class="ranking-grid">`;
+  if(!rank.length)h+='<div style="font-size:13px;color:var(--muted)">Aucune donnée.</div>';
+  else rank.forEach((item,i)=>{
+    const name=item.profile?`${item.profile.prenom||''} ${item.profile.nom||''}`.trim():'Utilisateur';
+    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'';
+    h+=`<div class="rank-entry"><div class="rank-number ${rc}">${i+1}</div><div><div class="rank-name">${esc(name)}</div><div class="rank-avg">${item.avg} / 100 · ${item.cnt} session${item.cnt>1?'s':''}</div></div></div>`;
+  });
+  h+='</div>';
+  c.innerHTML=h;
 }
 
-// ═══════════════════════════════════════════════════
-//  WIZARD — NOUVELLE STRUCTURE
-// ═══════════════════════════════════════════════════
-// Étape 1 : B2B/B2C                → clic = avance
-// Étape 2 : Nouveau / Continuer    → clic = avance
-// Étape 3a (nouveau)   : Vendeur + Prospect + Intensité → bouton Continuer
-// Étape 3b (continuer) : Liste des sims compatibles     → bouton Continuer
-// Étape 4 : Type d'entretien       → clic = affiche bouton Créer en dessous
-
+// ═══════════════════════════════════════════════════════════════════
+//  WIZARD
+// ═══════════════════════════════════════════════════════════════════
 function resetWS(){Object.assign(ws,{step:1,sessionId:null,b2b_b2c:null,mode:null,v_type:'',v_product:'',v_url:'',p_role:'',p_type:'',p_url:'',p_profile:'',interview:null,phase:null,prev_id:null,cont:null,contMode:null,intensite:3,savedPersonaId:null,savedVendeurId:null});}
 
 async function loadSavedPersonas(){
@@ -759,49 +801,50 @@ async function loadSavedVendeurs(){
   try{const r=await apiCall('/api/vendeurs/list');if(!r.ok)return;const d=await r.json();ws.savedVendeurs=d.vendeurs||[];}catch(_){ws.savedVendeurs=[];}
 }
 
-async function openDrawer(){
+async function openWizard(){
   resetWS();
   await Promise.all([loadSavedPersonas(),loadSavedVendeurs()]);
   let q=sb.from('simulations').select('id,created_at,type_entretien,phase_choisie,type_scenario,b2b_b2c,statut').eq('statut','terminee').order('created_at',{ascending:false}).limit(30);
   if(myProfile?.role==='commercial')q=q.eq('user_id',me.id);
   const{data}=await q;ws.prevSims=data||[];
-  renderDrawer();
-  $('drawerOverlay').classList.add('open');
+  renderWizardStep();
+  $('wizardOverlay').classList.add('open');
 }
 
-function closeDrawer(){$('drawerOverlay').classList.remove('open');}
-$('drawerClose').addEventListener('click',closeDrawer);
-$('drawerOverlay').addEventListener('click',e=>{if(e.target===$('drawerOverlay'))closeDrawer();});
+function closeWizard(){$('wizardOverlay').classList.remove('open');}
+$('wizardClose').addEventListener('click',closeWizard);
+$('wizardOverlay').addEventListener('click',e=>{if(e.target===$('wizardOverlay'))closeWizard();});
 
-function renderDrawer(){
-  const stepLabels={
-    1:'B2B ou B2C',
-    2:'Nouveau ou suite',
-    3:'Configuration',
-    4:'Entretien'
-  };
+function renderWizardStep(){
+  const stepLabels={1:'B2B ou B2C',2:'Nouveau ou suite',3:'Configuration',4:'Entretien'};
   const pct=Math.round((ws.step/4)*100);
-  $('drawerBar').style.width=`${pct}%`;
-  $('drawerStepLabel').textContent=`Étape ${ws.step} sur 4 · ${stepLabels[ws.step]||''}`;
-  $('drawerPrev').style.display=ws.step>1?'':'none';
-  const showNextBtn = ws.step===3;
-  $('drawerNext').style.display = showNextBtn ? '' : 'none';
-  $('drawerNext').textContent='Continuer';
-  $('drawerNext').onclick=drawerNext;
-  $('drawerPrev').onclick=drawerBack;
-  $('drawerBody').innerHTML=renderDrawerStep();
-  bindDrawerEvents();
+  document.querySelectorAll('.progress-step').forEach((s,i)=>{
+    s.classList.remove('done','active');
+    if(i<ws.step-1)s.classList.add('done');
+    else if(i===ws.step-1)s.classList.add('active');
+  });
+  $('wizardStepLabel').textContent=`Étape ${ws.step} sur 4 · ${stepLabels[ws.step]||''}`;
+  $('wizCounter').textContent=`${ws.step} / 4`;
+  $('wizBack').style.visibility=ws.step>1?'visible':'hidden';
+  $('wizNext').style.display=ws.step===3?'':'none';
+  $('wizNext').onclick=wizNext;
+  $('wizBack').onclick=wizBack;
+  $('wizardBody').innerHTML=renderWizardBody();
+  bindWizardEvents();
 }
 
-function bindDrawerEvents(){
+function bindWizardEvents(){
   const slider=$('intensiteSlider');
   if(slider){
-    slider.addEventListener('input',()=>{
+    slider.addEventListener('input',e=>{
+      e.stopPropagation();
       ws.intensite=Number(slider.value);
-      const disp=$('intensiteDisplay');const desc=$('intensiteDesc');
+      const disp=$('intensiteDisplay'),desc=$('intensiteDesc');
       if(disp)disp.textContent=`${ws.intensite}/5`;
       if(desc)desc.textContent=INTENSITE_DESCS[ws.intensite];
     });
+    slider.addEventListener('mousedown',e=>e.stopPropagation());
+    slider.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
   }
   const selP=$('savedPersonaSelect');
   if(selP){
@@ -816,6 +859,12 @@ function bindDrawerEvents(){
           const sl=$('intensiteSlider');if(sl)sl.value=ws.intensite;
           const disp=$('intensiteDisplay');if(disp)disp.textContent=`${ws.intensite}/5`;
           const desc=$('intensiteDesc');if(desc)desc.textContent=INTENSITE_DESCS[ws.intensite];
+          // Pré-remplissage vendeur depuis le persona
+          if(p.vendeur_type_entreprise&&!ws.v_type){ws.v_type=p.vendeur_type_entreprise;}
+          if(p.vendeur_produit&&!ws.v_product){ws.v_product=p.vendeur_produit;}
+          if(p.vendeur_url&&!ws.v_url){ws.v_url=p.vendeur_url;}
+          const it=$('v-type'),ip=$('v-product'),iu=$('v-url');
+          if(it)it.value=ws.v_type;if(ip)ip.value=ws.v_product;if(iu)iu.value=ws.v_url;
         }
       }
     });
@@ -838,97 +887,67 @@ function bindDrawerEvents(){
           ws.v_type=v.type_entreprise||'';
           ws.v_product=v.produit_service||'';
           ws.v_url=v.url||'';
-          const it=$('v-type');const ip=$('v-product');const iu=$('v-url');
-          if(it)it.value=ws.v_type;
-          if(ip)ip.value=ws.v_product;
-          if(iu)iu.value=ws.v_url;
+          const it=$('v-type'),ip=$('v-product'),iu=$('v-url');
+          if(it)it.value=ws.v_type;if(ip)ip.value=ws.v_product;if(iu)iu.value=ws.v_url;
         }
       }
     });
   }
 }
 
-function pickB2B2C(v){
-  ws.b2b_b2c=v;
-  Object.assign(ws,{p_role:'',p_type:'',p_url:'',p_profile:''});
-  ws.step=2;
-  renderDrawer();
-}
-
-function pickMode(m){
-  ws.mode=m;
-  ws.contMode = m==='continue' ? 'continue' : 'new';
-  if(m==='new'){
-    ws.prev_id=null;ws.cont=null;
-    ws.step=3;
-  }else{
-    ws.prev_id=null;ws.cont=null;
-    ws.step=3;
+function pickB2B2C(v){ws.b2b_b2c=v;Object.assign(ws,{p_role:'',p_type:'',p_url:'',p_profile:''});ws.step=2;renderWizardStep();}
+function pickMode(m){ws.mode=m;ws.contMode=m==='continue'?'continue':'new';ws.prev_id=null;ws.cont=null;ws.step=3;renderWizardStep();}
+function pickInterviewType(t){ws.interview=t;if(t==='cold_call')ws.phase=null;ws.prev_id=ws.contMode==='continue'?ws.prev_id:null;ws.cont=ws.contMode==='continue'?ws.cont:null;renderWizardStep();}
+function pickRdvPhase(v){ws.phase=v;renderWizardStep();}
+function selectPrevSim(id){
+  ws.prev_id=id;
+  const s=ws.prevSims.find(x=>x.id===id);
+  if(s){
+    if(s.type_entretien==='cold_call'){ws.cont='nouveau_rdv';ws.phase=ws.phase||'decouverte';}
+    else{ws.cont='meme_rdv';ws.phase=null;}
+    ws.interview='rdv';
   }
-  renderDrawer();
+  renderWizardStep();
 }
+function pickPhaseForContinue(v){ws.phase=v;renderWizardStep();}
 
-function pickInterviewType(t){
-  ws.interview=t;
-  if(t==='cold_call'){ws.phase=null;}
-  ws.prev_id = ws.contMode==='continue' ? ws.prev_id : null;
-  ws.cont = ws.contMode==='continue' ? ws.cont : null;
-  renderDrawer();
-}
-function pickRdvPhase(v){
-  ws.phase=v;
-  renderDrawer();
-}
-
-function renderDrawerStep(){
-  // ─── Étape 1 : B2B/B2C ───
-  if(ws.step===1)return`
-    <div class="step-title">Quel type de vente ?</div>
-    <div class="step-sub">Le scénario et la psychologie du prospect s'adaptent à ton contexte.</div>
-    <div class="pick-grid">
+function renderWizardBody(){
+  if(ws.step===1){
+    return `<div class="pick-grid">
       <button class="pick-card ${ws.b2b_b2c==='b2b'?'sel':''}" onclick="pickB2B2C('b2b')">
         <div class="pick-label">B2B</div>
-        <div class="pick-desc">Tu vends à une entreprise. Le prospect a un rôle, des enjeux organisationnels, un budget.</div>
+        <div class="pick-desc">Vous vendez à une entreprise — votre interlocuteur est un décideur professionnel.</div>
       </button>
       <button class="pick-card ${ws.b2b_b2c==='b2c'?'sel':''}" onclick="pickB2B2C('b2c')">
         <div class="pick-label">B2C</div>
-        <div class="pick-desc">Tu vends à un consommateur. Décision plus émotionnelle, cycle court.</div>
+        <div class="pick-desc">Vous vendez à un particulier — décision plus émotionnelle, cycle court.</div>
       </button>
     </div>
     <div id="w-err" class="w-error"></div>`;
-
-  // ─── Étape 2 : Nouveau / Continuer ───
-  if(ws.step===2)return`
-    <div class="step-title">Nouveau scénario ou suite ?</div>
-    <div class="step-sub">Un nouveau scénario crée un prospect inédit. Une suite conserve le même prospect et sa mémoire.</div>
-    <div class="pick-grid">
+  }
+  if(ws.step===2){
+    return `<div class="pick-grid">
       <button class="pick-card ${ws.mode==='new'?'sel':''}" onclick="pickMode('new')">
         <div class="pick-label">Nouveau scénario</div>
-        <div class="pick-desc">Tu crées un nouveau prospect à partir de zéro.</div>
+        <div class="pick-desc">Vous créez un nouveau prospect à partir de zéro.</div>
       </button>
       <button class="pick-card ${ws.mode==='continue'?'sel':''}" onclick="pickMode('continue')">
         <div class="pick-label">Continuer une simulation</div>
-        <div class="pick-desc">Reprends le même prospect après un Cold Call ou un RDV.</div>
+        <div class="pick-desc">Reprenez le même prospect après un Cold Call ou un RDV.</div>
       </button>
     </div>
     <div id="w-err" class="w-error"></div>`;
-
-  // ─── Étape 3 ───
-  if(ws.mode==='continue') return renderContinueStep();
+  }
+  if(ws.step===4)return renderInterviewStep();
+  if(ws.mode==='continue')return renderContinueStep();
   return renderNewScenarioStep();
 }
 
-// ─── Étape 3a : Nouveau scénario ───
 function renderNewScenarioStep(){
   const b2b=ws.b2b_b2c==='b2b';
-  let h=`
-    <div class="step-title">Toi et ton prospect</div>
-    <div class="step-sub">Plus tu es précis, plus le scénario sera réaliste.</div>`;
-
-  // Sélection vendeur sauvegardé
+  let h=`<div id="w-err" class="w-error"></div>`;
   if(ws.savedVendeurs.length){
-    h+=`
-    <div class="section-sep">Utiliser un vendeur sauvegardé</div>
+    h+=`<div class="section-sep">Vendeur sauvegardé</div>
     <div class="field-block">
       <select class="d-select" id="savedVendeurSelect">
         <option value="">— Saisir manuellement —</option>
@@ -936,22 +955,20 @@ function renderNewScenarioStep(){
       </select>
     </div>`;
   }
-
-  h+=`<div class="section-sep">Ce que tu vends</div>
+  h+=`<div class="section-sep">Ce que vous vendez</div>
     <div class="field-row-2">
-      <div class="field-block"><label class="d-label">Ton type d'entreprise</label><input class="d-input" id="v-type" value="${esc(ws.v_type)}" oninput="ws.v_type=this.value" placeholder="Ex : SaaS RH, Cabinet conseil…"></div>
+      <div class="field-block"><label class="d-label">Type d'entreprise</label><input class="d-input" id="v-type" value="${esc(ws.v_type)}" oninput="ws.v_type=this.value" placeholder="Ex : SaaS RH, Cabinet conseil…"></div>
       <div class="field-block"><label class="d-label">Produit ou service</label><input class="d-input" id="v-product" value="${esc(ws.v_product)}" oninput="ws.v_product=this.value" placeholder="Ex : Logiciel de formation…"></div>
     </div>
     <div class="field-block">
-      <label class="d-label">URL de ton site — facultatif</label>
-      <div class="url-pair"><input class="d-input" id="v-url" value="${esc(ws.v_url)}" oninput="ws.v_url=this.value" placeholder="https://…"><button class="btn-analyze" onclick="analyzeUrl('v')">Analyser</button></div>
+      <label class="d-label">URL de votre site — facultatif</label>
+      <div class="url-pair"><input class="d-input" id="v-url" value="${esc(ws.v_url)}" oninput="ws.v_url=this.value" placeholder="https://…"><button type="button" class="btn-analyze" onclick="analyzeUrl('v')">Analyser</button></div>
       <div class="analyze-result" id="v-res"></div>
     </div>
-    <button class="btn-small" onclick="saveCurrentVendeur()">💾 Sauvegarder ces infos vendeur</button>
+    <button type="button" class="btn-small" onclick="saveCurrentVendeur()">💾 Sauvegarder ce vendeur</button>
 
-    <div class="section-sep">Ton prospect</div>`;
+    <div class="section-sep">Votre prospect</div>`;
 
-  // Sélection persona sauvegardé
   if(ws.savedPersonas.length){
     h+=`<div class="field-block">
       <label class="d-label">Utiliser un persona sauvegardé</label>
@@ -960,23 +977,20 @@ function renderNewScenarioStep(){
         ${ws.savedPersonas.map(p=>`<option value="${esc(p.id)}" ${ws.savedPersonaId===p.id?'selected':''}>${esc(p.nom_persona)} (${esc(p.archetype)}, ${p.intensite}/5)</option>`).join('')}
       </select>
       <div class="saved-info ${ws.savedPersonaId?'show':''}" id="savedPersonaInfo">✅ Persona existant utilisé. L'archétype est conservé, l'intensité est modifiable.</div>
-      <button class="btn-small" id="btnAutreVariation" type="button">🔄 Retirer la sélection</button>
+      <button type="button" class="btn-small" id="btnAutreVariation">🔄 Retirer la sélection</button>
     </div>`;
   }
 
-  h+= b2b?`
-    <div class="field-row-2">
-      <div class="field-block"><label class="d-label">Rôle</label><select class="d-select" onchange="ws.p_role=this.value"><option value="">Choisir…</option>${[['drh','DRH'],['dirco','Directeur Commercial'],['ceo','CEO / Président'],['coo','Directeur des Opérations'],['daf','DAF'],['ops','Resp. Opérations'],['autre','Autre']].map(([v,l])=>`<option value="${v}" ${ws.p_role===v?'selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="field-block"><label class="d-label">Secteur ou type d'entreprise</label><input class="d-input" value="${esc(ws.p_type)}" oninput="ws.p_type=this.value" placeholder="Ex : PME industrielle…"></div>
-    </div>
-    <div class="field-block">
-      <label class="d-label">URL de son entreprise — facultatif</label>
-      <div class="url-pair"><input class="d-input" id="p-url" value="${esc(ws.p_url)}" oninput="ws.p_url=this.value" placeholder="https://…"><button class="btn-analyze" onclick="analyzeUrl('p')">Analyser</button></div>
-      <div class="analyze-result" id="p-res"></div>
-    </div>`:`
-    <div class="field-block"><label class="d-label">Profil du prospect</label><textarea class="d-textarea" oninput="ws.p_profile=this.value" placeholder="Age, situation, ce qu'il cherche, ses freins éventuels…">${esc(ws.p_profile)}</textarea></div>`;
+  h+=b2b?`<div class="field-row-2">
+    <div class="field-block"><label class="d-label">Rôle</label><select class="d-select" onchange="ws.p_role=this.value"><option value="">Choisir…</option>${[['drh','DRH'],['dirco','Directeur Commercial'],['ceo','CEO / Président'],['coo','Directeur des Opérations'],['daf','DAF'],['ops','Resp. Opérations'],['autre','Autre']].map(([v,l])=>`<option value="${v}" ${ws.p_role===v?'selected':''}>${l}</option>`).join('')}</select></div>
+    <div class="field-block"><label class="d-label">Secteur</label><input class="d-input" value="${esc(ws.p_type)}" oninput="ws.p_type=this.value" placeholder="Ex : PME industrielle…"></div>
+  </div>
+  <div class="field-block">
+    <label class="d-label">URL entreprise prospect — facultatif</label>
+    <div class="url-pair"><input class="d-input" id="p-url" value="${esc(ws.p_url)}" oninput="ws.p_url=this.value" placeholder="https://…"><button type="button" class="btn-analyze" onclick="analyzeUrl('p')">Analyser</button></div>
+    <div class="analyze-result" id="p-res"></div>
+  </div>`:`<div class="field-block"><label class="d-label">Profil du prospect</label><textarea class="d-textarea" oninput="ws.p_profile=this.value" placeholder="Âge, situation, ce qu'il cherche, ses freins…">${esc(ws.p_profile)}</textarea></div>`;
 
-  // Curseur intensité
   h+=`<div class="section-sep">Intensité du prospect</div>
     <div class="intensite-block">
       <div class="intensite-header">
@@ -986,25 +1000,16 @@ function renderNewScenarioStep(){
       <input type="range" min="1" max="5" value="${ws.intensite}" class="intensite-slider" id="intensiteSlider">
       <div class="intensite-scale"><span>1 · Facile</span><span>3 · Neutre</span><span>5 · Difficile</span></div>
       <div class="intensite-desc" id="intensiteDesc">${INTENSITE_DESCS[ws.intensite]}</div>
-    </div>
-    <div id="w-err" class="w-error"></div>`;
+    </div>`;
   return h;
 }
 
-// ─── Étape 3b : Continuer ───
 function renderContinueStep(){
-  // On sait qu'on continue. On ne choisit PAS le type d'entretien ici (sera RDV).
-  // L'utilisateur sélectionne la sim précédente compatible.
-  // La phase (complet, decouverte) détermine la cible.
-
-  const compat = ws.prevSims.filter(s => isCompatAny(s));
-  let h=`
-    <div class="step-title">Continuer une simulation</div>
-    <div class="step-sub">Choisis la simulation précédente. La suite se fera en rendez-vous (le prospect garde la mémoire).</div>`;
-
+  const compat=ws.prevSims.filter(s=>isCompatAny(s));
+  let h=`<div id="w-err" class="w-error"></div>`;
   if(!compat.length){
-    h+='<div style="padding:20px;text-align:center;font-size:13px;color:var(--t3);background:var(--surf2);border-radius:8px">Aucune simulation précédente compatible.</div>';
-  } else {
+    h+='<div style="padding:20px;text-align:center;font-size:13px;color:var(--muted);background:var(--stone-50);border-radius:8px">Aucune simulation précédente compatible.</div>';
+  }else{
     h+=`<div class="prev-list">`;
     compat.forEach(s=>{
       const sel=ws.prev_id===s.id;
@@ -1015,13 +1020,10 @@ function renderContinueStep(){
     });
     h+='</div>';
   }
-
-  // Si sim sélectionnée et c'est un RDV → choix de la phase suivante
   if(ws.prev_id){
     const s=ws.prevSims.find(x=>x.id===ws.prev_id);
     if(s){
       if(s.type_entretien==='cold_call'){
-        // Cold Call continué → force RDV + phase decouverte ou complet
         h+=`<div class="section-sep">Phase cible</div>
         <div class="field-block">
           <select class="d-select" onchange="pickPhaseForContinue(this.value)">
@@ -1029,92 +1031,38 @@ function renderContinueStep(){
             <option value="decouverte" ${ws.phase==='decouverte'?'selected':''}>Découverte</option>
             <option value="complet" ${ws.phase==='complet'?'selected':''}>Entretien complet</option>
           </select>
-          <div style="margin-top:8px;font-size:11px;color:var(--t3);font-style:italic">Ce Cold Call sera transformé en rendez-vous (le prospect se souviendra de vous).</div>
         </div>`;
-      } else {
-        // RDV → auto meme_rdv, choix de la phase suivante
-        const availablePhases = getNextPhasesFor(s);
+      }else{
+        const availablePhases=getNextPhasesFor(s);
         h+=`<div class="section-sep">Phase cible</div>
         <div class="field-block">
           <select class="d-select" onchange="pickPhaseForContinue(this.value)">
             <option value="">Choisir…</option>
             ${availablePhases.map(([v,l])=>`<option value="${v}" ${ws.phase===v?'selected':''}>${l}</option>`).join('')}
           </select>
-          <div style="margin-top:8px;font-size:11px;color:var(--t3);font-style:italic">Suite du même rendez-vous (le prospect garde la mémoire).</div>
         </div>`;
       }
     }
   }
-
-  h+='<div id="w-err" class="w-error"></div>';
   return h;
 }
 
-function selectPrevSim(id){
-  ws.prev_id=id;
-  const s=ws.prevSims.find(x=>x.id===id);
-  if(s){
-    if(s.type_entretien==='cold_call'){
-      ws.cont='nouveau_rdv';
-      ws.phase=ws.phase||'decouverte';
-    } else {
-      ws.cont='meme_rdv';
-      ws.phase=null;
-    }
-    ws.interview='rdv';
-  }
-  renderDrawer();
-}
-
-function pickPhaseForContinue(v){
-  ws.phase=v;
-  renderDrawer();
-}
-
-function isCompatAny(s){
-  if(s.b2b_b2c && s.b2b_b2c !== ws.b2b_b2c) return false;
-  if(s.type_entretien==='cold_call') return true; // cold call → peut continuer vers rdv decouverte/complet
-  if(s.type_entretien==='rdv'){
-    return ['decouverte','demo','objections_closing','nego','complet'].includes(s.phase_choisie);
-  }
-  return false;
-}
-
-function getNextPhasesFor(s){
-  if(s.type_entretien==='cold_call'){
-    return [['decouverte','Découverte'],['complet','Entretien complet']];
-  }
-  const p=s.phase_choisie;
-  if(p==='complet') return [['decouverte','Découverte'],['demo','Démo'],['objections_closing','Objections & Closing'],['nego','Négociation']];
-  if(p==='decouverte') return [['demo','Démo'],['objections_closing','Objections & Closing']];
-  if(p==='demo') return [['objections_closing','Objections & Closing'],['nego','Négociation']];
-  if(p==='objections_closing') return [['nego','Négociation']];
-  return [];
-}
-
-// ─── Étape 4 : Type d'entretien ───
 function renderInterviewStep(){
-  // Seul cas où on arrive ici : nouveau scénario (mode='new')
   const isColdCall=ws.interview==='cold_call';
   const isRdv=ws.interview==='rdv';
-  const canCreate = isColdCall || (isRdv && ws.phase);
-
-  let h=`
-    <div class="step-title">Type d'entretien</div>
-    <div class="step-sub">Le Cold Call part de zéro. Le RDV donne au prospect le contexte du rendez-vous.</div>
-    <div class="pick-grid">
-      <button class="pick-card ${isColdCall?'sel':''}" onclick="pickInterviewType('cold_call')">
-        <div class="pick-label">Cold Call</div>
-        <div class="pick-desc">Le prospect découvre tout au fil de la conversation. Prise de contact à froid.</div>
-      </button>
-      <button class="pick-card ${isRdv?'sel':''}" onclick="pickInterviewType('rdv')">
-        <div class="pick-label">Rendez-vous</div>
-        <div class="pick-desc">Le prospect sait pourquoi vous vous parlez. Il attend une démonstration ou une discussion.</div>
-      </button>
-    </div>`;
-
+  const canCreate=isColdCall||(isRdv&&ws.phase);
+  let h=`<div class="pick-grid">
+    <button class="pick-card ${isColdCall?'sel':''}" onclick="pickInterviewType('cold_call')">
+      <div class="pick-label">Cold Call</div>
+      <div class="pick-desc">Le prospect découvre tout au fil de la conversation. Prise de contact à froid.</div>
+    </button>
+    <button class="pick-card ${isRdv?'sel':''}" onclick="pickInterviewType('rdv')">
+      <div class="pick-label">Rendez-vous</div>
+      <div class="pick-desc">Le prospect sait pourquoi vous vous parlez. Il attend une discussion structurée.</div>
+    </button>
+  </div>`;
   if(isRdv){
-    h+=`<div class="field-block" style="margin-top:16px">
+    h+=`<div class="field-block">
       <label class="d-label">Phase à travailler</label>
       <select class="d-select" onchange="pickRdvPhase(this.value)">
         <option value="">Choisir…</option>
@@ -1122,7 +1070,6 @@ function renderInterviewStep(){
       </select>
     </div>`;
   }
-
   h+=`<div class="final-create-block ${canCreate?'show':''}">
     <button class="btn-create" id="btnCreateFinal" onclick="createSim()">Créer la simulation</button>
   </div>
@@ -1130,81 +1077,69 @@ function renderInterviewStep(){
   return h;
 }
 
-// Le rendu de l'étape 4 doit être dynamique : si c'est un nouveau scénario, on va à l'étape 4.
-// Petite surcharge de renderDrawerStep : si step===4, appeler renderInterviewStep.
-
-const _renderDrawerStep = renderDrawerStep;
-renderDrawerStep = function(){
-  if(ws.step===4) return renderInterviewStep();
-  return _renderDrawerStep();
-};
-
-// ─── Navigation ───
-function drawerNext(){
+function wizNext(){
   const err=$('w-err');if(err)err.classList.remove('show');
-
-  if(ws.step===1){ if(!ws.b2b_b2c){showErr('Choisis B2B ou B2C.');return;} ws.step=2; renderDrawer(); return; }
-  if(ws.step===2){ if(!ws.mode){showErr('Choisis Nouveau ou Continuer.');return;} ws.step=3; renderDrawer(); return; }
+  if(ws.step===1){if(!ws.b2b_b2c){showWErr('Choisis B2B ou B2C.');return;}ws.step=2;renderWizardStep();return;}
+  if(ws.step===2){if(!ws.mode){showWErr('Choisis Nouveau ou Continuer.');return;}ws.step=3;renderWizardStep();return;}
   if(ws.step===3){
     if(ws.mode==='new'){
       if(!validateNewScenario())return;
-      ws.interview=null;ws.phase=null;
-      ws.step=4;
-      prewarm();
-      renderDrawer();
-      return;
-    } else {
+      ws.interview=null;ws.phase=null;ws.step=4;prewarm();renderWizardStep();
+    }else{
       if(!validateContinue())return;
-      // En continue, on va directement créer (pas d'étape 4, on a déjà déterminé interview/phase)
-      ws.step=4;
-      renderDrawer();
-      return;
+      ws.step=4;renderWizardStep();
     }
   }
 }
 
-function drawerBack(){
-  const err=$('w-err');if(err)err.classList.remove('show');
-  if(ws.step>1){ws.step--;if(ws.step===3&&ws.mode==='new'){/* rien */}renderDrawer();}
-}
-
-function showErr(msg){const e=$('w-err');if(e){e.textContent=msg;e.classList.add('show');}}
+function wizBack(){const err=$('w-err');if(err)err.classList.remove('show');if(ws.step>1){ws.step--;renderWizardStep();}}
+function showWErr(msg){const e=$('w-err');if(e){e.textContent=msg;e.classList.add('show');}}
 
 function validateNewScenario(){
-  if(!ws.v_type.trim() && !ws.v_url.trim()){showErr("Renseigne ton type d'entreprise ou fournis une URL.");return false;}
-  if(!ws.v_product.trim() && !ws.v_url.trim()){showErr('Renseigne ton produit / service.');return false;}
+  if(!ws.v_type.trim()&&!ws.v_url.trim()){showWErr("Renseigne ton type d'entreprise ou une URL.");return false;}
+  if(!ws.v_product.trim()&&!ws.v_url.trim()){showWErr('Renseigne ton produit / service.');return false;}
   if(ws.b2b_b2c==='b2b'){
-    if(!ws.p_role){showErr('Choisis le rôle du prospect.');return false;}
-    if(!ws.p_type.trim() && !ws.p_url.trim()){showErr("Renseigne le secteur du prospect ou fournis une URL.");return false;}
-  } else {
-    if(!ws.p_profile.trim()){showErr('Décris le profil du prospect B2C.');return false;}
+    if(!ws.p_role){showWErr('Choisis le rôle du prospect.');return false;}
+    if(!ws.p_type.trim()&&!ws.p_url.trim()){showWErr("Renseigne le secteur du prospect ou une URL.");return false;}
+  }else{
+    if(!ws.p_profile.trim()){showWErr('Décris le profil du prospect.');return false;}
   }
   return true;
 }
 
 function validateContinue(){
-  if(!ws.prev_id){showErr('Choisis une simulation précédente.');return false;}
-  if(!ws.phase){showErr('Choisis une phase cible.');return false;}
+  if(!ws.prev_id){showWErr('Choisis une simulation précédente.');return false;}
+  if(!ws.phase){showWErr('Choisis une phase cible.');return false;}
   return true;
 }
 
+function isCompatAny(s){
+  if(s.b2b_b2c&&s.b2b_b2c!==ws.b2b_b2c)return false;
+  if(s.type_entretien==='cold_call')return true;
+  if(s.type_entretien==='rdv')return ['decouverte','demo','objections_closing','nego','complet'].includes(s.phase_choisie);
+  return false;
+}
+
+function getNextPhasesFor(s){
+  if(s.type_entretien==='cold_call')return [['decouverte','Découverte'],['complet','Entretien complet']];
+  const p=s.phase_choisie;
+  if(p==='complet')return [['decouverte','Découverte'],['demo','Démo'],['objections_closing','Objections & Closing'],['nego','Négociation']];
+  if(p==='decouverte')return [['demo','Démo'],['objections_closing','Objections & Closing']];
+  if(p==='demo')return [['objections_closing','Objections & Closing'],['nego','Négociation']];
+  if(p==='objections_closing')return [['nego','Négociation']];
+  return [];
+}
+
 async function saveCurrentVendeur(){
-  const nom=prompt('Nom de ce vendeur (pour le retrouver plus tard) :','');
+  const nom=prompt('Nom de ce vendeur :','');
   if(nom===null)return;
   if(!nom.trim()){alert('Nom requis.');return;}
   try{
-    const r=await apiCall('/api/vendeurs/save',{method:'POST',body:JSON.stringify({
-      nom:nom.trim(),
-      type_entreprise:ws.v_type.trim()||null,
-      produit_service:ws.v_product.trim()||null,
-      url:ws.v_url.trim()||null
-    })});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.error||'Erreur');
-    alert('✅ Vendeur sauvegardé.');
-    await loadSavedVendeurs();
-    renderDrawer();
-  }catch(e){alert(`Erreur : ${e.message}`);}
+    const r=await apiCall('/api/vendeurs/save',{method:'POST',body:JSON.stringify({nom:nom.trim(),type_entreprise:ws.v_type.trim()||null,produit_service:ws.v_product.trim()||null,url:ws.v_url.trim()||null})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error||'Erreur');
+    showToast('Vendeur sauvegardé.','success');
+    await loadSavedVendeurs();renderWizardStep();
+  }catch(e){showToast('Erreur : '+e.message,'error');}
 }
 
 async function analyzeUrl(tgt){
@@ -1218,106 +1153,90 @@ async function analyzeUrl(tgt){
     const d=await r.json();if(!r.ok)throw new Error(d.error||'Impossible');
     if(tgt==='v'){if(!ws.v_type&&d.type_entreprise)ws.v_type=d.type_entreprise;if(!ws.v_product&&d.produit_service)ws.v_product=d.produit_service;}
     else{if(!ws.p_type&&d.type_entreprise_prospect)ws.p_type=d.type_entreprise_prospect;}
-    renderDrawer();
+    renderWizardStep();
     const res=$(resId);if(res){res.textContent='Analyse terminée — vérifie et corrige.';res.classList.add('show');}
-  }catch(e){alert(`Erreur : ${e.message}`);}
+  }catch(e){showToast('Erreur : '+e.message,'error');}
   finally{if(btn){btn.disabled=false;btn.textContent='Analyser';}}
 }
 
 function prewarm(){
   if(ws.prev_id)return;
   if(!ws.sessionId)ws.sessionId=(crypto.randomUUID&&crypto.randomUUID())||`s_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-  apiCall('/api/simulation/prewarm',{
-    method:'POST',
-    body:JSON.stringify({
-      sessionId:ws.sessionId,
-      b2b_b2c:ws.b2b_b2c,
-      vendeur_type_entreprise:ws.v_type.trim(),
-      vendeur_produit:ws.v_product.trim(),
-      vendeur_url:ws.v_url.trim()||null,
-      prospect_role:ws.b2b_b2c==='b2b'?ws.p_role:null,
-      prospect_type_entreprise:ws.b2b_b2c==='b2b'?ws.p_type.trim():null,
-      prospect_url:ws.b2b_b2c==='b2b'?(ws.p_url.trim()||null):null,
-      prospect_profile:ws.b2b_b2c==='b2c'?ws.p_profile.trim():null,
-      type_entretien:ws.interview,
-      phase_choisie:ws.interview==='rdv'?ws.phase:null,
-      intensite: ws.intensite,
-      savedPersonaId: ws.savedPersonaId || null
-    })
-  }).catch(()=>{});
+  apiCall('/api/simulation/prewarm',{method:'POST',body:JSON.stringify({
+    sessionId:ws.sessionId,
+    b2b_b2c:ws.b2b_b2c,
+    vendeur_type_entreprise:ws.v_type.trim(),
+    vendeur_produit:ws.v_product.trim(),
+    vendeur_url:ws.v_url.trim()||null,
+    prospect_role:ws.b2b_b2c==='b2b'?ws.p_role:null,
+    prospect_type_entreprise:ws.b2b_b2c==='b2b'?ws.p_type.trim():null,
+    prospect_url:ws.b2b_b2c==='b2b'?(ws.p_url.trim()||null):null,
+    prospect_profile:ws.b2b_b2c==='b2c'?ws.p_profile.trim():null,
+    type_entretien:ws.interview,
+    phase_choisie:ws.interview==='rdv'?ws.phase:null,
+    intensite:ws.intensite,
+    savedPersonaId:ws.savedPersonaId||null
+  })}).catch(()=>{});
 }
 
 async function waitForPersona(simulationId){
-  const maxAttempts=90;
-  for(let i=0;i<maxAttempts;i++){
+  for(let i=0;i<90;i++){
     await new Promise(r=>setTimeout(r,1000));
     try{
       const r=await apiCall(`/api/simulation/context?simulationId=${encodeURIComponent(simulationId)}`);
       if(r.status===202)continue;
-      if(r.status===500){
-        const d=await r.json().catch(()=>({}));
-        throw new Error(d.error||'La préparation du scénario a échoué.');
-      }
+      if(r.status===500){const d=await r.json().catch(()=>({}));throw new Error(d.error||'La préparation a échoué.');}
       if(!r.ok)return false;
       const d=await r.json();
       if(d.ready)return true;
-    }catch(e){
-      if(e.message && e.message.includes('échoué'))throw e;
-    }
+    }catch(e){if(e.message&&e.message.includes('échoué'))throw e;}
   }
   return false;
 }
 
 async function createSim(){
   const err=$('w-err');if(err)err.classList.remove('show');
-
   if(ws.mode==='new'){
-    if(!ws.interview){showErr('Choisis Cold Call ou RDV.');return;}
-    if(ws.interview==='rdv'&&!ws.phase){showErr('Choisis une phase.');return;}
-  } else {
-    if(!ws.prev_id||!ws.phase){showErr('Configuration incomplète.');return;}
+    if(!ws.interview){showWErr('Choisis Cold Call ou RDV.');return;}
+    if(ws.interview==='rdv'&&!ws.phase){showWErr('Choisis une phase.');return;}
+  }else{
+    if(!ws.prev_id||!ws.phase){showWErr('Configuration incomplète.');return;}
   }
-
-  const btn=$('btnCreateFinal')||$('drawerNext');
+  const btn=$('btnCreateFinal')||$('wizNext');
   if(btn){btn.disabled=true;btn.textContent='Création…';}
-
   try{
-    const isContinue = ws.mode==='continue';
+    const isContinue=ws.mode==='continue';
     const payload={
-      sessionId: !isContinue ? (ws.sessionId||null) : null,
-      intensite: ws.intensite,
-      savedPersonaId: !isContinue ? (ws.savedPersonaId||null) : null,
-      b2b_b2c: ws.b2b_b2c,
-      vendeur_type_entreprise: !isContinue ? ws.v_type.trim() : null,
-      vendeur_produit: !isContinue ? ws.v_product.trim() : null,
-      vendeur_url: !isContinue ? (ws.v_url.trim()||null) : null,
-      prospect_role: !isContinue && ws.b2b_b2c==='b2b' ? ws.p_role : null,
-      prospect_type_entreprise: !isContinue && ws.b2b_b2c==='b2b' ? ws.p_type.trim() : null,
-      prospect_url: !isContinue && ws.b2b_b2c==='b2b' ? (ws.p_url.trim()||null) : null,
-      prospect_profile: !isContinue && ws.b2b_b2c==='b2c' ? ws.p_profile.trim() : null,
-      type_entretien: isContinue ? 'rdv' : ws.interview,
-      phase_choisie: isContinue ? ws.phase : (ws.interview==='rdv'?ws.phase:null),
-      simulation_precedente_id: isContinue ? ws.prev_id : null,
-      continuite_rdv: isContinue ? ws.cont : null
+      sessionId:!isContinue?(ws.sessionId||null):null,
+      intensite:ws.intensite,
+      savedPersonaId:!isContinue?(ws.savedPersonaId||null):null,
+      b2b_b2c:ws.b2b_b2c,
+      vendeur_type_entreprise:!isContinue?ws.v_type.trim():null,
+      vendeur_produit:!isContinue?ws.v_product.trim():null,
+      vendeur_url:!isContinue?(ws.v_url.trim()||null):null,
+      prospect_role:!isContinue&&ws.b2b_b2c==='b2b'?ws.p_role:null,
+      prospect_type_entreprise:!isContinue&&ws.b2b_b2c==='b2b'?ws.p_type.trim():null,
+      prospect_url:!isContinue&&ws.b2b_b2c==='b2b'?(ws.p_url.trim()||null):null,
+      prospect_profile:!isContinue&&ws.b2b_b2c==='b2c'?ws.p_profile.trim():null,
+      type_entretien:isContinue?'rdv':ws.interview,
+      phase_choisie:isContinue?ws.phase:(ws.interview==='rdv'?ws.phase:null),
+      simulation_precedente_id:isContinue?ws.prev_id:null,
+      continuite_rdv:isContinue?ws.cont:null
     };
-
-    const {data:{session}}=await sb.auth.getSession();
+    const{data:{session}}=await sb.auth.getSession();
     if(!session?.access_token||!session?.refresh_token)throw new Error('Session expirée.');
     const hR=await fetch(`${SIM_URL}/api/auth/handshake`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({refresh_token:session.refresh_token})});
     if(!hR.ok)throw new Error('Connexion au serveur impossible.');
     const{code}=await hR.json();
-
     const r=await apiCall('/api/simulation/start',{method:'POST',body:JSON.stringify(payload)});
     const d=await r.json();
     if(!r.ok)throw new Error(d.error||'Erreur création');
-
     if(d.status==='preparation'){
       if(btn)btn.textContent='Préparation du scénario…';
       const ready=await waitForPersona(d.simulationId);
       if(!ready)throw new Error('La préparation du scénario a échoué.');
     }
-
-    closeDrawer();
+    closeWizard();
     window.location.href=`${SIM_URL}/?code=${encodeURIComponent(code)}&simulationId=${encodeURIComponent(d.simulationId)}`;
   }catch(e){
     if(err){err.textContent=e.message;err.classList.add('show');}
@@ -1325,9 +1244,562 @@ async function createSim(){
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════
+//  DEBRIEF
+// ═══════════════════════════════════════════════════════════════════
+$('debriefBack').addEventListener('click',closeDebrief);
+$('debriefOverlay').addEventListener('click',e=>{if(e.target===$('debriefOverlay'))closeDebrief();});
+function closeDebrief(){
+  $('debriefOverlay').classList.remove('open');
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  currentDebriefSimId=null;
+}
+
+function scDisc(tr){
+  let q=0,ph='disc';
+  for(const t of tr||[]){
+    const tx=String(t.texte||'').toLowerCase();
+    if(/(signature|contrat|on signe|on bloque)/.test(tx))ph='close';
+    else if(/(trop cher|pas le temps|pas interest)/.test(tx))ph='obj';
+    else if(/(demo|notre solution|comment.a marche)/.test(tx))ph='pitch';
+    if(t.locuteur==='commercial'&&ph==='disc')q+=(tx.match(/\?/g)||[]).length;
+  }
+  return Math.min(100,q*15);
+}
+
+function buildRadar(met,tr){
+  const hasAnyMetric=met&&Object.keys(met).length>0&&['ratio_questions_affirmations','taux_resolution_objections','nb_interruptions','score_engagement_final','nb_signaux_achat'].some(k=>met[k]!=null);
+  if(!hasAnyMetric){
+    return {values:[null,null,null,null,null,null],hasData:false};
+  }
+  const fallback=[
+    Math.min(100,Number(met?.ratio_questions_affirmations)||0),
+    Math.min(100,Number(met?.taux_resolution_objections)||0),
+    scDisc(tr),
+    Number(met?.nb_signaux_achat)>0?Math.max(0,Math.min(100,100-(Number(met?.delai_moyen_closing_apres_signal)||0)/60*100)):null,
+    Math.max(0,Math.min(100,100-((Number(met?.nb_interruptions)||0)*10+(Number(met?.nb_silences_remplis)||0)*5))),
+    Math.min(100,Math.max(0,Number(met?.score_engagement_final)||0))
+  ];
+  const useQuali=['radar_questions','radar_objections','radar_decouverte','radar_closing','radar_rythme','radar_pratiques'].some(k=>met?.[k]!=null);
+  if(!useQuali)return {values:fallback,hasData:true};
+  const quali=[met.radar_questions,met.radar_objections,met.radar_decouverte,met.radar_closing,met.radar_rythme,met.radar_pratiques];
+  const merged=fallback.map((v,i)=>{
+    if(quali[i]==null)return v;
+    if(v==null)return Math.round(Number(quali[i]));
+    return Math.round((v+Number(quali[i]))/2);
+  });
+  return {values:merged,hasData:true};
+}
+
+async function avgRadar(simId){
+  const{data:ss}=await sb.from('simulations').select('id').eq('user_id',me.id).eq('statut','terminee');
+  const ids=(ss||[]).map(s=>s.id).filter(id=>id!==simId);
+  if(!ids.length)return null;
+  const{data:mets}=await sb.from('metriques').select('*').in('simulation_id',ids);
+  if(!mets?.length)return null;
+  const sum=[0,0,0,0,0,0];
+  let count=0;
+  mets.forEach(m=>{
+    const d=Number(m.delai_moyen_closing_apres_signal)||0;
+    const cl=Number(m.nb_signaux_achat)>0?Math.max(0,Math.min(100,100-(d/60)*100)):null;
+    const ry=Math.max(0,Math.min(100,100-((Number(m.nb_interruptions)||0)*10+(Number(m.nb_silences_remplis)||0)*5)));
+    const base=[Number(m.ratio_questions_affirmations)||0,Number(m.taux_resolution_objections)||0,null,cl,ry,Number(m.score_engagement_final)||0];
+    const quali=[m.radar_questions,m.radar_objections,m.radar_decouverte,m.radar_closing,m.radar_rythme,m.radar_pratiques];
+    let valid=true;
+    base.forEach((v,i)=>{
+      let val=v;
+      if(quali[i]!=null){
+        if(v!=null)val=Math.round((v+Number(quali[i]))/2);
+        else val=Math.round(Number(quali[i]));
+      }
+      if(val==null){valid=false;return;}
+      sum[i]+=val;
+    });
+    if(valid)count++;
+  });
+  if(!count)return null;
+  return sum.map(v=>Math.round(v/count));
+}
+
+function radarSVG(cur,avg){
+  const lb=['Questions','Objections','Découverte','Closing','Rythme','Engagement'];
+  const cx=50,cy=50,r=34;
+  const pts=vs=>vs.map((v,i)=>{
+    const val=v==null?0:v;
+    const a=-Math.PI/2+i*(Math.PI*2/lb.length);
+    const rv=r*(Math.max(0,Math.min(100,val))/100);
+    return `${cx+Math.cos(a)*rv},${cy+Math.sin(a)*rv}`;
+  }).join(' ');
+  const grid=[25,50,75,100].map(l=>`<polygon points="${pts(lb.map(()=>l))}" fill="none" stroke="var(--border)" stroke-width="0.4"/>`).join('');
+  const axes=lb.map((l,i)=>{
+    const a=-Math.PI/2+i*(Math.PI*2/lb.length);
+    const x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;
+    const lx=cx+Math.cos(a)*43,ly=cy+Math.sin(a)*43;
+    return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border)" stroke-width="0.35"/><text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="3.6" fill="var(--muted)">${esc(l)}</text>`;
+  }).join('');
+  const av=avg?`<polygon points="${pts(avg)}" fill="rgba(113,113,122,.05)" stroke="rgba(113,113,122,.5)" stroke-width="0.9" stroke-dasharray="2 1.5"/>`:'';
+  return `<svg class="radar-svg" viewBox="0 0 100 100"><g>${grid}${axes}${av}<polygon points="${pts(cur)}" fill="rgba(59,107,80,.13)" stroke="var(--sage)" stroke-width="1.3"/></g></svg>`;
+}
+
+// Fil serpentant V1 (simple, pas encore cross-simulation)
+function buildSerpentinePoints(bilan,tr,duration){
+  const points=[];
+  const ql=bilan?.analyse_qualitative||{};
+  (ql.comportements_naturels||[]).forEach(item=>{
+    points.push({t:Number(item.horodatage_secondes)||0,score:Math.max(60,Math.min(100,Number(item.niveau_certitude)||75)),label:'Positif',desc:item.description||'',type:'pos'});
+  });
+  (ql.ecarts||[]).forEach(item=>{
+    const t=item.type||'manquant';
+    const base=t==='adaptatif'?45:t==='instinctif'?30:20;
+    points.push({t:Number(item.horodatage_secondes)||0,score:base,label:t,desc:item.description||'',type:'neg'});
+  });
+  (ql.moments_bascule||[]).forEach(item=>{
+    points.push({t:Number(item.horodatage_secondes)||0,score:60,label:'Bascule',desc:item.description||'',type:'bascule'});
+  });
+  return points.filter(p=>p.t>0||points.length<3).sort((a,b)=>a.t-b.t);
+}
+
+function serpentineSVG(points,duration){
+  const W=800,H=120,padX=20,padY=10;
+  if(!points.length)return `<svg class="serp-svg" viewBox="0 0 ${W} ${H}"><text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="12" fill="var(--muted-2)">Aucun évènement à tracer</text></svg>`;
+  const maxT=Math.max(duration,...points.map(p=>p.t),1);
+  const xOf=t=>padX+(W-2*padX)*(t/maxT);
+  const yOf=s=>H-padY-(H-2*padY)*(s/100);
+  const dPath=points.map((p,i)=>{
+    const x=xOf(p.t),y=yOf(p.score);
+    if(i===0)return `M ${x} ${y}`;
+    const prev=points[i-1];
+    const px=xOf(prev.t),py=yOf(prev.score);
+    const mx=(px+x)/2;
+    return `C ${mx} ${py} ${mx} ${y} ${x} ${y}`;
+  }).join(' ');
+  let svg=`<svg class="serp-svg" viewBox="0 0 ${W} ${H}">`;
+  // Grille horizontale
+  [25,50,75].forEach(v=>{
+    svg+=`<line x1="${padX}" y1="${yOf(v)}" x2="${W-padX}" y2="${yOf(v)}" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="2 3"/>`;
+  });
+  // Chemin
+  svg+=`<path d="${dPath}" fill="none" stroke="var(--sage)" stroke-width="2"/>`;
+  // Points
+  points.forEach(p=>{
+    const x=xOf(p.t),y=yOf(p.score);
+    const fill=p.type==='pos'?'var(--sage)':p.type==='neg'?'var(--red)':p.type==='bascule'?'var(--amber)':'var(--muted)';
+    svg+=`<circle class="serp-point" data-t="${p.t}" cx="${x}" cy="${y}" r="5" fill="${fill}" stroke="white" stroke-width="1.5" style="cursor:pointer"/>`;
+  });
+  svg+='</svg>';
+  return svg;
+}
+
+async function openDebrief(simId){
+  currentDebriefSimId=simId;
+  $('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Chargement du débrief…</div>';
+  $('debriefActions').innerHTML='';
+  $('debriefOverlay').classList.add('open');
+
+  const[sR,tR,bR,mR]=await Promise.all([
+    sb.from('simulations').select('*').eq('id',simId).single(),
+    sb.from('transcriptions').select('*').eq('simulation_id',simId).order('horodatage_secondes',{ascending:true}),
+    sb.from('bilans').select('*').eq('simulation_id',simId).maybeSingle(),
+    sb.from('metriques').select('*').eq('simulation_id',simId).maybeSingle(),
+  ]);
+
+  if(sR.error){$('debriefBody').innerHTML=`<div style="padding:60px;text-align:center;color:var(--red)">${esc(sR.error.message)}</div>`;return;}
+  const sim=sR.data;
+
+  if(sim.statut==='preparation'){$('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Préparation en cours…</div>';return;}
+  if(sim.statut==='erreur_preparation'){$('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--red)">La préparation a échoué.</div>';return;}
+  if(sim.statut==='en_cours'||sim.statut==='en_pause'){
+    $('debriefBody').innerHTML=`<div style="padding:60px;text-align:center;color:var(--muted)">Cette simulation est ${sim.statut==='en_pause'?'en pause':'en cours'}. Reprends-la depuis la liste.</div>`;
+    return;
+  }
+
+  const tr=tR.data||[],bilan=bR.data,met=mR.data||{},ql=bilan?.analyse_qualitative||{};
+  const note=bilan?.note_globale!=null?Number(bilan.note_globale):null;
+  const sc=note==null?'none':ncls(note);
+
+  const radarData=buildRadar(met,tr);
+  const curR=radarData.values;
+  const avgR=await avgRadar(simId);
+
+  // Actions top bar
+  $('debriefActions').innerHTML=`
+    <button class="btn-ghost" id="dlTrans"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg><span>Transcription</span></button>
+    <button class="btn-ghost" id="dlPdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg><span>PDF</span></button>
+    <button class="btn-ghost" id="savePersona"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>Persona</span></button>
+  `;
+
+  const axisLabels=['Questions','Objections','Découverte','Closing','Rythme','Engagement'];
+  const qualiVals=[met.radar_questions,met.radar_objections,met.radar_decouverte,met.radar_closing,met.radar_rythme,met.radar_pratiques];
+  let axesLegend='<div class="radar-axes-legend">';
+  axisLabels.forEach((lbl,i)=>{
+    const q=qualiVals[i];
+    const v=q!=null?`${Math.round(q)}/100`:'—';
+    const cls=q!=null?'v':'v na';
+    axesLegend+=`<div class="item"><div class="k">${esc(lbl)}</div><div class="${cls}">${v}</div></div>`;
+  });
+  axesLegend+='</div>';
+
+  const duration=Number(sim.duree_secondes)||0;
+  const serpPoints=buildSerpentinePoints(bilan,tr,duration);
+  const serpSvg=serpentineSVG(serpPoints,duration);
+
+  let h=`
+  <div class="db-hero">
+    <div>
+      <div class="db-tagline">${esc(ql.tagline||'Bilan à générer')}</div>
+      <div class="db-meta">${esc(simLabel(sim))} · ${sim.b2b_b2c?sim.b2b_b2c.toUpperCase():'—'} · ${fmtDur(sim.duree_secondes||0)} · ${fmtDate(sim.created_at)}</div>
+    </div>
+    <div class="db-score-block">
+      <div class="db-score ${sc}">${note==null?'—':note}</div>
+      <div class="db-score-label">${note==null?'En attente':'/ 100'}</div>
+    </div>
+  </div>`;
+
+  // Fil serpentant
+  if(serpPoints.length){
+    h+=`<div class="db-section">
+      <div class="db-section-head"><div class="db-section-title">Fil chronologique</div></div>
+      <div class="db-section-body">
+        <div class="serpentine-header">
+          <div class="serpentine-toggle">
+            <button class="serp-tab active">Ma session</button>
+            <button class="serp-tab" disabled title="Bientôt disponible">Top Sales</button>
+          </div>
+          <div style="font-size:11px;color:var(--muted)">Cliquez sur un point pour écouter ce moment</div>
+        </div>
+        <div class="serpentine-wrap">${serpSvg}</div>
+        <div class="serp-info">${serpPoints.length} évènement${serpPoints.length>1?'s':''} clés</div>
+      </div>
+    </div>`;
+  }
+
+  h+=`<div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Radar de performance</div></div>
+    <div class="db-section-body">
+      ${radarSVG(curR,avgR)}
+      <div class="radar-legend"><span><i class="rdot"></i>Cette session</span><span><i class="rdot avg"></i>Ta moyenne</span></div>
+      ${axesLegend}
+    </div>
+  </div>`;
+
+  // Audio
+  h+=`<div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Écoute</div></div>
+    <div class="db-section-body" style="padding:12px 20px" id="audioSection"><div style="text-align:center;color:var(--muted);font-size:12px">Chargement audio…</div></div>
+  </div>`;
+
+  // Métriques
+  h+=`<div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Métriques</div></div>
+    <div class="db-section-body">
+      <div class="metrics-grid">
+        <div class="m-cell"><div class="m-val">${fmtM(met.ratio_parole_commercial,'%')}</div><div class="m-label">Parole commercial</div><div class="m-sub">vs ${fmtM(met.ratio_parole_prospect,'%')} prospect</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.nb_questions_total)}</div><div class="m-label">Questions</div><div class="m-sub">${fmtM(met.nb_questions_ouvertes)} ouvertes</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.taux_resolution_objections,'%')}</div><div class="m-label">Objections résolues</div><div class="m-sub">${fmtM(met.nb_objections_resolues)} / ${fmtM(met.nb_objections_total)}</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.nb_interruptions)}</div><div class="m-label">Interruptions</div><div class="m-sub">${fmtM(met.nb_silences_laisses)} silences</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.nb_signaux_exploites)}/${fmtM(met.nb_signaux_achat)}</div><div class="m-label">Signaux exploités</div></div>
+        <div class="m-cell"><div class="m-val">${fmtM(met.score_engagement_final)}</div><div class="m-label">Engagement final</div><div class="m-sub">Bascule ${met.moment_bascule_secondes==null?'—':fmtSec(met.moment_bascule_secondes)}</div></div>
+      </div>
+    </div>
+  </div>`;
+
+  // Comportements
+  const nats=ql.comportements_naturels||[];
+  h+=`<details class="db-acc" open><summary><span class="db-acc-title">Ce qu'il fait naturellement</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
+  if(!nats.length)h+='<div style="font-size:12px;color:var(--muted)">Aucun comportement identifié.</div>';
+  nats.forEach(item=>{const fw=(item.frameworks_associes||[]).map(f=>`<span class="chip chip-f">${esc(f)}</span>`).join('');h+=`<div class="qi"><div class="qi-chips"><button class="moment-btn" data-m="${Number(item.horodatage_secondes)||0}">${fmtSec(item.horodatage_secondes)}</button><span class="chip chip-c">${fmtM(item.niveau_certitude)}%</span>${fw}</div><div class="qi-text">${esc(item.description||'')}</div>${item.principe_nomme?`<div class="qi-note">${esc(item.principe_nomme)}</div>`:''}</div>`;});
+  h+='</div></details>';
+
+  const ecarts=ql.ecarts||[];
+  h+=`<details class="db-acc"><summary><span class="db-acc-title">Ses écarts</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
+  if(!ecarts.length)h+='<div style="font-size:12px;color:var(--muted)">Aucun écart identifié.</div>';
+  ecarts.forEach(item=>{const tp=['adaptatif','instinctif','manquant'].includes(item.type)?item.type:'manquant';h+=`<div class="qi"><div class="qi-chips"><span class="chip chip-${tp}">${tp}</span><button class="moment-btn" data-m="${Number(item.horodatage_secondes)||0}">${fmtSec(item.horodatage_secondes)}</button></div><div class="qi-text">${esc(item.description||'')}</div><div class="qi-note">Avant : ${esc(item.effet_avant||'—')} · Après : ${esc(item.effet_apres||'—')}</div></div>`;});
+  h+='</div></details>';
+
+  const moments=ql.moments_bascule||[];
+  h+=`<details class="db-acc"><summary><span class="db-acc-title">Moments de bascule</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
+  if(!moments.length)h+='<div style="font-size:12px;color:var(--muted)">Aucun moment identifié.</div>';
+  moments.forEach(item=>{h+=`<div class="qi"><div class="qi-chips"><button class="moment-btn" data-m="${Number(item.horodatage_secondes)||0}">${fmtSec(item.horodatage_secondes)}</button></div><div class="qi-text"><strong>Déclencheur :</strong> ${esc(item.declencheur||'—')}<br>${esc(item.description||'')}</div></div>`;});
+  h+='</div></details>';
+
+  const coh=ql.coherence_interne||{};
+  h+=`<details class="db-acc"><summary><span class="db-acc-title">Cohérence interne</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body"><div class="coh-grid">
+    <div class="coh-cell"><strong>Ancrés</strong><div>${(coh.comportements_ancres||[]).map(esc).join('<br>')||'—'}</div></div>
+    <div class="coh-cell"><strong>Situationnels</strong><div>${(coh.comportements_situationnels||[]).map(esc).join('<br>')||'—'}</div></div>
+    <div class="coh-cell"><strong>Incohérences</strong><div>${(coh.incoherences||[]).map(esc).join('<br>')||'—'}</div></div>
+  </div></div></details>`;
+
+  const dist=ql.distribution_tactique||{};
+  h+=`<details class="db-acc"><summary><span class="db-acc-title">Distribution tactique</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body"><div class="dist-rows">`;
+  ['questions','crac','storytelling','reframe','autres'].forEach(k=>{const v=Math.max(0,Math.min(100,Number(dist[k])||0));h+=`<div class="dist-row"><div class="dist-key">${k}</div><div class="dist-track"><div class="dist-fill" style="width:${v}%"></div></div><div class="dist-pct">${Math.round(v)}%</div></div>`;});
+  h+='</div></div></details>';
+
+  // Générer bilan
+  h+=`<div class="bilan-gen">
+    <div class="bg-left">
+      <div class="bg-title">Sensibilité aux correspondances</div>
+      <div class="bg-sub">0 = très solides uniquement · 100 = larges</div>
+      <div class="sens-row"><input id="sensScore" type="range" min="0" max="100" value="50"><span class="sens-val" id="sensVal">50</span></div>
+    </div>
+    <button class="btn-gen" id="genBilan">${bilan?'Regénérer':'Générer le bilan'}</button>
+  </div>`;
+
+  // Transcription
+  h+=`<div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Transcription</div><div style="font-size:11px;color:var(--muted)">Clique sur une ligne pour écouter ce moment</div></div>
+    <div class="t-list" id="tScroll">`;
+  if(!tr.length)h+='<div style="padding:20px;text-align:center;font-size:12px;color:var(--muted)">Aucune transcription.</div>';
+  const bTs=moments.map(m=>Number(m.horodatage_secondes)||0);
+  tr.forEach(ln=>{
+    const t=Number(ln.horodatage_secondes)||0;
+    const isB=bTs.some(bt=>Math.abs(bt-t)<=2);
+    h+=`<div class="t-row${isB?' bascule':''}" data-t="${t}"><div class="t-time">${fmtSec(t)}</div><div class="t-who ${ln.locuteur==='commercial'?'c':''}">${ln.locuteur==='commercial'?'Commercial':'Prospect'}</div><div class="t-text">${esc(ln.texte||'')}</div></div>`;
+  });
+  h+='</div></div>';
+
+  $('debriefBody').innerHTML=h;
+
+  // Audio loading
+  loadAudioForDebrief(simId);
+
+  // Actions débrief
+  $('dlTrans').addEventListener('click',()=>{
+    const url=`${SIM_URL}/api/simulation/${encodeURIComponent(simId)}/transcription?format=txt`;
+    apiCall(`/api/simulation/${encodeURIComponent(simId)}/transcription?format=txt`).then(async r=>{
+      if(!r.ok){showToast('Erreur téléchargement','error');return;}
+      const blob=await r.blob();
+      const burl=URL.createObjectURL(blob);
+      downloadUrl(burl,`transcription-${simId.slice(0,8)}.txt`);
+      setTimeout(()=>URL.revokeObjectURL(burl),3000);
+    }).catch(e=>showToast('Erreur : '+e.message,'error'));
+  });
+
+  $('dlPdf').addEventListener('click',()=>exportPdf(sim,bilan,met,ql));
+
+  $('savePersona').addEventListener('click',async()=>{
+    const nom=prompt('Nom du persona (pour le retrouver plus tard) :','');
+    if(nom===null)return;
+    try{
+      const r=await apiCall('/api/personas/save',{method:'POST',body:JSON.stringify({simulationId:simId,nomPersona:nom.trim()||null})});
+      const d=await r.json();
+      if(!r.ok)throw new Error(d.error||'Erreur');
+      showToast('Persona sauvegardé.','success');
+    }catch(e){showToast('Erreur : '+e.message,'error');}
+  });
+
+  // Bind ligne transcription
+  document.querySelectorAll('.t-row').forEach(r=>r.addEventListener('click',()=>{
+    if(!currentAudio)return;
+    currentAudio.currentTime=Number(r.dataset.t)||0;
+    currentAudio.play().catch(()=>{});
+  }));
+
+  // Bind moment buttons
+  document.querySelectorAll('.moment-btn').forEach(b=>b.addEventListener('click',()=>{
+    if(!currentAudio)return;
+    currentAudio.currentTime=Number(b.dataset.m)||0;
+    currentAudio.play().catch(()=>{});
+  }));
+
+  // Bind serpentine points
+  document.querySelectorAll('.serp-point').forEach(p=>p.addEventListener('click',()=>{
+    if(!currentAudio)return;
+    currentAudio.currentTime=Number(p.dataset.t)||0;
+    currentAudio.play().catch(()=>{});
+  }));
+
+  // Sensibilité
+  const sl=$('sensScore'),sv=$('sensVal');
+  sl.addEventListener('input',()=>{sv.textContent=sl.value;});
+  $('genBilan').addEventListener('click',async()=>{
+    const btn=$('genBilan');btn.disabled=true;btn.textContent='Analyse…';
+    try{
+      const r=await apiCall('/api/bilan',{method:'POST',body:JSON.stringify({simulationId:simId,surAttributionScore:Number(sl.value)})});
+      const d=await r.json();
+      if(!r.ok)throw new Error(d.error||'Erreur');
+      await openDebrief(simId);
+    }catch(e){
+      showToast('Erreur bilan : '+e.message,'error');
+      btn.disabled=false;
+      btn.textContent=bilan?'Regénérer':'Générer le bilan';
+    }
+  });
+}
+
+async function loadAudioForDebrief(simId){
+  const container=$('audioSection');
+  if(!container)return;
+  try{
+    const ar=await apiCall(`/api/simulation/${encodeURIComponent(simId)}/audio`);
+    if(!ar.ok){
+      container.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px">Audio non disponible</div>';
+      return;
+    }
+    const ad=await ar.json();
+    if(!ad.signedUrl){
+      container.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px">Audio non disponible</div>';
+      return;
+    }
+    container.innerHTML=`<div class="audio-player">
+      <button class="audio-btn" id="audioPlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20"/></svg></button>
+      <div class="audio-track" id="audioTrack"><div class="audio-fill" id="audioFill"></div><div class="audio-thumb" id="audioThumb"></div></div>
+      <div class="audio-time" id="audioTime">0:00 / 0:00</div>
+      <button class="btn-ghost" id="dlAudio" style="padding:6px 10px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></button>
+    </div>`;
+
+    const audio=new Audio(ad.signedUrl);
+    audio.preload='metadata';
+    currentAudio=audio;
+
+    const playBtn=$('audioPlay');
+    const fill=$('audioFill');
+    const thumb=$('audioThumb');
+    const timeEl=$('audioTime');
+    const track=$('audioTrack');
+
+    const fmtT=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+
+    playBtn.addEventListener('click',()=>{
+      if(audio.paused){audio.play().catch(()=>{});}
+      else{audio.pause();}
+    });
+
+    audio.addEventListener('play',()=>{playBtn.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';});
+    audio.addEventListener('pause',()=>{playBtn.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20"/></svg>';});
+
+    audio.addEventListener('timeupdate',()=>{
+      const pct=audio.duration?audio.currentTime/audio.duration*100:0;
+      fill.style.width=pct+'%';
+      thumb.style.left=pct+'%';
+      timeEl.textContent=`${fmtT(audio.currentTime)} / ${fmtT(audio.duration||0)}`;
+      document.querySelectorAll('.t-row').forEach(r=>{
+        const s=Number(r.dataset.t)||0;
+        r.classList.toggle('active',Math.abs(audio.currentTime-s)<1.5);
+      });
+    });
+
+    audio.addEventListener('loadedmetadata',()=>{timeEl.textContent=`0:00 / ${fmtT(audio.duration||0)}`;});
+
+    track.addEventListener('click',e=>{
+      const rect=track.getBoundingClientRect();
+      const x=e.clientX-rect.left;
+      const pct=Math.max(0,Math.min(1,x/rect.width));
+      if(audio.duration)audio.currentTime=pct*audio.duration;
+    });
+
+    $('dlAudio').addEventListener('click',()=>{
+      downloadAsBlob(ad.signedUrl,`simulation-${simId.slice(0,8)}.webm`);
+    });
+  }catch(e){
+    container.innerHTML=`<div style="text-align:center;color:var(--muted);font-size:12px">Erreur audio : ${esc(e.message)}</div>`;
+  }
+}
+
+// PDF Export
+function exportPdf(sim,bilan,met,ql){
+  try{
+    const{jsPDF}=window.jspdf;
+    const doc=new jsPDF('p','mm','a4');
+    const pageW=doc.internal.pageSize.getWidth();
+    let y=20;
+    const margin=20;
+    const w=pageW-2*margin;
+
+    // Header
+    doc.setFontSize(20);doc.setFont('helvetica','bold');
+    doc.text('Débrief Kold Kall',margin,y);y+=8;
+    doc.setFontSize(10);doc.setFont('helvetica','normal');
+    doc.setTextColor(100,100,110);
+    doc.text(`${simLabel(sim)} · ${sim.b2b_b2c?.toUpperCase()||'—'} · ${fmtDur(sim.duree_secondes||0)} · ${fmtDate(sim.created_at)}`,margin,y);
+    y+=12;
+    doc.setTextColor(0,0,0);
+
+    // Score
+    doc.setFontSize(16);doc.setFont('helvetica','bold');
+    doc.text(`Score : ${bilan?.note_globale ?? '—'} / 100`,margin,y);y+=10;
+
+    // Tagline
+    if(ql.tagline){
+      doc.setFontSize(11);doc.setFont('helvetica','italic');
+      doc.text(ql.tagline,margin,y,{maxWidth:w});y+=12;
+    }
+
+    // Radar values
+    doc.setFontSize(12);doc.setFont('helvetica','bold');
+    doc.text('Radar',margin,y);y+=6;
+    doc.setFontSize(10);doc.setFont('helvetica','normal');
+    const axes=[['Questions',met.radar_questions],['Objections',met.radar_objections],['Découverte',met.radar_decouverte],['Closing',met.radar_closing],['Rythme',met.radar_rythme],['Pratiques',met.radar_pratiques]];
+    axes.forEach(([k,v])=>{
+      doc.text(`${k} : ${v!=null?Math.round(v)+'/100':'—'}`,margin,y);
+      y+=5;
+    });
+    y+=6;
+
+    // Comportements naturels
+    const nats=ql.comportements_naturels||[];
+    if(nats.length){
+      doc.setFontSize(12);doc.setFont('helvetica','bold');
+      doc.text('Ce qu\'il fait naturellement',margin,y);y+=6;
+      doc.setFontSize(10);doc.setFont('helvetica','normal');
+      nats.forEach(item=>{
+        const t=fmtSec(item.horodatage_secondes);
+        const txt=`[${t}] ${item.description||''}`;
+        const lines=doc.splitTextToSize(txt,w);
+        lines.forEach(l=>{if(y>270){doc.addPage();y=20;}doc.text(l,margin,y);y+=5;});
+        y+=1;
+      });
+      y+=4;
+    }
+
+    // Écarts
+    const ec=ql.ecarts||[];
+    if(ec.length){
+      if(y>250){doc.addPage();y=20;}
+      doc.setFontSize(12);doc.setFont('helvetica','bold');
+      doc.text('Écarts',margin,y);y+=6;
+      doc.setFontSize(10);doc.setFont('helvetica','normal');
+      ec.forEach(item=>{
+        const t=fmtSec(item.horodatage_secondes);
+        const txt=`[${t}] (${item.type}) ${item.description||''}`;
+        const lines=doc.splitTextToSize(txt,w);
+        lines.forEach(l=>{if(y>270){doc.addPage();y=20;}doc.text(l,margin,y);y+=5;});
+        y+=1;
+      });
+      y+=4;
+    }
+
+    // Moments de bascule
+    const mb=ql.moments_bascule||[];
+    if(mb.length){
+      if(y>250){doc.addPage();y=20;}
+      doc.setFontSize(12);doc.setFont('helvetica','bold');
+      doc.text('Moments de bascule',margin,y);y+=6;
+      doc.setFontSize(10);doc.setFont('helvetica','normal');
+      mb.forEach(item=>{
+        const t=fmtSec(item.horodatage_secondes);
+        const txt=`[${t}] ${item.declencheur||''} — ${item.description||''}`;
+        const lines=doc.splitTextToSize(txt,w);
+        lines.forEach(l=>{if(y>270){doc.addPage();y=20;}doc.text(l,margin,y);y+=5;});
+        y+=1;
+      });
+    }
+
+    doc.save(`debrief-${sim.id.slice(0,8)}.pdf`);
+  }catch(e){
+    showToast('Erreur PDF : '+e.message,'error');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  INITIALISATION
+// ═══════════════════════════════════════════════════════════════════
 (async()=>{
-  try{const{data:{session},error}=await sb.auth.getSession();if(error)console.error(error);if(session){me=session.user;await loadProfile();}else showLogin(true);}
-  catch(e){console.error(e);showLogin(true);}
+  try{
+    const{data:{session},error}=await sb.auth.getSession();
+    if(error)console.error(error);
+    if(session){me=session.user;await loadProfile();}
+    else showLogin(true);
+  }catch(e){console.error(e);showLogin(true);}
 })();
 </script>
 </body>
