@@ -569,7 +569,20 @@ function exportTranscriptionPdf(sim,tr){generateLogoDataUrl((logoDataUrl)=>{cons
 function openPdfPreview(sim,bilan,met,ql,tr){generateLogoDataUrl((logoDataUrl)=>{const docDef=buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl);pdfMake.createPdf(docDef).getBlob((blob)=>{const url=URL.createObjectURL(blob);$('pdfPreviewIframe').src=url;$('pdfPreviewOverlay').classList.add('open');$('pdfDownloadBtn').onclick=()=>{const a=document.createElement('a');a.href=url;a.download=`debrief-${sim.id.slice(0,8)}.pdf`;document.body.appendChild(a);a.click();document.body.removeChild(a);};});});}
 $('pdfCloseBtn').addEventListener('click',()=>{$('pdfPreviewOverlay').classList.remove('open');const iframe=$('pdfPreviewIframe');if(iframe.src)URL.revokeObjectURL(iframe.src);iframe.src='';});
 $('pdfPreviewOverlay').addEventListener('click',e=>{if(e.target===$('pdfPreviewOverlay'))$('pdfCloseBtn').click();});
-(async()=>{try{const{data:{session},error}=await sb.auth.getSession();if(error)console.error(error);if(session){me=session.user;await loadProfile();}else showLogin(true);}catch(e){console.error(e);showLogin(true);}})();
+(async()=>{
+  try{
+    const urlParams = new URLSearchParams(window.location.search);
+    const invitationToken = urlParams.get('invitation');
+    if (invitationToken) {
+      await handleInvitation(invitationToken);
+      return;
+    }
+    const {data:{session},error}=await sb.auth.getSession();
+    if(error)console.error(error);
+    if(session){me=session.user;await loadProfile();}
+    else showLogin(true);
+  }catch(e){console.error(e);showLogin(true);}
+})();
 </script>
 </body>
 </html>
