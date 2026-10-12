@@ -35,7 +35,6 @@ button,input,select,textarea{font-family:inherit;}
 button{cursor:pointer;}
 .hidden{display:none !important;}
 
-/* LOGIN */
 .login-screen{position:fixed;inset:0;background:var(--stone-50);display:flex;align-items:center;justify-content:center;z-index:900;transition:opacity .3s;}
 .login-screen.hidden{opacity:0;pointer-events:none;}
 .login-wrap{width:100%;max-width:400px;}
@@ -57,7 +56,6 @@ button{cursor:pointer;}
 .btn-main:active{transform:scale(.98);}
 .btn-main:disabled{opacity:.5;cursor:wait;}
 
-/* APP */
 .app{display:none;height:100vh;flex-direction:column;}
 .app.visible{display:flex;}
 .topbar{height:56px;flex-shrink:0;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:relative;z-index:50;}
@@ -155,7 +153,6 @@ button{cursor:pointer;}
 .progression-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-xs);padding:18px;}
 .prog-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:16px;}
 
-/* WIZARD */
 .wizard-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.35);display:flex;align-items:center;justify-content:center;z-index:300;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(2px);}
 .wizard-overlay.open{opacity:1;pointer-events:all;}
 .wizard-modal{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:min(600px,96vw);max-height:90vh;display:flex;flex-direction:column;transform:scale(.97) translateY(8px);transition:transform .25s var(--ease);overflow:hidden;}
@@ -230,7 +227,6 @@ button{cursor:pointer;}
 .btn-create:active{transform:scale(.98);}
 .btn-create:disabled{opacity:.5;cursor:wait;}
 
-/* DEBRIEF */
 .debrief-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.35);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px);}
 .debrief-overlay.open{opacity:1;pointer-events:all;}
 .debrief-panel{position:fixed;top:0;right:0;bottom:0;width:min(840px,96vw);background:var(--white);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .30s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;overflow:hidden;z-index:201;}
@@ -244,7 +240,6 @@ button{cursor:pointer;}
 .btn-ghost:hover{background:var(--stone-100);border-color:var(--muted-2);}
 .btn-ghost svg{width:13px;height:13px;}
 
-/* STICKY AUDIO */
 .debrief-audio-sticky{flex-shrink:0;padding:10px 24px;background:var(--white);border-bottom:1px solid var(--border);display:none;}
 .debrief-audio-sticky.visible{display:block;}
 .audio-player{background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:12px;}
@@ -291,21 +286,24 @@ button{cursor:pointer;}
 .m-label{font-size:11px;color:var(--muted);}
 .m-sub{font-size:10px;color:var(--muted-2);}
 
-/* SERPENTINE V2 */
 .serpentine-wrap{position:relative;padding:8px 0 4px;flex-shrink:0;}
-.serp-svg{width:100%;height:200px;display:block;}
+.serp-svg{width:100%;height:220px;display:block;}
 .serp-svg circle.point{cursor:pointer;transition:r .15s;}
 .serp-svg circle.point:hover{r:8;}
 .serp-svg circle.halo{pointer-events:none;opacity:0;transition:opacity .15s;}
 .serp-svg g.pgroup:hover circle.halo{opacity:0.25;}
 .serp-tooltip{position:absolute;background:var(--ink);color:#fff;font-size:11px;padding:6px 10px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap;transform:translate(-50%,-100%);z-index:10;}
 .serp-tooltip.visible{opacity:1;}
-.serp-detail{margin-top:12px;padding:14px;background:var(--stone-50);border:1px solid var(--border);border-radius:8px;font-size:12px;line-height:1.6;color:var(--ink-2);}
+.serp-detail{margin-top:12px;padding:16px;background:var(--stone-50);border:1px solid var(--border);border-radius:8px;font-size:13px;line-height:1.65;color:var(--ink-2);}
 .serp-detail.empty{color:var(--muted-2);font-style:italic;}
-.serp-detail strong{color:var(--ink);font-weight:600;}
-.serp-detail .row{margin-bottom:4px;}
+.serp-detail .row{margin-bottom:10px;}
 .serp-detail .row:last-child{margin-bottom:0;}
-.serp-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;margin-right:6px;}
+.serp-detail .row-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.serp-detail .quote{background:var(--white);border-left:3px solid var(--sage);padding:8px 12px;border-radius:6px;font-style:italic;color:var(--ink);}
+.serp-detail .quote.prospect{border-left-color:var(--blue);}
+.serp-detail .quote.commercial{border-left-color:var(--sage);}
+.serp-detail .impact{background:var(--amber-bg);border:1px solid var(--amber-border);padding:10px 14px;border-radius:6px;color:var(--amber);font-weight:500;}
+.serp-tag{display:inline-block;font-size:10px;font-weight:600;padding:3px 10px;border-radius:99px;margin-right:8px;}
 .serp-tag.vert{background:var(--sage-light);color:var(--sage);}
 .serp-tag.rouge{background:var(--red-bg);color:var(--red);}
 .serp-tag.orange{background:var(--amber-bg);color:var(--amber);}
@@ -333,8 +331,11 @@ details[open] summary{border-bottom:1px solid var(--border);}
 .chip-adapt{background:var(--sage-light);color:var(--sage);}
 .chip-inst{background:var(--amber-bg);color:var(--amber);}
 .chip-mank{background:var(--red-bg);color:var(--red);}
+.chip-score{background:var(--stone-100);color:var(--ink-2);font-weight:700;}
 .qi-text{font-size:12px;line-height:1.65;color:var(--ink-2);}
 .qi-note{font-size:11px;color:var(--muted-2);margin-top:6px;line-height:1.5;}
+.qi-quote{background:var(--white);border-left:2px solid var(--sage-border);padding:6px 10px;border-radius:4px;font-size:12px;font-style:italic;color:var(--ink-2);margin:6px 0;}
+.qi-impact{background:var(--amber-bg);border-left:2px solid var(--amber);padding:6px 10px;border-radius:4px;font-size:12px;color:var(--amber);margin:6px 0;font-weight:500;}
 .moment-btn{background:var(--sage-light);color:var(--sage);border:none;border-radius:99px;padding:2px 8px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s;}
 .moment-btn:hover{opacity:.75;}
 
@@ -350,7 +351,6 @@ details[open] summary{border-bottom:1px solid var(--border);}
 .coh-cell strong{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px;text-transform:uppercase;}
 .coh-cell div{font-size:12px;line-height:1.6;color:var(--ink-2);}
 
-/* TRANSCRIPTION */
 .t-list{max-height:400px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);}
 .t-row{display:grid;grid-template-columns:44px 96px 1fr auto;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;font-size:12px;transition:background .1s;align-items:center;}
 .t-row:last-child{border-bottom:none;}
@@ -376,14 +376,12 @@ details[open] summary{border-bottom:1px solid var(--border);}
 .btn-gen:active{transform:scale(.98);}
 .btn-gen:disabled{opacity:.5;cursor:wait;}
 
-/* TOAST */
 .kk-toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120%);max-width:min(520px,calc(100vw - 32px));padding:13px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;text-align:center;background:rgba(24,24,27,0.95);color:#fff;box-shadow:var(--shadow-lg);z-index:9999;opacity:0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s;}
 .kk-toast.visible{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto;}
 .kk-toast.error{background:linear-gradient(135deg,rgba(185,28,28,0.96),rgba(153,27,27,0.96));}
 .kk-toast.success{background:linear-gradient(135deg,rgba(59,107,80,0.96),rgba(78,138,104,0.96));}
 .kk-toast.warning{background:linear-gradient(135deg,rgba(180,83,9,0.96),rgba(146,64,14,0.96));}
 
-/* PDF PREVIEW */
 .pdf-preview-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.55);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
 .pdf-preview-overlay.open{display:flex;}
 .pdf-preview-modal{background:var(--white);border-radius:var(--radius-lg);width:75vw;height:75vh;max-width:96vw;max-height:96vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow-lg);}
@@ -502,8 +500,8 @@ details[open] summary{border-bottom:1px solid var(--border);}
         <div class="progress-step"></div>
       </div>
       <div class="wizard-step-label" id="wizardStepLabel">Étape 1 sur 4</div>
-      <h2 class="wizard-step-title" id="wizardStepTitle">Contexte de vente</h2>
-      <p class="wizard-step-sub" id="wizardStepSub">Quel type de vente allez-vous simuler ?</p>
+      <h2 class="wizard-step-title" id="wizardStepTitle">Type de vente</h2>
+      <p class="wizard-step-sub" id="wizardStepSub">Le scénario s'adapte à votre contexte.</p>
     </div>
     <div class="wizard-body" id="wizardBody"></div>
     <div class="wizard-footer">
@@ -557,6 +555,7 @@ let currentAudio=null;
 let pausedSims=[];
 let allSims=[];
 let currentSimFilter='all';
+let currentSimAudioDuration=null;
 
 const ws={
   step:1,sessionId:null,b2b_b2c:null,mode:null,
@@ -653,7 +652,7 @@ async function renderSessions(){
     if(pr.ok){const pd=await pr.json();pausedSims=pd.simulations||[];}
   }catch(_){}
 
-  let q=sb.from('simulations').select('id,user_id,created_at,duree_secondes,type_scenario,statut,type_entretien,phase_choisie,b2b_b2c,url_audio,bilans(note_globale),profiles(nom,prenom)').order('created_at',{ascending:false});
+  let q=sb.from('simulations').select('id,user_id,created_at,duree_secondes,audio_duree_secondes,type_scenario,statut,type_entretien,phase_choisie,b2b_b2c,url_audio,bilans(note_globale),profiles(nom,prenom)').order('created_at',{ascending:false});
   if(myProfile?.role==='commercial')q=q.eq('user_id',me.id);
   const{data:sims,error}=await q;
   if(error){c.innerHTML=`<div style="padding:60px;text-align:center;color:var(--red)">${esc(error.message)}</div>`;return;}
@@ -741,13 +740,14 @@ async function renderSessions(){
         actionBtn=`<button class="btn-detail" data-debrief="${esc(s.id)}">Débrief</button>`;
       }
       const statutLabel={terminee:'Terminée',en_cours:'En cours',en_pause:'En pause',preparation:'Préparation',erreur_preparation:'Erreur'}[s.statut]||s.statut||'—';
+      const displayDuration = s.audio_duree_secondes || s.duree_secondes || 0;
       h+=`<div class="session-row" data-id="${esc(s.id)}">
         <div>
           <div class="session-type">${esc(simLabel(s))}${dir}</div>
           <div class="session-meta">${fmtDate(s.created_at)}</div>
         </div>
         <div><span class="session-tag ${tag.cls}">${tag.label}</span></div>
-        <div class="session-duration col-dur">${fmtDur(s.duree_secondes||0)}</div>
+        <div class="session-duration col-dur">${fmtDur(displayDuration)}</div>
         <div class="session-score score-${nc}">${esc(nd)}</div>
         <div style="font-size:11px;color:var(--muted)">${esc(statutLabel)}</div>
         <div>${actionBtn}</div>
@@ -892,7 +892,6 @@ function renderWizardStep(){
   $('wizNext').onclick=wizNext;
   $('wizBack').onclick=wizBack;
 
-  // Titre contextuel selon l'étape
   if(ws.step===1){
     $('wizardStepTitle').textContent='Type de vente';
     $('wizardStepSub').textContent='Le scénario et la psychologie du prospect s\'adaptent à votre contexte.';
@@ -942,13 +941,11 @@ function bindWizardEvents(){
           const sl=$('intensiteSlider');if(sl)sl.value=ws.intensite;
           const d=$('intensiteDisplay');if(d)d.textContent=`${ws.intensite}/5`;
           const t=$('intensiteDesc');if(t)t.textContent=INTENSITE_DESCS[ws.intensite];
-          // Vendeur
           if(p.vendeur_type_entreprise&&!ws.v_type)ws.v_type=p.vendeur_type_entreprise;
           if(p.vendeur_produit&&!ws.v_product)ws.v_product=p.vendeur_produit;
           if(p.vendeur_url&&!ws.v_url)ws.v_url=p.vendeur_url;
           const it=$('v-type'),ip=$('v-product'),iu=$('v-url');
           if(it)it.value=ws.v_type;if(ip)ip.value=ws.v_product;if(iu)iu.value=ws.v_url;
-          // Prospect
           if(ws.b2b_b2c==='b2b'){
             const role=mapPosteToRole(p.poste);
             if(role)ws.p_role=role;
@@ -1048,7 +1045,7 @@ function renderNewScenarioStep(){
         <option value="">— Créer un nouveau persona —</option>
         ${ws.savedPersonas.map(p=>`<option value="${esc(p.id)}" ${ws.savedPersonaId===p.id?'selected':''}>${esc(p.nom_persona)} (${esc(p.archetype)}, ${p.intensite}/5)</option>`).join('')}
       </select>
-      <div class="saved-info ${ws.savedPersonaId?'show':''}" id="savedPersonaInfo">✅ Persona existant utilisé. L'archétype est conservé, l'intensité est modifiable.</div>
+      <div class="saved-info ${ws.savedPersonaId?'show':''}" id="savedPersonaInfo">✅ Persona existant utilisé.</div>
       <button type="button" class="btn-small" id="btnAutreVariation">🔄 Retirer la sélection</button>
     </div>`;
   }
@@ -1331,49 +1328,54 @@ function radarSVG(cur,avg){
   return `<div class="radar-svg-wrap"><svg class="radar-svg" viewBox="0 0 100 100"><g>${grid}${axes}${av}<polygon points="${pts(cur)}" fill="rgba(59,107,80,.13)" stroke="var(--sage)" stroke-width="1.3"/></g></svg></div>`;
 }
 
-// ═══ FIL SERPENTANT V2 ═══
+// ═══ FIL SERPENTANT V3 (avec initiateur/extrait/impact + compat ancien format) ═══
 function buildSerpEvents(bilan){
   const events=[];
   const ql=bilan?.analyse_qualitative||{};
-  (ql.comportements_naturels||[]).forEach(i=>{
-    events.push({
-      t: Number(i.horodatage_secondes)||0,
-      s: Math.max(60, Math.min(100, Number(i.niveau_certitude)||75)),
-      type: 'vert',
-      action: i.description || 'Comportement identifié',
-      impact: i.principe_nomme || '',
-      framework: (i.frameworks_associes||[]).join(', ')
-    });
-  });
-  (ql.ecarts||[]).forEach(i=>{
-    const tp = i.type || 'manquant';
-    const base = tp === 'adaptatif' ? 45 : tp === 'instinctif' ? 30 : 20;
-    events.push({
-      t: Number(i.horodatage_secondes)||0,
-      s: base,
-      type: 'rouge',
-      action: i.description || 'Écart identifié',
-      impact: [i.effet_avant, i.effet_apres].filter(Boolean).join(' → '),
-      framework: i.framework_de_reference || ''
-    });
-  });
-  (ql.moments_bascule||[]).forEach(i=>{
-    events.push({
-      t: Number(i.horodatage_secondes)||0,
-      s: 60,
-      type: 'orange',
-      action: i.declencheur || 'Moment de bascule',
-      impact: i.description || '',
-      framework: ''
-    });
-  });
+
+  // Détecter si nouveau format (a un champ initiateur sur au moins 1 entrée)
+  const hasNewFormat = ['comportements_naturels','ecarts','moments_bascule'].some(list =>
+    (ql[list] || []).some(item => item.initiateur)
+  );
+
+  const mapEvent = (item, kind) => {
+    const t = Number(item.horodatage_secondes)||0;
+    let s = Number(item.score);
+    if (!Number.isFinite(s)) {
+      s = kind === 'pos' ? (Number(item.niveau_certitude) || 75) : (kind === 'neg' ? 20 : 60);
+      if (kind === 'neg') {
+        const tp = item.type || 'manquant';
+        s = tp === 'adaptatif' ? 45 : tp === 'instinctif' ? 30 : 20;
+      }
+    }
+    return {
+      t, s,
+      type: kind === 'pos' ? 'vert' : kind === 'neg' ? 'rouge' : 'orange',
+      initiateur: item.initiateur || null,
+      extrait_initiateur: item.extrait_initiateur || null,
+      action_commercial: item.action_commercial || null,
+      impact_prospect: item.impact_prospect || null,
+      framework_reference: item.framework_reference || null,
+      // Champs anciens pour compat
+      description: item.description || '',
+      principe_nomme: item.principe_nomme || null,
+      declencheur: item.declencheur || null,
+      effet_avant: item.effet_avant || '',
+      effet_apres: item.effet_apres || ''
+    };
+  };
+
+  (ql.comportements_naturels||[]).forEach(i => events.push(mapEvent(i, 'pos')));
+  (ql.ecarts||[]).forEach(i => events.push(mapEvent(i, 'neg')));
+  (ql.moments_bascule||[]).forEach(i => events.push(mapEvent(i, 'bascule')));
+
   return events.sort((a,b)=>a.t-b.t);
 }
 
-function renderSerpentineV2(events, duration){
+function renderSerpentineV3(events, duration){
   if(!events.length) return '<div style="padding:40px;text-align:center;color:var(--muted);font-size:12px">Aucun évènement à tracer</div>';
 
-  // Décalage des points superposés (même timestamp exact)
+  // Décalage des points superposés
   const groups = {};
   events.forEach(e => {
     const key = e.t.toFixed(1);
@@ -1383,9 +1385,8 @@ function renderSerpentineV2(events, duration){
   const adjusted = [];
   Object.keys(groups).forEach(key => {
     const g = groups[key];
-    if (g.length === 1) {
-      adjusted.push({ ...g[0], origT: g[0].t });
-    } else {
+    if (g.length === 1) adjusted.push({ ...g[0], origT: g[0].t });
+    else {
       const spread = 0.8;
       g.forEach((e, i) => {
         const offset = (i - (g.length - 1) / 2) * (spread / Math.max(1, g.length - 1));
@@ -1395,7 +1396,7 @@ function renderSerpentineV2(events, duration){
   });
   adjusted.sort((a,b)=>a.t-b.t);
 
-  const W = 800, H = 200;
+  const W = 800, H = 220;
   const padX = 60, padY = 20;
   const maxT = Math.max(duration, ...adjusted.map(e => e.t), 1);
   const xOf = t => padX + (W - padX - 20) * (t / maxT);
@@ -1403,14 +1404,12 @@ function renderSerpentineV2(events, duration){
 
   let svg = `<svg class="serp-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">`;
 
-  // Axe Y : 0, 50, 100
   [0, 50, 100].forEach(v => {
     const y = yOf(v);
     svg += `<line x1="${padX}" y1="${y}" x2="${W - 10}" y2="${y}" stroke="#E4E4E7" stroke-width="1" ${v === 50 ? 'stroke-dasharray="2 3"' : ''}/>`;
     svg += `<text x="${padX - 8}" y="${y + 4}" text-anchor="end" font-size="10" fill="#71717A" font-weight="600">${v}</text>`;
   });
 
-  // Axe X : temps
   const markers = [0, 0.25, 0.5, 0.75, 1].map(r => Math.round(maxT * r));
   markers.forEach(t => {
     const x = xOf(t);
@@ -1419,7 +1418,6 @@ function renderSerpentineV2(events, duration){
     svg += `<text x="${x}" y="${H - 4}" text-anchor="middle" font-size="9" fill="#A1A1AA">${mm}:${ss}</text>`;
   });
 
-  // Chemin
   let path = '';
   adjusted.forEach((p, i) => {
     const x = xOf(p.t), y = yOf(p.s);
@@ -1433,7 +1431,6 @@ function renderSerpentineV2(events, duration){
   });
   svg += `<path d="${path}" fill="none" stroke="#3B6B50" stroke-width="2"/>`;
 
-  // Points avec halo, valeur et index
   adjusted.forEach((p, i) => {
     const x = xOf(p.t), y = yOf(p.s);
     const color = p.type === 'vert' ? '#3B6B50' : p.type === 'rouge' ? '#B91C1C' : '#B45309';
@@ -1449,7 +1446,7 @@ function renderSerpentineV2(events, duration){
     <div class="serpentine-wrap" id="serpWrap">
       ${svg}
       <div class="serp-tooltip" id="serpTooltip"></div>
-      <div class="serp-detail empty" id="serpDetail">Clique sur un point du fil pour voir ce que tu as fait à ce moment précis.</div>
+      <div class="serp-detail empty" id="serpDetail">Clique sur un point du fil pour voir ce qui s'est passé à ce moment précis.</div>
       <div class="serp-legend">
         <span><span class="dot" style="background:#3B6B50"></span>Bien fait</span>
         <span><span class="dot" style="background:#B45309"></span>Moment de bascule</span>
@@ -1466,9 +1463,8 @@ function bindSerpentine(events, duration){
   const detail = $('serpDetail');
   const svg = wrap.querySelector('svg');
   if(!svg) return;
-  const W = 800, H = 200;
+  const W = 800, H = 220;
 
-  // On recalcule les adjusted identiques à renderSerpentineV2 pour l'index
   const groups = {};
   events.forEach(e => {
     const key = e.t.toFixed(1);
@@ -1498,7 +1494,6 @@ function bindSerpentine(events, duration){
     c.addEventListener('mouseenter', () => {
       const idx = Number(c.dataset.idx);
       const p = adjusted[idx];
-      const rect = wrap.getBoundingClientRect();
       const xRatio = xOf(p.t) / W;
       const yRatio = yOf(p.s) / H;
       tooltip.textContent = `▶ Écouter à ${fmtSec(p.origT)}`;
@@ -1511,15 +1506,71 @@ function bindSerpentine(events, duration){
       const idx = Number(c.dataset.idx);
       const p = adjusted[idx];
       const label = p.type === 'vert' ? 'Bien fait' : p.type === 'rouge' ? 'Écart' : 'Bascule';
+
+      // Construction du détail adaptatif
+      let html = `<div class="row"><span class="serp-tag ${p.type}">${label}</span><strong>${fmtSec(p.origT)}</strong> — Score ${Math.round(p.s)}/100</div>`;
+
+      // Si nouveau format avec initiateur : affichage dynamique
+      if (p.initiateur === 'prospect') {
+        // Prospect a initié → prospect d'abord, puis commercial, puis impact
+        if (p.extrait_initiateur) {
+          html += `<div class="row">
+            <div class="row-label">Ce que le prospect a dit</div>
+            <div class="quote prospect">« ${esc(p.extrait_initiateur)} »</div>
+          </div>`;
+        }
+        if (p.action_commercial) {
+          html += `<div class="row">
+            <div class="row-label">Ce que tu as répondu</div>
+            <div class="quote commercial">${esc(p.action_commercial)}</div>
+          </div>`;
+        }
+        if (p.impact_prospect) {
+          html += `<div class="row">
+            <div class="row-label">Impact sur le prospect</div>
+            <div class="impact">${esc(p.impact_prospect)}</div>
+          </div>`;
+        }
+      } else if (p.initiateur === 'commercial') {
+        // Commercial a initié → commercial d'abord, puis impact
+        if (p.action_commercial || p.extrait_initiateur) {
+          html += `<div class="row">
+            <div class="row-label">Ce que tu as dit / fait</div>
+            <div class="quote commercial">${esc(p.action_commercial || p.extrait_initiateur)}</div>
+          </div>`;
+        }
+        if (p.impact_prospect) {
+          html += `<div class="row">
+            <div class="row-label">Impact sur le prospect</div>
+            <div class="impact">${esc(p.impact_prospect)}</div>
+          </div>`;
+        }
+      } else {
+        // Ancien format — affichage des champs disponibles
+        if (p.description) {
+          html += `<div class="row"><div class="row-label">Ce que tu as fait</div><div>${esc(p.description)}</div></div>`;
+        }
+        if (p.principe_nomme) {
+          html += `<div class="row"><div class="row-label">Principe</div><div>${esc(p.principe_nomme)}</div></div>`;
+        }
+        if (p.declencheur) {
+          html += `<div class="row"><div class="row-label">Déclencheur</div><div>${esc(p.declencheur)}</div></div>`;
+        }
+        if (p.effet_avant || p.effet_apres) {
+          html += `<div class="row"><div class="row-label">Avant → Après</div><div>${esc(p.effet_avant||'—')} → ${esc(p.effet_apres||'—')}</div></div>`;
+        }
+      }
+
+      if (p.framework_reference) {
+        html += `<div class="row" style="font-size:11px;color:var(--muted)">Référence : ${esc(p.framework_reference)}</div>`;
+      }
+
+      html += `<div class="row" style="margin-top:10px;color:var(--sage);font-size:11px;font-weight:600;cursor:pointer" onclick="if(currentAudio){currentAudio.currentTime=${p.origT};currentAudio.play().catch(()=>{});}">▶ Écouter à ${fmtSec(p.origT)}</div>`;
+
       detail.classList.remove('empty');
-      detail.innerHTML = `
-        <div class="row"><span class="serp-tag ${p.type}">${label}</span><strong>${fmtSec(p.origT)}</strong> — Score ${Math.round(p.s)}/100</div>
-        <div class="row"><strong>Ce que tu as fait :</strong> ${esc(p.action)}</div>
-        ${p.impact ? `<div class="row"><strong>Impact :</strong> ${esc(p.impact)}</div>` : ''}
-        ${p.framework ? `<div class="row"><strong>Référence :</strong> ${esc(p.framework)}</div>` : ''}
-        <div class="row" style="margin-top:8px;color:var(--sage);font-size:11px;font-weight:600">▶ Lecture audio à ${fmtSec(p.origT)}</div>
-      `;
-      // Lecture audio
+      detail.innerHTML = html;
+
+      // Lecture audio auto
       if(currentAudio){
         currentAudio.currentTime = p.origT;
         currentAudio.play().catch(()=>{});
@@ -1534,6 +1585,7 @@ async function openDebrief(simId){
   $('debriefActions').innerHTML='';
   $('debriefAudioSticky').innerHTML='';
   $('debriefAudioSticky').classList.remove('visible');
+  currentSimAudioDuration=null;
   $('debriefOverlay').classList.add('open');
 
   const[sR,tR,bR,mR]=await Promise.all([
@@ -1551,7 +1603,7 @@ async function openDebrief(simId){
   if(sim.statut==='en_cours'||sim.statut==='en_pause'){
     $('debriefBody').innerHTML=`<div style="padding:60px;text-align:center;">
       <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Cette simulation est ${sim.statut==='en_pause'?'en pause':'en cours'}.</p>
-      <button class="btn-gen" onclick="closeDebrief();resumeSimulation('${esc(simId)}')">Reprendre la simulation</button>
+      ${sim.statut==='en_pause'?`<button class="btn-gen" onclick="closeDebrief();resumeSimulation('${esc(simId)}')">Reprendre la simulation</button>`:'<p style="color:var(--muted-2);font-size:11px">Aucune action possible pour l\'instant.</p>'}
     </div>`;
     return;
   }
@@ -1581,15 +1633,16 @@ async function openDebrief(simId){
   });
   axesLegend+='</div>';
 
-  const duration=Number(sim.duree_secondes)||0;
+  // Utiliser audio_duree_secondes si dispo, sinon duree_secondes
+  const duration = Number(sim.audio_duree_secondes) || Number(sim.duree_secondes) || 0;
   const serpEvents=buildSerpEvents(bilan);
-  const serpHtml=renderSerpentineV2(serpEvents,duration);
+  const serpHtml=renderSerpentineV3(serpEvents,duration);
 
   let h=`
   <div class="db-hero">
     <div>
       <div class="db-tagline">${esc(ql.tagline||'Bilan à générer')}</div>
-      <div class="db-meta">${esc(simLabel(sim))} · ${sim.b2b_b2c?sim.b2b_b2c.toUpperCase():'—'} · ${fmtDur(sim.duree_secondes||0)} · ${fmtDate(sim.created_at)}</div>
+      <div class="db-meta">${esc(simLabel(sim))} · ${sim.b2b_b2c?sim.b2b_b2c.toUpperCase():'—'} · ${fmtDur(duration)} · ${fmtDate(sim.created_at)}</div>
     </div>
     <div class="db-score-block">
       <div class="db-score ${sc}">${note==null?'—':note}</div>
@@ -1629,22 +1682,95 @@ async function openDebrief(simId){
     </div>
   </div>`;
 
+  // ─── Comportements naturels ───
   const nats=ql.comportements_naturels||[];
   h+=`<details class="db-acc" open><summary><span class="db-acc-title">Ce qu'il fait naturellement</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
   if(!nats.length)h+='<div style="font-size:12px;color:var(--muted)">Aucun comportement identifié.</div>';
-  nats.forEach(i=>{const fw=(i.frameworks_associes||[]).map(f=>`<span class="chip chip-f">${esc(f)}</span>`).join('');h+=`<div class="qi"><div class="qi-chips"><button class="moment-btn" data-m="${Number(i.horodatage_secondes)||0}">${fmtSec(i.horodatage_secondes)}</button><span class="chip chip-c">${fmtM(i.niveau_certitude)}%</span>${fw}</div><div class="qi-text">${esc(i.description||'')}</div>${i.principe_nomme?`<div class="qi-note">${esc(i.principe_nomme)}</div>`:''}</div>`;});
+  nats.forEach(i=>{
+    const fw=(i.frameworks_associes||[]).map(f=>`<span class="chip chip-f">${esc(f)}</span>`).join('');
+    const scoreChip = i.score != null ? `<span class="chip chip-score">${Math.round(i.score)}/100</span>` : '';
+    h+=`<div class="qi">
+      <div class="qi-chips">
+        <button class="moment-btn" data-m="${Number(i.horodatage_secondes)||0}">${fmtSec(i.horodatage_secondes)}</button>
+        ${scoreChip}
+        ${i.niveau_certitude != null ? `<span class="chip chip-c">Certitude ${fmtM(i.niveau_certitude)}%</span>` : ''}
+        ${fw}
+      </div>`;
+    if(i.initiateur==='prospect' && i.extrait_initiateur){
+      h+=`<div class="qi-quote">« ${esc(i.extrait_initiateur)} »</div>`;
+    }
+    if(i.action_commercial){
+      h+=`<div class="qi-text"><strong>Ce que tu as fait :</strong> ${esc(i.action_commercial)}</div>`;
+    } else if(i.description){
+      h+=`<div class="qi-text">${esc(i.description)}</div>`;
+    }
+    if(i.impact_prospect){
+      h+=`<div class="qi-impact">Impact : ${esc(i.impact_prospect)}</div>`;
+    }
+    if(i.principe_nomme)h+=`<div class="qi-note">${esc(i.principe_nomme)}</div>`;
+    h+=`</div>`;
+  });
   h+='</div></details>';
 
+  // ─── Écarts ───
   const ecarts=ql.ecarts||[];
   h+=`<details class="db-acc"><summary><span class="db-acc-title">Ses écarts</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
   if(!ecarts.length)h+='<div style="font-size:12px;color:var(--muted)">Aucun écart.</div>';
-  ecarts.forEach(i=>{const tp=['adaptatif','instinctif','manquant'].includes(i.type)?i.type:'manquant';h+=`<div class="qi"><div class="qi-chips"><span class="chip chip-${tp}">${tp}</span><button class="moment-btn" data-m="${Number(i.horodatage_secondes)||0}">${fmtSec(i.horodatage_secondes)}</button></div><div class="qi-text">${esc(i.description||'')}</div><div class="qi-note">Avant : ${esc(i.effet_avant||'—')} · Après : ${esc(i.effet_apres||'—')}</div></div>`;});
+  ecarts.forEach(i=>{
+    const tp=['adaptatif','instinctif','manquant'].includes(i.type)?i.type:'manquant';
+    const scoreChip = i.score != null ? `<span class="chip chip-score">${Math.round(i.score)}/100</span>` : '';
+    h+=`<div class="qi">
+      <div class="qi-chips">
+        <span class="chip chip-${tp}">${tp}</span>
+        <button class="moment-btn" data-m="${Number(i.horodatage_secondes)||0}">${fmtSec(i.horodatage_secondes)}</button>
+        ${scoreChip}
+      </div>`;
+    if(i.initiateur==='prospect' && i.extrait_initiateur){
+      h+=`<div class="qi-quote">« ${esc(i.extrait_initiateur)} »</div>`;
+    }
+    if(i.action_commercial){
+      h+=`<div class="qi-text"><strong>Ce que tu as fait :</strong> ${esc(i.action_commercial)}</div>`;
+    } else if(i.description){
+      h+=`<div class="qi-text">${esc(i.description)}</div>`;
+    }
+    if(i.impact_prospect){
+      h+=`<div class="qi-impact">Impact : ${esc(i.impact_prospect)}</div>`;
+    }
+    if(i.effet_avant || i.effet_apres){
+      h+=`<div class="qi-note">Avant : ${esc(i.effet_avant||'—')} · Après : ${esc(i.effet_apres||'—')}</div>`;
+    }
+    h+=`</div>`;
+  });
   h+='</div></details>';
 
+  // ─── Moments de bascule ───
   const moments=ql.moments_bascule||[];
   h+=`<details class="db-acc"><summary><span class="db-acc-title">Moments de bascule</span><span class="db-acc-icon">+</span></summary><div class="db-acc-body">`;
   if(!moments.length)h+='<div style="font-size:12px;color:var(--muted)">Aucun moment.</div>';
-  moments.forEach(i=>{h+=`<div class="qi"><div class="qi-chips"><button class="moment-btn" data-m="${Number(i.horodatage_secondes)||0}">${fmtSec(i.horodatage_secondes)}</button></div><div class="qi-text"><strong>Déclencheur :</strong> ${esc(i.declencheur||'—')}<br>${esc(i.description||'')}</div></div>`;});
+  moments.forEach(i=>{
+    const scoreChip = i.score != null ? `<span class="chip chip-score">${Math.round(i.score)}/100</span>` : '';
+    h+=`<div class="qi">
+      <div class="qi-chips">
+        <button class="moment-btn" data-m="${Number(i.horodatage_secondes)||0}">${fmtSec(i.horodatage_secondes)}</button>
+        ${scoreChip}
+      </div>`;
+    if(i.initiateur==='prospect' && i.extrait_initiateur){
+      h+=`<div class="qi-quote">« ${esc(i.extrait_initiateur)} »</div>`;
+    }
+    if(i.action_commercial){
+      h+=`<div class="qi-text"><strong>Ce que tu as fait :</strong> ${esc(i.action_commercial)}</div>`;
+    }
+    if(i.impact_prospect){
+      h+=`<div class="qi-impact">Impact : ${esc(i.impact_prospect)}</div>`;
+    }
+    if(i.declencheur){
+      h+=`<div class="qi-note"><strong>Déclencheur :</strong> ${esc(i.declencheur)}</div>`;
+    }
+    if(i.description){
+      h+=`<div class="qi-note">${esc(i.description)}</div>`;
+    }
+    h+=`</div>`;
+  });
   h+='</div></details>';
 
   const coh=ql.coherence_interne||{};
@@ -1683,10 +1809,7 @@ async function openDebrief(simId){
 
   $('debriefBody').innerHTML=h;
 
-  // Charger l'audio en sticky
   await loadAudioSticky(simId);
-
-  // Binder le fil serpentant
   bindSerpentine(serpEvents, duration);
 
   $('dlTransBtn').addEventListener('click',()=>exportTranscriptionPdf(sim,tr));
@@ -1756,7 +1879,7 @@ async function loadAudioSticky(simId){
         setTimeout(()=>URL.revokeObjectURL(url),3000);
       }catch(e){showToast('Erreur : '+e.message,'error');}
     });
-  }catch(e){sticky.innerHTML='';sticky.classList.remove('sticky');}
+  }catch(e){sticky.innerHTML='';sticky.classList.remove('visible');}
 }
 
 // ═══ PDF EXPORT ═══
@@ -1766,7 +1889,6 @@ const INK='#18181B';
 const INK_2='#3F3F46';
 const MUTED='#71717A';
 const STONE_50='#FAFAF9';
-const STONE_100='#F2F1EF';
 const BORDER='#E4E4E7';
 const AMBER='#B45309';
 const RED='#B91C1C';
@@ -1795,6 +1917,7 @@ function generateLogoDataUrl(cb){
 
 function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
   const note=bilan?.note_globale!=null?Number(bilan.note_globale):null;
+  const duration=Number(sim.audio_duree_secondes)||Number(sim.duree_secondes)||0;
   const content=[];
 
   content.push({
@@ -1817,7 +1940,7 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
   content.push({
     columns:[
       {width:'*',text:`${simLabel(sim)}`,fontSize:11,bold:true,color:INK_2},
-      {width:'auto',text:`${sim.b2b_b2c?.toUpperCase()||'—'} · ${fmtDur(sim.duree_secondes||0)} · ${fmtDate(sim.created_at)}`,fontSize:10,color:MUTED}
+      {width:'auto',text:`${sim.b2b_b2c?.toUpperCase()||'—'} · ${fmtDur(duration)} · ${fmtDate(sim.created_at)}`,fontSize:10,color:MUTED}
     ],
     margin:[0,0,0,12]
   });
@@ -1830,50 +1953,19 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
     });
   }
 
-  const axes=[['Questions',met?.radar_questions],['Objections',met?.radar_objections],['Découverte',met?.radar_decouverte],['Closing',met?.radar_closing],['Rythme',met?.radar_rythme],['Pratiques',met?.radar_pratiques]];
-  const hasAnyAxis=axes.some(([,v])=>v!=null);
-  if(hasAnyAxis){
-    content.push({text:'RADAR DE PERFORMANCE',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
-    const rows=[];
-    axes.forEach(([k,v])=>{
-      const val=v!=null?Math.round(Number(v)):null;
-      rows.push([
-        {text:k,fontSize:10,color:INK_2,border:[false,false,false,false]},
-        {text:val!=null?`${val}/100`:'—',fontSize:10,bold:true,color:val!=null?scoreColor(val):MUTED,border:[false,false,false,false],alignment:'right'}
-      ]);
-    });
-    content.push({table:{widths:['*','auto'],body:rows},layout:{hLineWidth:()=>0.5,hLineColor:()=>BORDER,vLineWidth:()=>0},margin:[0,0,0,14]});
-  }
-
-  content.push({text:'MÉTRIQUES',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
-  content.push({
-    table:{
-      widths:['*','*','*'],
-      body:[
-        [
-          {stack:[{text:'Parole commercial',fontSize:9,color:MUTED},{text:fmtM(met?.ratio_parole_commercial,'%'),fontSize:16,bold:true,color:INK}],margin:[8,6,8,6]},
-          {stack:[{text:'Questions',fontSize:9,color:MUTED},{text:fmtM(met?.nb_questions_total),fontSize:16,bold:true,color:INK}],margin:[8,6,8,6]},
-          {stack:[{text:'Objections résolues',fontSize:9,color:MUTED},{text:fmtM(met?.taux_resolution_objections,'%'),fontSize:16,bold:true,color:INK}],margin:[8,6,8,6]}
-        ],
-        [
-          {stack:[{text:'Interruptions',fontSize:9,color:MUTED},{text:fmtM(met?.nb_interruptions),fontSize:16,bold:true,color:INK}],margin:[8,6,8,6]},
-          {stack:[{text:'Signaux exploités',fontSize:9,color:MUTED},{text:`${fmtM(met?.nb_signaux_exploites)}/${fmtM(met?.nb_signaux_achat)}`,fontSize:16,bold:true,color:INK}],margin:[8,6,8,6]},
-          {stack:[{text:'Engagement final',fontSize:9,color:MUTED},{text:fmtM(met?.score_engagement_final),fontSize:16,bold:true,color:INK}],margin:[8,6,8,6]}
-        ]
-      ]
-    },
-    layout:{hLineWidth:()=>0.5,vLineWidth:()=>0.5,hLineColor:()=>BORDER,vLineColor:()=>BORDER,fillColor:(i)=>i%2===0?STONE_50:null},
-    margin:[0,0,0,14]
-  });
-
   const nats=ql.comportements_naturels||[];
   if(nats.length){
     content.push({text:'CE QU\'IL FAIT NATURELLEMENT',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
     nats.forEach(item=>{
+      const block=[];
+      if(item.initiateur==='prospect' && item.extrait_initiateur)block.push({text:`« ${item.extrait_initiateur} »`,italics:true,fontSize:9,color:MUTED,margin:[0,0,0,3]});
+      if(item.action_commercial)block.push({text:item.action_commercial,fontSize:10,color:INK_2,lineHeight:1.5});
+      else if(item.description)block.push({text:item.description,fontSize:10,color:INK_2,lineHeight:1.5});
+      if(item.impact_prospect)block.push({text:`Impact : ${item.impact_prospect}`,fontSize:10,color:AMBER,bold:true,margin:[0,3,0,0]});
       content.push({
         table:{widths:[60,'*'],body:[[
-          {text:fmtSec(item.horodatage_secondes),fontSize:9,color:MUTED,border:[false,false,false,true],borderColor:[null,null,null,BORDER],margin:[8,6,8,6]},
-          {text:item.description||'',fontSize:10,color:INK_2,lineHeight:1.5,border:[false,false,false,true],borderColor:[null,null,null,BORDER],margin:[0,6,8,6]}
+          {text:fmtSec(item.horodatage_secondes)+(item.score!=null?`\n${Math.round(item.score)}/100`:''),fontSize:9,bold:true,color:scoreColor(item.score),margin:[8,6,8,6]},
+          {stack:block,margin:[0,6,8,6]}
         ]]},
         layout:{hLineWidth:()=>0,vLineWidth:()=>0},
         margin:[0,0,0,4]
@@ -1886,12 +1978,15 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
   if(ecarts.length){
     content.push({text:'ÉCARTS',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
     ecarts.forEach(item=>{
-      const label=item.type||'manquant';
+      const block=[];
+      if(item.initiateur==='prospect' && item.extrait_initiateur)block.push({text:`« ${item.extrait_initiateur} »`,italics:true,fontSize:9,color:MUTED,margin:[0,0,0,3]});
+      if(item.action_commercial)block.push({text:item.action_commercial,fontSize:10,color:INK_2,lineHeight:1.5});
+      else if(item.description)block.push({text:item.description,fontSize:10,color:INK_2,lineHeight:1.5});
+      if(item.impact_prospect)block.push({text:`Impact : ${item.impact_prospect}`,fontSize:10,color:AMBER,bold:true,margin:[0,3,0,0]});
       content.push({
-        table:{widths:[70,60,'*'],body:[[
-          {text:label,fontSize:9,bold:true,color:label==='adaptatif'?SAGE:label==='instinctif'?AMBER:RED,margin:[8,6,4,6]},
-          {text:fmtSec(item.horodatage_secondes),fontSize:9,color:MUTED,margin:[4,6,4,6]},
-          {text:item.description||'',fontSize:10,color:INK_2,lineHeight:1.5,margin:[4,6,8,6]}
+        table:{widths:[60,'*'],body:[[
+          {text:fmtSec(item.horodatage_secondes)+(item.score!=null?`\n${Math.round(item.score)}/100`:''),fontSize:9,bold:true,color:RED,margin:[8,6,8,6]},
+          {stack:block,margin:[0,6,8,6]}
         ]]},
         layout:{hLineWidth:()=>0,vLineWidth:()=>0},
         margin:[0,0,0,4]
@@ -1904,10 +1999,15 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
   if(moments.length){
     content.push({text:'MOMENTS DE BASCULE',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
     moments.forEach(item=>{
+      const block=[];
+      if(item.initiateur==='prospect' && item.extrait_initiateur)block.push({text:`« ${item.extrait_initiateur} »`,italics:true,fontSize:9,color:MUTED,margin:[0,0,0,3]});
+      if(item.action_commercial)block.push({text:item.action_commercial,fontSize:10,color:INK_2,lineHeight:1.5});
+      if(item.impact_prospect)block.push({text:`Impact : ${item.impact_prospect}`,fontSize:10,color:AMBER,bold:true,margin:[0,3,0,0]});
+      if(item.declencheur)block.push({text:`Déclencheur : ${item.declencheur}`,fontSize:9,italics:true,color:MUTED,margin:[0,3,0,0]});
       content.push({
         table:{widths:[60,'*'],body:[[
-          {text:fmtSec(item.horodatage_secondes),fontSize:9,color:AMBER,bold:true,margin:[8,6,8,6]},
-          {stack:[{text:item.declencheur||'',fontSize:10,bold:true,color:INK_2},{text:item.description||'',fontSize:10,color:INK_2,lineHeight:1.5,margin:[0,3,0,0]}],margin:[0,6,8,6]}
+          {text:fmtSec(item.horodatage_secondes)+(item.score!=null?`\n${Math.round(item.score)}/100`:''),fontSize:9,bold:true,color:AMBER,margin:[8,6,8,6]},
+          {stack:block,margin:[0,6,8,6]}
         ]]},
         layout:{hLineWidth:()=>0,vLineWidth:()=>0},
         margin:[0,0,0,4]
@@ -1955,7 +2055,7 @@ function exportTranscriptionPdf(sim,tr){
         ]},
         {width:'auto',alignment:'right',stack:[
           {text:simLabel(sim),fontSize:12,bold:true,color:INK},
-          {text:`${sim.b2b_b2c?.toUpperCase()||'—'} · ${fmtDur(sim.duree_secondes||0)}`,fontSize:9,color:MUTED,alignment:'right',margin:[0,2,0,0]}
+          {text:`${sim.b2b_b2c?.toUpperCase()||'—'} · ${fmtDur(sim.audio_duree_secondes||sim.duree_secondes||0)}`,fontSize:9,color:MUTED,alignment:'right',margin:[0,2,0,0]}
         ]}
       ],
       margin:[0,0,0,10]
