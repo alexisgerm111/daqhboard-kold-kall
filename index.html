@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kold Kall — Studio</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%233B6B50'/%3E%3Cpath d='M50 22a12 12 0 0 0-12 12v20a12 12 0 0 0 24 0V34a12 12 0 0 0-12-12z' fill='white'/%3E%3Cpath d='M74 48v4a24 24 0 0 1-48 0v-4' fill='none' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='50' y1='76' x2='50' y2='86' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -34,10 +35,10 @@ button,input,select,textarea{font-family:inherit;}
 button{cursor:pointer;}
 .hidden{display:none !important;}
 
-/* ── LOGIN ─────────────────────────────── */
+/* LOGIN */
 .login-screen{position:fixed;inset:0;background:var(--stone-50);display:flex;align-items:center;justify-content:center;z-index:900;transition:opacity .3s;}
 .login-screen.hidden{opacity:0;pointer-events:none;}
-.login-wrap{width:100%;max-width:400px;display:flex;flex-direction:column;}
+.login-wrap{width:100%;max-width:400px;}
 .login-brand{display:flex;align-items:center;gap:10px;margin-bottom:32px;}
 .login-logo{width:36px;height:36px;background:var(--sage);border-radius:8px;display:flex;align-items:center;justify-content:center;}
 .login-logo svg{width:20px;height:20px;}
@@ -56,10 +57,10 @@ button{cursor:pointer;}
 .btn-main:active{transform:scale(.98);}
 .btn-main:disabled{opacity:.5;cursor:wait;}
 
-/* ── APP ─────────────────────────────────── */
+/* APP */
 .app{display:none;height:100vh;flex-direction:column;}
 .app.visible{display:flex;}
-.topbar{height:56px;flex-shrink:0;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:0;position:relative;z-index:50;}
+.topbar{height:56px;flex-shrink:0;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:relative;z-index:50;}
 .topbar-brand{display:flex;align-items:center;gap:9px;margin-right:40px;flex-shrink:0;}
 .topbar-logo{width:28px;height:28px;background:var(--sage);border-radius:6px;display:flex;align-items:center;justify-content:center;}
 .topbar-logo svg{width:16px;height:16px;}
@@ -87,15 +88,12 @@ button{cursor:pointer;}
 .page-title{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;}
 .page-sub{font-size:13px;color:var(--muted);}
 
-/* Stats */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
 .stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow-xs);}
 .stat-label{font-size:11px;font-weight:500;color:var(--muted);margin-bottom:8px;}
 .stat-value{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1;}
 .stat-delta{font-size:11px;color:var(--sage);font-weight:500;margin-top:5px;}
-.stat-delta.neg{color:var(--red);}
 
-/* Paused banner (NEW) */
 .paused-banner{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);padding:14px 18px;margin-bottom:18px;}
 .paused-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--amber);margin-bottom:10px;}
 .paused-list{display:flex;flex-direction:column;gap:8px;}
@@ -107,7 +105,6 @@ button{cursor:pointer;}
 .btn-resume:hover{background:var(--sage-mid);}
 .btn-resume:disabled{opacity:.5;cursor:wait;}
 
-/* Sessions */
 .sessions-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .section-label{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--ink-2);}
 .filter-row{display:flex;gap:6px;}
@@ -133,9 +130,6 @@ button{cursor:pointer;}
 .score-mid{color:var(--amber);}
 .score-low{color:var(--red);}
 .score-none{color:var(--muted-2);}
-.delta-chip{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:500;}
-.delta-chip.up{color:var(--sage);}
-.delta-chip.down{color:var(--red);}
 .btn-detail{padding:5px 12px;border-radius:var(--radius-sm);border:1px solid var(--border-2);font-size:12px;font-weight:500;color:var(--ink-2);background:var(--white);cursor:pointer;transition:all .15s;}
 .btn-detail:hover{background:var(--stone-100);}
 .btn-detail.primary{background:var(--sage);color:#fff;border-color:var(--sage);}
@@ -145,7 +139,6 @@ button{cursor:pointer;}
 .empty-state svg{width:40px;height:40px;margin-bottom:14px;color:var(--border-2);}
 .empty-state p{font-size:14px;}
 
-/* Ranking */
 .ranking-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .ranking-table{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-xs);overflow:hidden;}
 .ranking-table-header{padding:14px 18px;border-bottom:1px solid var(--border);background:var(--stone-100);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--ink-2);}
@@ -162,7 +155,7 @@ button{cursor:pointer;}
 .progression-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-xs);padding:18px;}
 .prog-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:16px;}
 
-/* Wizard modal */
+/* WIZARD */
 .wizard-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.35);display:flex;align-items:center;justify-content:center;z-index:300;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(2px);}
 .wizard-overlay.open{opacity:1;pointer-events:all;}
 .wizard-modal{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:min(600px,96vw);max-height:90vh;display:flex;flex-direction:column;transform:scale(.97) translateY(8px);transition:transform .25s var(--ease);overflow:hidden;}
@@ -237,7 +230,7 @@ button{cursor:pointer;}
 .btn-create:active{transform:scale(.98);}
 .btn-create:disabled{opacity:.5;cursor:wait;}
 
-/* Debrief panel */
+/* DEBRIEF */
 .debrief-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.35);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px);}
 .debrief-overlay.open{opacity:1;pointer-events:all;}
 .debrief-panel{position:fixed;top:0;right:0;bottom:0;width:min(840px,96vw);background:var(--white);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .30s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;overflow:hidden;z-index:201;}
@@ -250,9 +243,22 @@ button{cursor:pointer;}
 .btn-ghost{padding:6px 12px;border:1px solid var(--border-2);border-radius:var(--radius-sm);font-size:12px;font-weight:500;color:var(--ink-2);background:var(--white);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
 .btn-ghost:hover{background:var(--stone-100);border-color:var(--muted-2);}
 .btn-ghost svg{width:13px;height:13px;}
-.debrief-body{flex:1;min-height:0;overflow-y:auto;padding:28px 32px 60px;display:flex;flex-direction:column;gap:24px;}
 
-.db-hero{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;}
+/* STICKY AUDIO */
+.debrief-audio-sticky{flex-shrink:0;padding:10px 24px;background:var(--white);border-bottom:1px solid var(--border);display:none;}
+.debrief-audio-sticky.visible{display:block;}
+.audio-player{background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:12px;}
+.audio-btn{width:36px;height:36px;border-radius:50%;background:var(--sage);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.audio-btn:hover{background:var(--sage-mid);}
+.audio-btn svg{width:16px;height:16px;}
+.audio-track{flex:1;height:4px;background:var(--border-2);border-radius:99px;position:relative;cursor:pointer;}
+.audio-fill{height:100%;background:var(--sage);border-radius:99px;width:0%;pointer-events:none;}
+.audio-thumb{width:12px;height:12px;border-radius:50%;background:var(--sage);border:2px solid var(--white);box-shadow:var(--shadow-sm);position:absolute;top:50%;transform:translate(-50%,-50%);pointer-events:none;left:0%;}
+.audio-time{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+.debrief-body{flex:1;min-height:0;overflow-y:auto;padding:24px 32px 60px;display:flex;flex-direction:column;gap:20px;}
+
+.db-hero{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-shrink:0;}
 .db-tagline{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;line-height:1.2;letter-spacing:-.03em;color:var(--ink);max-width:520px;}
 .db-meta{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6;}
 .db-score-block{text-align:right;flex-shrink:0;}
@@ -267,15 +273,6 @@ button{cursor:pointer;}
 .db-section-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--stone-50);}
 .db-section-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:-.01em;}
 .db-section-body{padding:20px;}
-
-.audio-player{background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:14px;}
-.audio-btn{width:36px;height:36px;border-radius:50%;background:var(--sage);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s;}
-.audio-btn:hover{background:var(--sage-mid);}
-.audio-btn svg{width:16px;height:16px;}
-.audio-track{flex:1;height:4px;background:var(--border-2);border-radius:99px;position:relative;cursor:pointer;}
-.audio-fill{height:100%;background:var(--sage);border-radius:99px;width:0%;pointer-events:none;}
-.audio-thumb{width:12px;height:12px;border-radius:50%;background:var(--sage);border:2px solid var(--white);box-shadow:var(--shadow-sm);position:absolute;top:50%;transform:translate(-50%,-50%);pointer-events:none;left:0%;}
-.audio-time{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
 
 .radar-svg-wrap{display:flex;justify-content:center;flex-shrink:0;}
 .radar-svg{width:220px;height:220px;display:block;flex-shrink:0;}
@@ -294,15 +291,27 @@ button{cursor:pointer;}
 .m-label{font-size:11px;color:var(--muted);}
 .m-sub{font-size:10px;color:var(--muted-2);}
 
-/* Serpentine */
-.serpentine-wrap{margin-top:8px;flex-shrink:0;}
-.serpentine-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
-.serpentine-toggle{display:flex;gap:2px;background:var(--stone-100);border:1px solid var(--border);border-radius:99px;padding:2px;}
-.serp-tab{padding:5px 12px;border-radius:99px;border:none;background:transparent;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
-.serp-tab.active{background:var(--white);color:var(--ink);box-shadow:var(--shadow-xs);}
-.serp-tab:disabled{opacity:.4;cursor:not-allowed;}
-.serp-svg{width:100%;height:130px;display:block;}
-.serp-info{font-size:11px;color:var(--muted);text-align:center;margin-top:6px;}
+/* SERPENTINE V2 */
+.serpentine-wrap{position:relative;padding:8px 0 4px;flex-shrink:0;}
+.serp-svg{width:100%;height:200px;display:block;}
+.serp-svg circle.point{cursor:pointer;transition:r .15s;}
+.serp-svg circle.point:hover{r:8;}
+.serp-svg circle.halo{pointer-events:none;opacity:0;transition:opacity .15s;}
+.serp-svg g.pgroup:hover circle.halo{opacity:0.25;}
+.serp-tooltip{position:absolute;background:var(--ink);color:#fff;font-size:11px;padding:6px 10px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap;transform:translate(-50%,-100%);z-index:10;}
+.serp-tooltip.visible{opacity:1;}
+.serp-detail{margin-top:12px;padding:14px;background:var(--stone-50);border:1px solid var(--border);border-radius:8px;font-size:12px;line-height:1.6;color:var(--ink-2);}
+.serp-detail.empty{color:var(--muted-2);font-style:italic;}
+.serp-detail strong{color:var(--ink);font-weight:600;}
+.serp-detail .row{margin-bottom:4px;}
+.serp-detail .row:last-child{margin-bottom:0;}
+.serp-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;margin-right:6px;}
+.serp-tag.vert{background:var(--sage-light);color:var(--sage);}
+.serp-tag.rouge{background:var(--red-bg);color:var(--red);}
+.serp-tag.orange{background:var(--amber-bg);color:var(--amber);}
+.serp-legend{display:flex;gap:16px;font-size:11px;color:var(--muted);margin-top:10px;justify-content:center;}
+.serp-legend span{display:flex;align-items:center;gap:5px;}
+.serp-legend .dot{width:10px;height:10px;border-radius:50%;}
 
 .db-acc{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;flex-shrink:0;}
 .db-acc+.db-acc{margin-top:8px;}
@@ -341,8 +350,9 @@ details[open] summary{border-bottom:1px solid var(--border);}
 .coh-cell strong{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px;text-transform:uppercase;}
 .coh-cell div{font-size:12px;line-height:1.6;color:var(--ink-2);}
 
+/* TRANSCRIPTION */
 .t-list{max-height:400px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);}
-.t-row{display:grid;grid-template-columns:44px 96px 1fr;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;font-size:12px;transition:background .1s;}
+.t-row{display:grid;grid-template-columns:44px 96px 1fr auto;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;font-size:12px;transition:background .1s;align-items:center;}
 .t-row:last-child{border-bottom:none;}
 .t-row:hover{background:var(--stone-50);}
 .t-row.active{background:var(--sage-light);box-shadow:inset 3px 0 0 var(--sage);}
@@ -351,6 +361,8 @@ details[open] summary{border-bottom:1px solid var(--border);}
 .t-who{font-weight:600;color:var(--muted);}
 .t-who.c{color:var(--sage);}
 .t-text{color:var(--ink-2);line-height:1.55;}
+.t-play{opacity:0;font-size:10px;font-weight:600;color:var(--sage);transition:opacity .15s;white-space:nowrap;}
+.t-row:hover .t-play{opacity:1;}
 
 .bilan-gen{display:flex;align-items:center;gap:16px;background:var(--stone-50);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;flex-shrink:0;}
 .bg-left{flex:1;min-width:0;}
@@ -364,22 +376,22 @@ details[open] summary{border-bottom:1px solid var(--border);}
 .btn-gen:active{transform:scale(.98);}
 .btn-gen:disabled{opacity:.5;cursor:wait;}
 
-/* Toast */
+/* TOAST */
 .kk-toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120%);max-width:min(520px,calc(100vw - 32px));padding:13px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;text-align:center;background:rgba(24,24,27,0.95);color:#fff;box-shadow:var(--shadow-lg);z-index:9999;opacity:0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s;}
 .kk-toast.visible{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto;}
 .kk-toast.error{background:linear-gradient(135deg,rgba(185,28,28,0.96),rgba(153,27,27,0.96));}
 .kk-toast.success{background:linear-gradient(135deg,rgba(59,107,80,0.96),rgba(78,138,104,0.96));}
 .kk-toast.warning{background:linear-gradient(135deg,rgba(180,83,9,0.96),rgba(146,64,14,0.96));}
 
-/* PDF preview modal */
-.pdf-preview-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.5);z-index:400;display:none;align-items:center;justify-content:center;padding:32px;}
+/* PDF PREVIEW */
+.pdf-preview-overlay{position:fixed;inset:0;background:rgba(24,24,27,0.55);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
 .pdf-preview-overlay.open{display:flex;}
-.pdf-preview-modal{background:var(--white);border-radius:var(--radius-lg);width:min(900px,100%);max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow-lg);}
+.pdf-preview-modal{background:var(--white);border-radius:var(--radius-lg);width:75vw;height:75vh;max-width:96vw;max-height:96vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow-lg);}
 .pdf-preview-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .pdf-preview-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;}
 .pdf-preview-actions{display:flex;gap:8px;}
-.pdf-preview-body{flex:1;min-height:0;overflow:hidden;background:var(--stone-100);}
-.pdf-preview-body iframe{width:100%;height:100%;border:none;}
+.pdf-preview-body{flex:1;min-height:0;background:var(--stone-100);}
+.pdf-preview-body iframe{width:100%;height:100%;border:none;display:block;}
 
 @media(max-width:900px){
   .stats-row{grid-template-columns:repeat(2,1fr);}
@@ -387,23 +399,25 @@ details[open] summary{border-bottom:1px solid var(--border);}
   .metrics-grid{grid-template-columns:repeat(2,1fr);}
   .field-row-2,.pick-grid,.coh-grid,.ranking-grid{grid-template-columns:1fr;}
   .radar-axes-legend{grid-template-columns:1fr 1fr;}
+  .pdf-preview-modal{width:92vw;height:80vh;}
 }
 @media(max-width:600px){
   .view-inner{padding:16px;}
   .topbar{padding:0 16px;}
   .session-row{grid-template-columns:1fr auto;gap:8px;}
   .session-row.header-row{display:none;}
-  .col-tag,.col-dur,.col-delta{display:none;}
+  .col-tag,.col-dur{display:none;}
   .debrief-body{padding:20px 16px 48px;}
   .db-tagline{font-size:18px;}
   .db-score{font-size:36px;}
   .debrief-actions .btn-ghost span{display:none;}
+  .t-row{grid-template-columns:44px 60px 1fr;}
+  .t-play{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══ -->
 <div class="login-screen" id="loginScreen">
   <div class="login-wrap">
     <div class="login-brand">
@@ -429,7 +443,6 @@ details[open] summary{border-bottom:1px solid var(--border);}
   </div>
 </div>
 
-<!-- ══ APP ══ -->
 <div class="app" id="app">
   <header class="topbar">
     <div class="topbar-brand">
@@ -455,7 +468,6 @@ details[open] summary{border-bottom:1px solid var(--border);}
   </header>
 
   <div class="content">
-    <!-- Sessions -->
     <div class="view active" id="view-sessions">
       <div class="view-inner">
         <div class="page-header">
@@ -465,8 +477,6 @@ details[open] summary{border-bottom:1px solid var(--border);}
         <div id="sessionsContent"></div>
       </div>
     </div>
-
-    <!-- Ranking -->
     <div class="view" id="view-ranking">
       <div class="view-inner">
         <div class="page-header">
@@ -479,7 +489,6 @@ details[open] summary{border-bottom:1px solid var(--border);}
   </div>
 </div>
 
-<!-- ══ WIZARD ══ -->
 <div class="wizard-overlay" id="wizardOverlay">
   <div class="wizard-modal" id="wizardModal">
     <div class="wizard-header">
@@ -505,7 +514,6 @@ details[open] summary{border-bottom:1px solid var(--border);}
   </div>
 </div>
 
-<!-- ══ DEBRIEF ══ -->
 <div class="debrief-overlay" id="debriefOverlay">
   <div class="debrief-panel" id="debriefPanel">
     <div class="debrief-topbar">
@@ -515,11 +523,11 @@ details[open] summary{border-bottom:1px solid var(--border);}
       </button>
       <div class="debrief-actions" id="debriefActions"></div>
     </div>
+    <div class="debrief-audio-sticky" id="debriefAudioSticky"></div>
     <div class="debrief-body" id="debriefBody"></div>
   </div>
 </div>
 
-<!-- ══ PDF PREVIEW ══ -->
 <div class="pdf-preview-overlay" id="pdfPreviewOverlay">
   <div class="pdf-preview-modal">
     <div class="pdf-preview-header">
@@ -536,9 +544,6 @@ details[open] summary{border-bottom:1px solid var(--border);}
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════════════════
-//  CONFIG
-// ═══════════════════════════════════════════════════════════════════════════
 const SUPABASE_URL='https://vjvyzbojcbwmfudkamlh.supabase.co';
 const SUPABASE_KEY='sb_publishable_H-wuFrWTNgDEP0fwSWnqNg_c8dJMQZM';
 const SIM_URL='https://agent-vocal-39hz.onrender.com';
@@ -546,16 +551,12 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 const INTENSITE_DESCS={1:'Très ouvert, facile à convaincre',2:'Plutôt ouvert, quelques réserves',3:'Neutre : ni ouvert ni fermé',4:'Méfiant, demande à être convaincu',5:'Très difficile, exigeant voire agressif'};
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  ÉTAT
-// ═══════════════════════════════════════════════════════════════════════════
 let me=null,myProfile=null,latestAutoOpen=null;
 let currentDebriefSimId=null;
 let currentAudio=null;
 let pausedSims=[];
 let allSims=[];
 let currentSimFilter='all';
-let currentSerpMode='mine';
 
 const ws={
   step:1,sessionId:null,b2b_b2c:null,mode:null,
@@ -568,9 +569,6 @@ const ws={
   savedPersonas:[],savedVendeurs:[]
 };
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  HELPERS
-// ═══════════════════════════════════════════════════════════════════════════
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 const fmtDate=d=>{const dt=new Date(d);return dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})+' · '+dt.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});};
@@ -598,9 +596,6 @@ async function apiCall(path,opts={}){
   return fetch(`${SIM_URL}${path}`,{...opts,headers:hdrs});
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  LOGIN
-// ═══════════════════════════════════════════════════════════════════════════
 function showLogin(v){$('loginScreen').classList.toggle('hidden',!v);$('app').classList.toggle('visible',!v);}
 function showLoginErr(m){const e=$('loginErr');e.classList.toggle('show',!!m);e.textContent=m||'';}
 
@@ -647,9 +642,7 @@ async function renderView(v){
   else if(v==='ranking')await renderRanking();
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  SESSIONS
-// ═══════════════════════════════════════════════════════════════════════════
+// ═══ SESSIONS ═══
 async function renderSessions(){
   const c=$('sessionsContent');
   c.innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Chargement…</div>';
@@ -666,20 +659,16 @@ async function renderSessions(){
   if(error){c.innerHTML=`<div style="padding:60px;text-align:center;color:var(--red)">${esc(error.message)}</div>`;return;}
   allSims=sims||[];
 
-  // Stats
   const finished=allSims.filter(s=>s.statut==='terminee');
   const graded=finished.filter(s=>s.bilans?.[0]?.note_globale!=null);
   const avg=graded.length?Math.round(graded.reduce((sum,x)=>sum+Number(x.bilans[0].note_globale),0)/graded.length):0;
   const best=graded.length?Math.max(...graded.map(x=>Number(x.bilans[0].note_globale))):0;
   const monthCount=allSims.filter(s=>{const d=new Date(s.created_at);const now=new Date();return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
 
-  // Résolution objections moyenne
   const{data:metrs}=await sb.from('metriques').select('taux_resolution_objections,simulation_id').in('simulation_id',finished.map(s=>s.id).filter(Boolean));
   const objRate=metrs?.length?Math.round(metrs.reduce((sum,m)=>sum+(Number(m.taux_resolution_objections)||0),0)/metrs.length):0;
 
   let h='';
-
-  // Stats
   if(finished.length){
     h+=`<div class="stats-row">
       <div class="stat-card"><div class="stat-label">Score moyen</div><div class="stat-value">${avg||'—'}</div><div class="stat-delta">${graded.length} session${graded.length>1?'s':''} notée${graded.length>1?'s':''}</div></div>
@@ -689,7 +678,6 @@ async function renderSessions(){
     </div>`;
   }
 
-  // Paused banner
   if(pausedSims.length){
     h+=`<div class="paused-banner">
       <div class="paused-title">⏸ ${pausedSims.length} simulation${pausedSims.length>1?'s':''} en pause</div>
@@ -706,7 +694,6 @@ async function renderSessions(){
     </div>`;
   }
 
-  // Header avec filtres
   h+=`<div class="sessions-header">
     <span class="section-label">Historique</span>
     <div class="filter-row">
@@ -731,10 +718,10 @@ async function renderSessions(){
     h+=`<div class="session-list">
       <div class="session-row header-row">
         <div class="col-head">Session</div>
-        <div class="col-head col-tag">Type</div>
+        <div class="col-head">Type</div>
         <div class="col-head col-dur">Durée</div>
         <div class="col-head">Score</div>
-        <div class="col-head col-delta">Évolution</div>
+        <div class="col-head">Statut</div>
         <div></div>
       </div>`;
     filtered.forEach(s=>{
@@ -743,17 +730,27 @@ async function renderSessions(){
       const nd=note!=null?`${note}`:'—';
       const tag=simTag(s);
       const dir=myProfile?.role!=='commercial'&&s.profiles?` — ${esc(s.profiles.prenom||'')} ${esc(s.profiles.nom||'')}`:'';
-      const isPaused=s.statut==='en_pause'||s.statut==='en_cours';
+      const isPaused=s.statut==='en_pause';
+      const isEnCours=s.statut==='en_cours';
+      let actionBtn='';
+      if(isPaused){
+        actionBtn=`<button class="btn-detail primary" data-resume="${esc(s.id)}">Reprendre</button>`;
+      }else if(isEnCours){
+        actionBtn=`<button class="btn-detail" data-debrief="${esc(s.id)}">Débrief partiel</button>`;
+      }else{
+        actionBtn=`<button class="btn-detail" data-debrief="${esc(s.id)}">Débrief</button>`;
+      }
+      const statutLabel={terminee:'Terminée',en_cours:'En cours',en_pause:'En pause',preparation:'Préparation',erreur_preparation:'Erreur'}[s.statut]||s.statut||'—';
       h+=`<div class="session-row" data-id="${esc(s.id)}">
         <div>
           <div class="session-type">${esc(simLabel(s))}${dir}</div>
           <div class="session-meta">${fmtDate(s.created_at)}</div>
         </div>
-        <div class="col-tag"><span class="session-tag ${tag.cls}">${tag.label}</span></div>
+        <div><span class="session-tag ${tag.cls}">${tag.label}</span></div>
         <div class="session-duration col-dur">${fmtDur(s.duree_secondes||0)}</div>
         <div class="session-score score-${nc}">${esc(nd)}</div>
-        <div class="col-delta">${note!=null?'<span class="delta-chip up">—</span>':''}</div>
-        <div>${isPaused?`<button class="btn-detail primary" data-resume="${esc(s.id)}">Reprendre</button>`:`<button class="btn-detail" data-debrief="${esc(s.id)}">Débrief</button>`}</div>
+        <div style="font-size:11px;color:var(--muted)">${esc(statutLabel)}</div>
+        <div>${actionBtn}</div>
       </div>`;
     });
     h+='</div>';
@@ -761,7 +758,6 @@ async function renderSessions(){
 
   c.innerHTML=h;
 
-  // Bindings
   c.querySelectorAll('.filter-chip').forEach(ch=>ch.addEventListener('click',()=>{currentSimFilter=ch.dataset.filter;renderSessions();}));
   c.querySelectorAll('[data-debrief]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openDebrief(b.dataset.debrief);}));
   c.querySelectorAll('[data-resume]').forEach(b=>b.addEventListener('click',async e=>{e.stopPropagation();const id=b.dataset.resume;b.disabled=true;b.textContent='…';await resumeSimulation(id);b.disabled=false;b.textContent='Reprendre';}));
@@ -771,7 +767,7 @@ async function renderSessions(){
     const id=r.dataset.id;
     if(!id)return;
     const sim=allSims.find(x=>x.id===id);
-    if(sim&&(sim.statut==='en_cours'||sim.statut==='en_pause'))return;
+    if(sim&&sim.statut==='en_pause')return;
     openDebrief(id);
   }));
 
@@ -786,9 +782,6 @@ async function renderSessions(){
 
 async function resumeSimulation(simulationId){
   try{
-    const r=await apiCall('/api/simulation/resume',{method:'POST',body:JSON.stringify({simulationId})});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.error||'Erreur');
     const{data:{session}}=await sb.auth.getSession();
     if(!session?.access_token||!session?.refresh_token)throw new Error('Session expirée.');
     const hR=await fetch(`${SIM_URL}/api/auth/handshake`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({refresh_token:session.refresh_token})});
@@ -798,9 +791,7 @@ async function resumeSimulation(simulationId){
   }catch(e){showToast('Reprise impossible : '+e.message,'error');}
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  RANKING
-// ═══════════════════════════════════════════════════════════════════════════
+// ═══ RANKING ═══
 async function renderRanking(){
   const c=$('rankingContent');
   c.innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Chargement…</div>';
@@ -818,30 +809,18 @@ async function renderRanking(){
   const rank=Object.keys(us).map(uid=>({uid,avg:us[uid].cnt?Math.round(us[uid].tot/us[uid].cnt):0,profile:us[uid].profile,cnt:us[uid].cnt})).sort((a,b)=>b.avg-a.avg);
 
   let h='<div class="ranking-grid">';
-
-  // Table
-  h+=`<div class="ranking-table">
-    <div class="ranking-table-header">Classement équipe</div>`;
+  h+=`<div class="ranking-table"><div class="ranking-table-header">Classement équipe</div>`;
   if(!rank.length)h+='<div style="padding:20px;font-size:13px;color:var(--muted)">Aucune donnée.</div>';
   else rank.forEach((item,i)=>{
     const name=item.profile?`${item.profile.prenom||''} ${item.profile.nom||''}`.trim():'Utilisateur';
     const rc=i===0?'gold':i===1?'silver':i===2?'bronze':'other';
-    h+=`<div class="rank-row">
-      <div class="rank-pos ${rc}">${i+1}</div>
-      <div class="rank-name">${esc(name)}</div>
-      <div><span class="rank-score">${item.avg}</span><span class="rank-count">/100 · ${item.cnt} session${item.cnt>1?'s':''}</span></div>
-    </div>`;
+    h+=`<div class="rank-row"><div class="rank-pos ${rc}">${i+1}</div><div class="rank-name">${esc(name)}</div><div><span class="rank-score">${item.avg}</span><span class="rank-count">/100 · ${item.cnt} session${item.cnt>1?'s':''}</span></div></div>`;
   });
   h+='</div>';
 
-  // Progression
   const mySims=(ss||[]).filter(s=>s.user_id===me.id).slice(-8);
   const points=mySims.map(s=>Number(s.bilans?.[0]?.note_globale)||0);
-  h+=`<div class="progression-card">
-    <div class="prog-title">Votre progression — dernières sessions</div>
-    ${svgProgression(points)}
-  </div>`;
-
+  h+=`<div class="progression-card"><div class="prog-title">Votre progression — dernières sessions</div>${svgProgression(points)}</div>`;
   h+='</div>';
   c.innerHTML=h;
 }
@@ -868,9 +847,7 @@ function svgProgression(points){
   return svg;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  WIZARD
-// ═══════════════════════════════════════════════════════════════════════════
+// ═══ WIZARD ═══
 function resetWS(){Object.assign(ws,{step:1,sessionId:null,b2b_b2c:null,mode:null,v_type:'',v_product:'',v_url:'',p_role:'',p_type:'',p_url:'',p_profile:'',interview:null,phase:null,prev_id:null,cont:null,contMode:null,intensite:3,savedPersonaId:null,savedVendeurId:null});}
 
 async function loadSavedPersonas(){try{const r=await apiCall('/api/personas/list');if(!r.ok)return;const d=await r.json();ws.savedPersonas=d.personas||[];}catch(_){ws.savedPersonas=[];}}
@@ -889,7 +866,6 @@ function closeWizard(){$('wizardOverlay').classList.remove('open');}
 $('wizardClose').addEventListener('click',closeWizard);
 $('wizardOverlay').addEventListener('click',e=>{if(e.target===$('wizardOverlay'))closeWizard();});
 
-// Mapping poste → role
 function mapPosteToRole(poste){
   if(!poste)return '';
   const n=String(poste).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -915,6 +891,27 @@ function renderWizardStep(){
   $('wizNext').style.display=ws.step===3?'':'none';
   $('wizNext').onclick=wizNext;
   $('wizBack').onclick=wizBack;
+
+  // Titre contextuel selon l'étape
+  if(ws.step===1){
+    $('wizardStepTitle').textContent='Type de vente';
+    $('wizardStepSub').textContent='Le scénario et la psychologie du prospect s\'adaptent à votre contexte.';
+  }else if(ws.step===2){
+    $('wizardStepTitle').textContent='Nouveau ou suite';
+    $('wizardStepSub').textContent='Créez un prospect inédit ou reprenez une relation existante.';
+  }else if(ws.step===3){
+    if(ws.mode==='continue'){
+      $('wizardStepTitle').textContent='Simulation à continuer';
+      $('wizardStepSub').textContent='Choisissez la simulation précédente et la nouvelle phase à travailler.';
+    }else{
+      $('wizardStepTitle').textContent='Votre contexte et votre prospect';
+      $('wizardStepSub').textContent='Décrivez ce que vous vendez et à qui. Une URL suffit pour remplir automatiquement.';
+    }
+  }else if(ws.step===4){
+    $('wizardStepTitle').textContent='Type d\'entretien';
+    $('wizardStepSub').textContent='Cold Call ou Rendez-vous structuré.';
+  }
+
   $('wizardBody').innerHTML=renderWizardBody();
   bindWizardEvents();
 }
@@ -954,12 +951,8 @@ function bindWizardEvents(){
           // Prospect
           if(ws.b2b_b2c==='b2b'){
             const role=mapPosteToRole(p.poste);
-            if(role){ws.p_role=role;}
-            if(p.secteur||p.vendeur_type_entreprise){
-              // Secteur du prospect : on utilise le secteur du persona (qui vient de identite.secteur)
-              const sect=p.secteur||'';
-              if(sect&&!ws.p_type)ws.p_type=sect;
-            }
+            if(role)ws.p_role=role;
+            if(p.secteur&&!ws.p_type)ws.p_type=p.secteur;
             const pr=$('p-role-select'),pt=$('p-type');
             if(pr&&ws.p_role)pr.value=ws.p_role;
             if(pt)pt.value=ws.p_type;
@@ -1016,8 +1009,8 @@ function renderWizardBody(){
     <button class="pick-card ${ws.b2b_b2c==='b2c'?'sel':''}" onclick="pickB2B2C('b2c')"><div class="pick-label">B2C</div><div class="pick-desc">Vous vendez à un particulier — décision plus émotionnelle.</div></button>
   </div><div id="w-err" class="w-error"></div>`;
   if(ws.step===2)return `<div class="pick-grid">
-    <button class="pick-card ${ws.mode==='new'?'sel':''}" onclick="pickMode('new')"><div class="pick-label">Nouveau scénario</div><div class="pick-desc">Vous créez un nouveau prospect.</div></button>
-    <button class="pick-card ${ws.mode==='continue'?'sel':''}" onclick="pickMode('continue')"><div class="pick-label">Continuer une simulation</div><div class="pick-desc">Reprenez le même prospect.</div></button>
+    <button class="pick-card ${ws.mode==='new'?'sel':''}" onclick="pickMode('new')"><div class="pick-label">Nouveau scénario</div><div class="pick-desc">Vous créez un nouveau prospect à partir de zéro.</div></button>
+    <button class="pick-card ${ws.mode==='continue'?'sel':''}" onclick="pickMode('continue')"><div class="pick-label">Continuer une simulation</div><div class="pick-desc">Reprenez le même prospect après un Cold Call ou un RDV.</div></button>
   </div><div id="w-err" class="w-error"></div>`;
   if(ws.step===4)return renderInterviewStep();
   if(ws.mode==='continue')return renderContinueStep();
@@ -1055,7 +1048,7 @@ function renderNewScenarioStep(){
         <option value="">— Créer un nouveau persona —</option>
         ${ws.savedPersonas.map(p=>`<option value="${esc(p.id)}" ${ws.savedPersonaId===p.id?'selected':''}>${esc(p.nom_persona)} (${esc(p.archetype)}, ${p.intensite}/5)</option>`).join('')}
       </select>
-      <div class="saved-info ${ws.savedPersonaId?'show':''}" id="savedPersonaInfo">✅ Persona existant utilisé.</div>
+      <div class="saved-info ${ws.savedPersonaId?'show':''}" id="savedPersonaInfo">✅ Persona existant utilisé. L'archétype est conservé, l'intensité est modifiable.</div>
       <button type="button" class="btn-small" id="btnAutreVariation">🔄 Retirer la sélection</button>
     </div>`;
   }
@@ -1277,14 +1270,14 @@ async function createSim(){
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  DEBRIEF
-// ═══════════════════════════════════════════════════════════════════════════
+// ═══ DEBRIEF ═══
 $('debriefBack').addEventListener('click',closeDebrief);
 $('debriefOverlay').addEventListener('click',e=>{if(e.target===$('debriefOverlay'))closeDebrief();});
 function closeDebrief(){
   $('debriefOverlay').classList.remove('open');
   if(currentAudio){currentAudio.pause();currentAudio=null;}
+  $('debriefAudioSticky').innerHTML='';
+  $('debriefAudioSticky').classList.remove('visible');
   currentDebriefSimId=null;
 }
 
@@ -1338,33 +1331,209 @@ function radarSVG(cur,avg){
   return `<div class="radar-svg-wrap"><svg class="radar-svg" viewBox="0 0 100 100"><g>${grid}${axes}${av}<polygon points="${pts(cur)}" fill="rgba(59,107,80,.13)" stroke="var(--sage)" stroke-width="1.3"/></g></svg></div>`;
 }
 
-function buildSerpPoints(bilan){
-  const pts=[];const ql=bilan?.analyse_qualitative||{};
-  (ql.comportements_naturels||[]).forEach(i=>pts.push({t:Number(i.horodatage_secondes)||0,s:Math.max(60,Math.min(100,Number(i.niveau_certitude)||75)),type:'pos'}));
-  (ql.ecarts||[]).forEach(i=>{const t=i.type||'manquant';const b=t==='adaptatif'?45:t==='instinctif'?30:20;pts.push({t:Number(i.horodatage_secondes)||0,s:b,type:'neg'});});
-  (ql.moments_bascule||[]).forEach(i=>pts.push({t:Number(i.horodatage_secondes)||0,s:60,type:'bascule'}));
-  return pts.filter(p=>p.t>0||pts.length<3).sort((a,b)=>a.t-b.t);
+// ═══ FIL SERPENTANT V2 ═══
+function buildSerpEvents(bilan){
+  const events=[];
+  const ql=bilan?.analyse_qualitative||{};
+  (ql.comportements_naturels||[]).forEach(i=>{
+    events.push({
+      t: Number(i.horodatage_secondes)||0,
+      s: Math.max(60, Math.min(100, Number(i.niveau_certitude)||75)),
+      type: 'vert',
+      action: i.description || 'Comportement identifié',
+      impact: i.principe_nomme || '',
+      framework: (i.frameworks_associes||[]).join(', ')
+    });
+  });
+  (ql.ecarts||[]).forEach(i=>{
+    const tp = i.type || 'manquant';
+    const base = tp === 'adaptatif' ? 45 : tp === 'instinctif' ? 30 : 20;
+    events.push({
+      t: Number(i.horodatage_secondes)||0,
+      s: base,
+      type: 'rouge',
+      action: i.description || 'Écart identifié',
+      impact: [i.effet_avant, i.effet_apres].filter(Boolean).join(' → '),
+      framework: i.framework_de_reference || ''
+    });
+  });
+  (ql.moments_bascule||[]).forEach(i=>{
+    events.push({
+      t: Number(i.horodatage_secondes)||0,
+      s: 60,
+      type: 'orange',
+      action: i.declencheur || 'Moment de bascule',
+      impact: i.description || '',
+      framework: ''
+    });
+  });
+  return events.sort((a,b)=>a.t-b.t);
 }
 
-function serpSVG(points,duration){
-  const W=800,H=130,padX=20,padY=12;
-  if(!points.length)return `<svg class="serp-svg" viewBox="0 0 ${W} ${H}"><text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="12" fill="var(--muted-2)">Aucun évènement à tracer</text></svg>`;
-  const maxT=Math.max(duration,...points.map(p=>p.t),1);
-  const xOf=t=>padX+(W-2*padX)*(t/maxT);
-  const yOf=s=>H-padY-(H-2*padY)*(s/100);
-  const dPath=points.map((p,i)=>{const x=xOf(p.t),y=yOf(p.s);if(i===0)return `M ${x} ${y}`;const prev=points[i-1];const px=xOf(prev.t),py=yOf(prev.s);const mx=(px+x)/2;return `C ${mx} ${py} ${mx} ${y} ${x} ${y}`;}).join(' ');
-  let svg=`<svg class="serp-svg" viewBox="0 0 ${W} ${H}">`;
-  [25,50,75].forEach(v=>{svg+=`<line x1="${padX}" y1="${yOf(v)}" x2="${W-padX}" y2="${yOf(v)}" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="2 3"/>`;});
-  svg+=`<path d="${dPath}" fill="none" stroke="var(--sage)" stroke-width="2"/>`;
-  points.forEach(p=>{const x=xOf(p.t),y=yOf(p.s);const fill=p.type==='pos'?'var(--sage)':p.type==='neg'?'var(--red)':'var(--amber)';svg+=`<circle class="serp-point" data-t="${p.t}" cx="${x}" cy="${y}" r="5" fill="${fill}" stroke="white" stroke-width="1.5" style="cursor:pointer"/>`;});
-  svg+='</svg>';
-  return svg;
+function renderSerpentineV2(events, duration){
+  if(!events.length) return '<div style="padding:40px;text-align:center;color:var(--muted);font-size:12px">Aucun évènement à tracer</div>';
+
+  // Décalage des points superposés (même timestamp exact)
+  const groups = {};
+  events.forEach(e => {
+    const key = e.t.toFixed(1);
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(e);
+  });
+  const adjusted = [];
+  Object.keys(groups).forEach(key => {
+    const g = groups[key];
+    if (g.length === 1) {
+      adjusted.push({ ...g[0], origT: g[0].t });
+    } else {
+      const spread = 0.8;
+      g.forEach((e, i) => {
+        const offset = (i - (g.length - 1) / 2) * (spread / Math.max(1, g.length - 1));
+        adjusted.push({ ...e, t: e.t + offset, origT: e.t });
+      });
+    }
+  });
+  adjusted.sort((a,b)=>a.t-b.t);
+
+  const W = 800, H = 200;
+  const padX = 60, padY = 20;
+  const maxT = Math.max(duration, ...adjusted.map(e => e.t), 1);
+  const xOf = t => padX + (W - padX - 20) * (t / maxT);
+  const yOf = s => H - padY - (H - 2 * padY) * (s / 100);
+
+  let svg = `<svg class="serp-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">`;
+
+  // Axe Y : 0, 50, 100
+  [0, 50, 100].forEach(v => {
+    const y = yOf(v);
+    svg += `<line x1="${padX}" y1="${y}" x2="${W - 10}" y2="${y}" stroke="#E4E4E7" stroke-width="1" ${v === 50 ? 'stroke-dasharray="2 3"' : ''}/>`;
+    svg += `<text x="${padX - 8}" y="${y + 4}" text-anchor="end" font-size="10" fill="#71717A" font-weight="600">${v}</text>`;
+  });
+
+  // Axe X : temps
+  const markers = [0, 0.25, 0.5, 0.75, 1].map(r => Math.round(maxT * r));
+  markers.forEach(t => {
+    const x = xOf(t);
+    const mm = Math.floor(t / 60);
+    const ss = String(Math.round(t % 60)).padStart(2, '0');
+    svg += `<text x="${x}" y="${H - 4}" text-anchor="middle" font-size="9" fill="#A1A1AA">${mm}:${ss}</text>`;
+  });
+
+  // Chemin
+  let path = '';
+  adjusted.forEach((p, i) => {
+    const x = xOf(p.t), y = yOf(p.s);
+    if (i === 0) path = `M ${x} ${y}`;
+    else {
+      const prev = adjusted[i - 1];
+      const px = xOf(prev.t), py = yOf(prev.s);
+      const mx = (px + x) / 2;
+      path += ` C ${mx} ${py}, ${mx} ${y}, ${x} ${y}`;
+    }
+  });
+  svg += `<path d="${path}" fill="none" stroke="#3B6B50" stroke-width="2"/>`;
+
+  // Points avec halo, valeur et index
+  adjusted.forEach((p, i) => {
+    const x = xOf(p.t), y = yOf(p.s);
+    const color = p.type === 'vert' ? '#3B6B50' : p.type === 'rouge' ? '#B91C1C' : '#B45309';
+    svg += `<g class="pgroup" data-idx="${i}">`;
+    svg += `<circle class="halo" cx="${x}" cy="${y}" r="16" fill="${color}"/>`;
+    svg += `<circle class="point" cx="${x}" cy="${y}" r="6" fill="${color}" stroke="#fff" stroke-width="2" data-idx="${i}"/>`;
+    svg += `<text x="${x}" y="${y - 12}" text-anchor="middle" font-size="9" fill="${color}" font-weight="700" pointer-events="none">${Math.round(p.s)}</text>`;
+    svg += `</g>`;
+  });
+  svg += '</svg>';
+
+  return `
+    <div class="serpentine-wrap" id="serpWrap">
+      ${svg}
+      <div class="serp-tooltip" id="serpTooltip"></div>
+      <div class="serp-detail empty" id="serpDetail">Clique sur un point du fil pour voir ce que tu as fait à ce moment précis.</div>
+      <div class="serp-legend">
+        <span><span class="dot" style="background:#3B6B50"></span>Bien fait</span>
+        <span><span class="dot" style="background:#B45309"></span>Moment de bascule</span>
+        <span><span class="dot" style="background:#B91C1C"></span>Écart</span>
+      </div>
+    </div>
+  `;
+}
+
+function bindSerpentine(events, duration){
+  const wrap = $('serpWrap');
+  if(!wrap) return;
+  const tooltip = $('serpTooltip');
+  const detail = $('serpDetail');
+  const svg = wrap.querySelector('svg');
+  if(!svg) return;
+  const W = 800, H = 200;
+
+  // On recalcule les adjusted identiques à renderSerpentineV2 pour l'index
+  const groups = {};
+  events.forEach(e => {
+    const key = e.t.toFixed(1);
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(e);
+  });
+  const adjusted = [];
+  Object.keys(groups).forEach(key => {
+    const g = groups[key];
+    if (g.length === 1) adjusted.push({ ...g[0], origT: g[0].t });
+    else {
+      const spread = 0.8;
+      g.forEach((e, i) => {
+        const offset = (i - (g.length - 1) / 2) * (spread / Math.max(1, g.length - 1));
+        adjusted.push({ ...e, t: e.t + offset, origT: e.t });
+      });
+    }
+  });
+  adjusted.sort((a,b)=>a.t-b.t);
+
+  const maxT = Math.max(duration, ...adjusted.map(e => e.t), 1);
+  const padX = 60, padY = 20;
+  const xOf = t => padX + (W - padX - 20) * (t / maxT);
+  const yOf = s => H - padY - (H - 2 * padY) * (s / 100);
+
+  svg.querySelectorAll('circle.point').forEach(c => {
+    c.addEventListener('mouseenter', () => {
+      const idx = Number(c.dataset.idx);
+      const p = adjusted[idx];
+      const rect = wrap.getBoundingClientRect();
+      const xRatio = xOf(p.t) / W;
+      const yRatio = yOf(p.s) / H;
+      tooltip.textContent = `▶ Écouter à ${fmtSec(p.origT)}`;
+      tooltip.style.left = (xRatio * 100) + '%';
+      tooltip.style.top = (yRatio * 100) + '%';
+      tooltip.classList.add('visible');
+    });
+    c.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+    c.addEventListener('click', () => {
+      const idx = Number(c.dataset.idx);
+      const p = adjusted[idx];
+      const label = p.type === 'vert' ? 'Bien fait' : p.type === 'rouge' ? 'Écart' : 'Bascule';
+      detail.classList.remove('empty');
+      detail.innerHTML = `
+        <div class="row"><span class="serp-tag ${p.type}">${label}</span><strong>${fmtSec(p.origT)}</strong> — Score ${Math.round(p.s)}/100</div>
+        <div class="row"><strong>Ce que tu as fait :</strong> ${esc(p.action)}</div>
+        ${p.impact ? `<div class="row"><strong>Impact :</strong> ${esc(p.impact)}</div>` : ''}
+        ${p.framework ? `<div class="row"><strong>Référence :</strong> ${esc(p.framework)}</div>` : ''}
+        <div class="row" style="margin-top:8px;color:var(--sage);font-size:11px;font-weight:600">▶ Lecture audio à ${fmtSec(p.origT)}</div>
+      `;
+      // Lecture audio
+      if(currentAudio){
+        currentAudio.currentTime = p.origT;
+        currentAudio.play().catch(()=>{});
+      }
+    });
+  });
 }
 
 async function openDebrief(simId){
   currentDebriefSimId=simId;
   $('debriefBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Chargement…</div>';
   $('debriefActions').innerHTML='';
+  $('debriefAudioSticky').innerHTML='';
+  $('debriefAudioSticky').classList.remove('visible');
   $('debriefOverlay').classList.add('open');
 
   const[sR,tR,bR,mR]=await Promise.all([
@@ -1413,8 +1582,8 @@ async function openDebrief(simId){
   axesLegend+='</div>';
 
   const duration=Number(sim.duree_secondes)||0;
-  const serpPoints=buildSerpPoints(bilan);
-  const serpSvgHtml=serpSVG(serpPoints,duration);
+  const serpEvents=buildSerpEvents(bilan);
+  const serpHtml=renderSerpentineV2(serpEvents,duration);
 
   let h=`
   <div class="db-hero">
@@ -1428,10 +1597,14 @@ async function openDebrief(simId){
     </div>
   </div>`;
 
-  h+=`<div class="db-section">
-    <div class="db-section-head"><div class="db-section-title">Écoute</div></div>
-    <div class="db-section-body" style="padding:12px 20px" id="audioSection"><div style="text-align:center;color:var(--muted);font-size:12px">Chargement audio…</div></div>
-  </div>`;
+  if(serpEvents.length){
+    h+=`<div class="db-section">
+      <div class="db-section-head"><div class="db-section-title">Fil chronologique</div></div>
+      <div class="db-section-body" style="padding:16px 20px">
+        ${serpHtml}
+      </div>
+    </div>`;
+  }
 
   h+=`<div class="db-section">
     <div class="db-section-head"><div class="db-section-title">Radar de performance</div></div>
@@ -1441,23 +1614,6 @@ async function openDebrief(simId){
       ${axesLegend}
     </div>
   </div>`;
-
-  if(serpPoints.length){
-    h+=`<div class="db-section">
-      <div class="db-section-head"><div class="db-section-title">Fil chronologique</div></div>
-      <div class="db-section-body">
-        <div class="serpentine-header">
-          <div class="serpentine-toggle">
-            <button class="serp-tab active">Ma session</button>
-            <button class="serp-tab" disabled title="Bientôt disponible">Top Sales</button>
-          </div>
-          <div style="font-size:11px;color:var(--muted)">Clique sur un point pour écouter ce moment</div>
-        </div>
-        <div class="serpentine-wrap">${serpSvgHtml}</div>
-        <div class="serp-info">${serpPoints.length} évènement${serpPoints.length>1?'s':''} clés</div>
-      </div>
-    </div>`;
-  }
 
   h+=`<div class="db-section">
     <div class="db-section-head"><div class="db-section-title">Métriques</div></div>
@@ -1521,13 +1677,17 @@ async function openDebrief(simId){
   tr.forEach(ln=>{
     const t=Number(ln.horodatage_secondes)||0;
     const isB=bTs.some(bt=>Math.abs(bt-t)<=2);
-    h+=`<div class="t-row${isB?' bascule':''}" data-t="${t}"><div class="t-time">${fmtSec(t)}</div><div class="t-who ${ln.locuteur==='commercial'?'c':''}">${ln.locuteur==='commercial'?'Commercial':'Prospect'}</div><div class="t-text">${esc(ln.texte||'')}</div></div>`;
+    h+=`<div class="t-row${isB?' bascule':''}" data-t="${t}"><div class="t-time">${fmtSec(t)}</div><div class="t-who ${ln.locuteur==='commercial'?'c':''}">${ln.locuteur==='commercial'?'Commercial':'Prospect'}</div><div class="t-text">${esc(ln.texte||'')}</div><div class="t-play">▶ ${fmtSec(t)}</div></div>`;
   });
   h+='</div></div></div>';
 
   $('debriefBody').innerHTML=h;
 
-  loadAudioForDebrief(simId);
+  // Charger l'audio en sticky
+  await loadAudioSticky(simId);
+
+  // Binder le fil serpentant
+  bindSerpentine(serpEvents, duration);
 
   $('dlTransBtn').addEventListener('click',()=>exportTranscriptionPdf(sim,tr));
   $('dlPdfBtn').addEventListener('click',()=>openPdfPreview(sim,bilan,met,ql,tr));
@@ -1543,7 +1703,6 @@ async function openDebrief(simId){
 
   document.querySelectorAll('.t-row').forEach(r=>r.addEventListener('click',()=>{if(!currentAudio)return;currentAudio.currentTime=Number(r.dataset.t)||0;currentAudio.play().catch(()=>{});}));
   document.querySelectorAll('.moment-btn').forEach(b=>b.addEventListener('click',()=>{if(!currentAudio)return;currentAudio.currentTime=Number(b.dataset.m)||0;currentAudio.play().catch(()=>{});}));
-  document.querySelectorAll('.serp-point').forEach(p=>p.addEventListener('click',()=>{if(!currentAudio)return;currentAudio.currentTime=Number(p.dataset.t)||0;currentAudio.play().catch(()=>{});}));
 
   const sl=$('sensScore'),sv=$('sensVal');
   sl.addEventListener('input',()=>{sv.textContent=sl.value;});
@@ -1560,19 +1719,20 @@ async function openDebrief(simId){
   });
 }
 
-async function loadAudioForDebrief(simId){
-  const c=$('audioSection');if(!c)return;
+async function loadAudioSticky(simId){
+  const sticky=$('debriefAudioSticky');
   try{
     const ar=await apiCall(`/api/simulation/${encodeURIComponent(simId)}/audio`);
-    if(!ar.ok){c.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px">Audio non disponible</div>';return;}
+    if(!ar.ok){sticky.innerHTML='';sticky.classList.remove('visible');return;}
     const ad=await ar.json();
-    if(!ad.signedUrl){c.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px">Audio non disponible</div>';return;}
-    c.innerHTML=`<div class="audio-player">
+    if(!ad.signedUrl){sticky.innerHTML='';sticky.classList.remove('visible');return;}
+    sticky.innerHTML=`<div class="audio-player">
       <button class="audio-btn" id="audioPlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20"/></svg></button>
       <div class="audio-track" id="audioTrack"><div class="audio-fill" id="audioFill"></div><div class="audio-thumb" id="audioThumb"></div></div>
       <div class="audio-time" id="audioTime">0:00 / 0:00</div>
       <button class="btn-ghost" id="dlAudioBtn" style="padding:6px 10px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></button>
     </div>`;
+    sticky.classList.add('visible');
     const audio=new Audio(ad.signedUrl);audio.preload='metadata';currentAudio=audio;
     const playBtn=$('audioPlay'),fill=$('audioFill'),thumb=$('audioThumb'),timeEl=$('audioTime'),track=$('audioTrack');
     const fmtT=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
@@ -1596,12 +1756,10 @@ async function loadAudioForDebrief(simId){
         setTimeout(()=>URL.revokeObjectURL(url),3000);
       }catch(e){showToast('Erreur : '+e.message,'error');}
     });
-  }catch(e){c.innerHTML=`<div style="text-align:center;color:var(--muted);font-size:12px">Erreur audio</div>`;}
+  }catch(e){sticky.innerHTML='';sticky.classList.remove('sticky');}
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  PDF EXPORT (pdfmake)
-// ═══════════════════════════════════════════════════════════════════════════
+// ═══ PDF EXPORT ═══
 const SAGE='#3B6B50';
 const SAGE_LIGHT='#EEF5F1';
 const INK='#18181B';
@@ -1612,21 +1770,13 @@ const STONE_100='#F2F1EF';
 const BORDER='#E4E4E7';
 const AMBER='#B45309';
 const RED='#B91C1C';
-const GREEN='#3B6B50';
 
-function scoreColor(n){
-  if(n==null)return MUTED;
-  if(n>=70)return GREEN;
-  if(n>=50)return AMBER;
-  return RED;
-}
+function scoreColor(n){if(n==null)return MUTED;if(n>=70)return SAGE;if(n>=50)return AMBER;return RED;}
 
-function generateLogoDataUrl(callback){
+function generateLogoDataUrl(cb){
   const canvas=document.createElement('canvas');
-  const size=128;
-  canvas.width=size;canvas.height=size;
+  const size=128;canvas.width=size;canvas.height=size;
   const ctx=canvas.getContext('2d');
-  // Fond vert sage arrondi
   const r=28;
   ctx.fillStyle=SAGE;
   ctx.beginPath();
@@ -1634,69 +1784,26 @@ function generateLogoDataUrl(callback){
   ctx.lineTo(size,size-r);ctx.quadraticCurveTo(size,size,size-r,size);
   ctx.lineTo(r,size);ctx.quadraticCurveTo(0,size,0,size-r);
   ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();ctx.fill();
-  // Micro blanc
   ctx.fillStyle='#FFFFFF';
-  ctx.beginPath();
-  ctx.roundRect(52,30,24,44,12);
-  ctx.fill();
+  ctx.beginPath();ctx.roundRect(52,30,24,44,12);ctx.fill();
   ctx.strokeStyle='#FFFFFF';ctx.lineWidth=6;ctx.lineCap='round';
   ctx.beginPath();ctx.arc(64,68,18,0,Math.PI);ctx.stroke();
   ctx.beginPath();ctx.moveTo(64,86);ctx.lineTo(64,96);ctx.stroke();
   ctx.beginPath();ctx.moveTo(54,96);ctx.lineTo(74,96);ctx.stroke();
-  callback(canvas.toDataURL('image/png'));
-}
-
-function buildTranscriptionPdfDef(sim,tr){
-  const content=[];
-  content.push({
-    columns:[
-      {width:'*',stack:[
-        {text:'TRANSCRIPTION',fontSize:9,bold:true,color:SAGE,characterSpacing:2},
-        {text:simLabel(sim),fontSize:20,bold:true,color:INK,margin:[0,4,0,2]},
-        {text:`${sim.b2b_b2c?.toUpperCase()||'—'} · ${fmtDur(sim.duree_secondes||0)} · ${fmtDate(sim.created_at)}`,fontSize:10,color:MUTED}
-      ]},
-      {width:'auto',alignment:'right',stack:[
-        {text:'Kold Kall',fontSize:14,bold:true,color:SAGE}
-      ]}
-    ],
-    margin:[0,0,0,20]
-  });
-
-  content.push({
-    canvas:[{type:'line',x1:0,y1:0,x2:515,y2:0,lineWidth:0.5,lineColor:BORDER}],
-    margin:[0,0,0,16]
-  });
-
-  if(!tr.length){
-    content.push({text:'Aucune transcription disponible.',fontSize:11,color:MUTED,italics:true});
-  }else{
-    tr.forEach(ln=>{
-      const isCommercial=ln.locuteur==='commercial';
-      content.push({
-        columns:[
-          {width:50,text:fmtSec(ln.horodatage_secondes),fontSize:9,color:MUTED,margin:[0,2,0,0]},
-          {width:80,text:isCommercial?'Commercial':'Prospect',fontSize:9,bold:true,color:isCommercial?SAGE:INK_2,margin:[0,2,0,0]},
-          {width:'*',text:ln.texte||'',fontSize:10,color:INK_2,lineHeight:1.5,alignment:'justify'}
-        ],
-        margin:[0,6,0,0]
-      });
-    });
-  }
-  return content;
+  cb(canvas.toDataURL('image/png'));
 }
 
 function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
   const note=bilan?.note_globale!=null?Number(bilan.note_globale):null;
   const content=[];
 
-  // Header avec logo
   content.push({
     columns:[
       {width:44,image:'logo',fit:[44,44]},
       {width:'*',stack:[
         {text:'DÉBRIEF DE SIMULATION',fontSize:9,bold:true,color:SAGE,characterSpacing:2,margin:[10,2,0,0]},
         {text:'Kold Kall',fontSize:16,bold:true,color:INK,margin:[10,2,0,0]}
-      ],margin:[0,0,0,0]},
+      ]},
       {width:'auto',alignment:'right',stack:[
         {text:note!=null?`${note}`:'—',fontSize:44,bold:true,color:scoreColor(note),lineHeight:1},
         {text:note!=null?'/ 100':'',fontSize:10,color:MUTED,alignment:'right'}
@@ -1705,12 +1812,8 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
     margin:[0,0,0,14]
   });
 
-  content.push({
-    canvas:[{type:'line',x1:0,y1:0,x2:515,y2:0,lineWidth:0.8,lineColor:SAGE}],
-    margin:[0,0,0,14]
-  });
+  content.push({canvas:[{type:'line',x1:0,y1:0,x2:515,y2:0,lineWidth:0.8,lineColor:SAGE}],margin:[0,0,0,14]});
 
-  // Meta
   content.push({
     columns:[
       {width:'*',text:`${simLabel(sim)}`,fontSize:11,bold:true,color:INK_2},
@@ -1719,27 +1822,14 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
     margin:[0,0,0,12]
   });
 
-  // Tagline
   if(ql.tagline){
     content.push({
-      table:{widths:['*'],body:[[{
-        text:ql.tagline,
-        fontSize:13,
-        bold:true,
-        italics:true,
-        color:SAGE,
-        margin:[12,10,12,10]
-      }]]},
-      layout:{
-        fillColor:()=>SAGE_LIGHT,
-        hLineWidth:()=>0,vLineWidth:()=>4,
-        vLineColor:(i)=>i===0?SAGE:'transparent'
-      },
+      table:{widths:['*'],body:[[{text:ql.tagline,fontSize:13,bold:true,italics:true,color:SAGE,margin:[12,10,12,10]}]]},
+      layout:{fillColor:()=>SAGE_LIGHT,hLineWidth:()=>0,vLineWidth:()=>4,vLineColor:(i)=>i===0?SAGE:'transparent'},
       margin:[0,0,0,14]
     });
   }
 
-  // Radar numérique (pas de SVG, on liste les axes en bloc)
   const axes=[['Questions',met?.radar_questions],['Objections',met?.radar_objections],['Découverte',met?.radar_decouverte],['Closing',met?.radar_closing],['Rythme',met?.radar_rythme],['Pratiques',met?.radar_pratiques]];
   const hasAnyAxis=axes.some(([,v])=>v!=null);
   if(hasAnyAxis){
@@ -1755,7 +1845,6 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
     content.push({table:{widths:['*','auto'],body:rows},layout:{hLineWidth:()=>0.5,hLineColor:()=>BORDER,vLineWidth:()=>0},margin:[0,0,0,14]});
   }
 
-  // Métriques
   content.push({text:'MÉTRIQUES',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
   content.push({
     table:{
@@ -1773,15 +1862,10 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
         ]
       ]
     },
-    layout:{
-      hLineWidth:()=>0.5,vLineWidth:()=>0.5,
-      hLineColor:()=>BORDER,vLineColor:()=>BORDER,
-      fillColor:(i)=>i%2===0?STONE_50:null
-    },
+    layout:{hLineWidth:()=>0.5,vLineWidth:()=>0.5,hLineColor:()=>BORDER,vLineColor:()=>BORDER,fillColor:(i)=>i%2===0?STONE_50:null},
     margin:[0,0,0,14]
   });
 
-  // Comportements naturels
   const nats=ql.comportements_naturels||[];
   if(nats.length){
     content.push({text:'CE QU\'IL FAIT NATURELLEMENT',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
@@ -1798,7 +1882,6 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
     content.push({text:'',margin:[0,0,0,10]});
   }
 
-  // Écarts
   const ecarts=ql.ecarts||[];
   if(ecarts.length){
     content.push({text:'ÉCARTS',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
@@ -1806,7 +1889,7 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
       const label=item.type||'manquant';
       content.push({
         table:{widths:[70,60,'*'],body:[[
-          {text:label,fontSize:9,bold:true,color:label==='adaptatif'?GREEN:label==='instinctif'?AMBER:RED,margin:[8,6,4,6]},
+          {text:label,fontSize:9,bold:true,color:label==='adaptatif'?SAGE:label==='instinctif'?AMBER:RED,margin:[8,6,4,6]},
           {text:fmtSec(item.horodatage_secondes),fontSize:9,color:MUTED,margin:[4,6,4,6]},
           {text:item.description||'',fontSize:10,color:INK_2,lineHeight:1.5,margin:[4,6,8,6]}
         ]]},
@@ -1817,7 +1900,6 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
     content.push({text:'',margin:[0,0,0,10]});
   }
 
-  // Moments de bascule
   const moments=ql.moments_bascule||[];
   if(moments.length){
     content.push({text:'MOMENTS DE BASCULE',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,8]});
@@ -1825,10 +1907,7 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
       content.push({
         table:{widths:[60,'*'],body:[[
           {text:fmtSec(item.horodatage_secondes),fontSize:9,color:AMBER,bold:true,margin:[8,6,8,6]},
-          {stack:[
-            {text:item.declencheur||'',fontSize:10,bold:true,color:INK_2},
-            {text:item.description||'',fontSize:10,color:INK_2,lineHeight:1.5,margin:[0,3,0,0]}
-          ],margin:[0,6,8,6]}
+          {stack:[{text:item.declencheur||'',fontSize:10,bold:true,color:INK_2},{text:item.description||'',fontSize:10,color:INK_2,lineHeight:1.5,margin:[0,3,0,0]}],margin:[0,6,8,6]}
         ]]},
         layout:{hLineWidth:()=>0,vLineWidth:()=>0},
         margin:[0,0,0,4]
@@ -1836,24 +1915,20 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
     });
   }
 
-  // Page transcription séparée
   content.push({text:'',pageBreak:'before'});
   content.push({text:'TRANSCRIPTION INTÉGRALE',fontSize:9,bold:true,color:SAGE,characterSpacing:1,margin:[0,0,0,10]});
-  if(!tr.length){
-    content.push({text:'Aucune transcription.',fontSize:11,color:MUTED,italics:true});
-  }else{
-    tr.forEach(ln=>{
-      const isCommercial=ln.locuteur==='commercial';
-      content.push({
-        columns:[
-          {width:45,text:fmtSec(ln.horodatage_secondes),fontSize:8,color:MUTED,margin:[0,3,0,0]},
-          {width:70,text:isCommercial?'Commercial':'Prospect',fontSize:9,bold:true,color:isCommercial?SAGE:INK_2,margin:[0,3,0,0]},
-          {width:'*',text:ln.texte||'',fontSize:10,color:INK_2,lineHeight:1.5}
-        ],
-        margin:[0,4,0,0]
-      });
+  if(!tr.length)content.push({text:'Aucune transcription.',fontSize:11,color:MUTED,italics:true});
+  else tr.forEach(ln=>{
+    const isC=ln.locuteur==='commercial';
+    content.push({
+      columns:[
+        {width:45,text:fmtSec(ln.horodatage_secondes),fontSize:8,color:MUTED,margin:[0,3,0,0]},
+        {width:70,text:isC?'Commercial':'Prospect',fontSize:9,bold:true,color:isC?SAGE:INK_2,margin:[0,3,0,0]},
+        {width:'*',text:ln.texte||'',fontSize:10,color:INK_2,lineHeight:1.5}
+      ],
+      margin:[0,4,0,0]
     });
-  }
+  });
 
   return {
     content,
@@ -1861,15 +1936,10 @@ function buildFullDebriefPdfDef(sim,bilan,met,ql,tr,logoDataUrl){
     pageMargins:[40,40,40,50],
     images:{logo:logoDataUrl},
     defaultStyle:{font:'Roboto'},
-    footer:(currentPage,total)=>{
-      return {
-        margin:[40,20,40,0],
-        columns:[
-          {width:'*',text:'Kold Kall',fontSize:8,color:MUTED},
-          {width:'auto',text:`Page ${currentPage} / ${total}`,fontSize:8,color:MUTED}
-        ]
-      };
-    }
+    footer:(p,t)=>({margin:[40,20,40,0],columns:[
+      {width:'*',text:'Kold Kall',fontSize:8,color:MUTED},
+      {width:'auto',text:`Page ${p} / ${t}`,fontSize:8,color:MUTED}
+    ]})
   };
 }
 
@@ -1928,7 +1998,6 @@ function openPdfPreview(sim,bilan,met,ql,tr){
       const url=URL.createObjectURL(blob);
       $('pdfPreviewIframe').src=url;
       $('pdfPreviewOverlay').classList.add('open');
-      // Bind download
       $('pdfDownloadBtn').onclick=()=>{
         const a=document.createElement('a');
         a.href=url;a.download=`debrief-${sim.id.slice(0,8)}.pdf`;
@@ -1945,9 +2014,7 @@ $('pdfCloseBtn').addEventListener('click',()=>{
 });
 $('pdfPreviewOverlay').addEventListener('click',e=>{if(e.target===$('pdfPreviewOverlay'))$('pdfCloseBtn').click();});
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════════════════════════════════
+// ═══ INIT ═══
 (async()=>{
   try{
     const{data:{session},error}=await sb.auth.getSession();
