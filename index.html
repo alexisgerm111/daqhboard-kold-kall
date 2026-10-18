@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kold Kall — Studio</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%233B6B50'/%3E%3Cpath d='M50 22a12 12 0 0 0-12 12v20a12 12 0 0 0 24 0V34a12 12 0 0 0-12-12z' fill='white'/%3E%3Cpath d='M74 48v4a24 24 0 0 1-48 0v-4' fill='none' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='50' y1='76' x2='50' y2='86' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2394A4FF'/%3E%3Cstop offset='0.48' stop-color='%23385BFF'/%3E%3Cstop offset='1' stop-color='%237948E9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='37' y='16' width='26' height='44' rx='13'/%3E%3Cpath d='M26 46v8a24 24 0 0 0 48 0v-8'/%3E%3Cline x1='50' y1='78' x2='50' y2='88'/%3E%3Cline x1='36' y1='88' x2='64' y2='88'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -349,19 +349,6 @@ input[type=range]{width:100%;accent-color:var(--cobalt);margin-bottom:6px}
 .btn-create:disabled{opacity:.5;cursor:wait;transform:none}
 .w-err{display:none;margin-top:12px;padding:8px 12px;background:#FEF2F2;border:1px solid rgba(200,68,72,.15);border-radius:var(--r);font-size:11px;color:var(--danger)}
 .w-err.show{display:block}
-
-/* EXERCISE MODAL */
-.ex-card{background:var(--paper);border:1px solid var(--rule);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:14px}
-.ex-q{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;display:flex;align-items:flex-start;gap:8px}
-.ex-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--cobalt);color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
-.ex-hint{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5;font-style:italic}
-.ex-scale{display:flex;gap:8px}
-.ex-scale-btn{flex:1;padding:10px;border:1.5px solid var(--rule-strong);border-radius:var(--r);font-size:12px;font-weight:600;background:var(--surface);color:var(--muted);transition:all .15s;text-align:center}
-.ex-scale-btn:hover{border-color:rgba(56,91,255,.35);color:var(--ink)}
-.ex-scale-btn.sel{border-color:var(--cobalt);background:rgba(56,91,255,.06);color:var(--cobalt)}
-.ex-axis-row{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:10px}
-.ex-axis-label{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:4px}
-.ex-axis-hint{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5}
 
 /* RANKING / TEAM */
 .rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -784,22 +771,6 @@ input[type=range]{width:100%;accent-color:var(--cobalt);margin-bottom:6px}
   </div>
 </div>
 
-<!-- EXERCISE MODAL -->
-<div class="modal-overlay" id="exerciseOverlay">
-  <div class="modal" id="exerciseModal" style="width:min(720px,96vw)">
-    <div class="modal-head">
-      <div class="modal-step-lbl" id="exKindLbl">Avant la simulation</div>
-      <h2 class="modal-title" id="exTitle">—</h2>
-      <p class="modal-sub" id="exSub">—</p>
-    </div>
-    <div class="modal-body" id="exBody"></div>
-    <div class="modal-foot">
-      <span class="modal-counter" id="exCounter"></span>
-      <button class="btn-modal-next btn-modal-sage" id="exSubmit">Valider</button>
-    </div>
-  </div>
-</div>
-
 <!-- PDF PREVIEW -->
 <div class="pdf-preview-overlay" id="pdfPreviewOverlay">
   <div class="pdf-preview-modal">
@@ -889,7 +860,7 @@ async function routeFromURL(){
   if(simulationId){
     history.replaceState({},document.title,location.pathname);
     await renderView('sessions');
-    await runPreDebriefExercise(simulationId);
+    await openSimulationDebrief(simulationId);
     return;
   }
   await renderView('sessions');
@@ -1487,8 +1458,8 @@ function renderWizardStep(){
 }
 
 function buildWizBody(){
-  if(ws.step===1)return `<div class="pick-grid"><button class="pick ${ws.b2b_b2c==='b2b'?'sel':''}" onclick="pickB2B2C('b2b')"><div class="pick-icon">🏢</div><div class="pick-label">B2B</div><div class="pick-desc">Vous vendez à une entreprise — décideur professionnel.</div></button><button class="pick ${ws.b2b_b2c==='b2c'?'sel':''}" onclick="pickB2B2C('b2c')"><div class="pick-icon">👤</div><div class="pick-label">B2C</div><div class="pick-desc">Vous vendez à un particulier — décision plus émotionnelle.</div></button></div><div class="w-err" id="wErr"></div>`;
-  if(ws.step===2)return `<div class="pick-grid"><button class="pick ${ws.mode==='new'?'sel':''}" onclick="pickMode('new')"><div class="pick-icon">✨</div><div class="pick-label">Nouveau scénario</div><div class="pick-desc">Créez un nouveau prospect à partir de zéro.</div></button><button class="pick ${ws.mode==='continue'?'sel':''}" onclick="pickMode('continue')"><div class="pick-icon">🔄</div><div class="pick-label">Continuer</div><div class="pick-desc">Reprenez le même prospect après un Cold Call ou un RDV.</div></button></div><div class="w-err" id="wErr"></div>`;
+  if(ws.step===1)return `<div class="pick-grid"><button class="pick ${ws.b2b_b2c==='b2b'?'sel':''}" onclick="pickB2B2C('b2b')"><div class="pick-label">B2B</div><div class="pick-desc">Vous vendez à une entreprise — décideur professionnel.</div></button><button class="pick ${ws.b2b_b2c==='b2c'?'sel':''}" onclick="pickB2B2C('b2c')"><div class="pick-label">B2C</div><div class="pick-desc">Vous vendez à un particulier — décision plus émotionnelle.</div></button></div><div class="w-err" id="wErr"></div>`;
+  if(ws.step===2)return `<div class="pick-grid"><button class="pick ${ws.mode==='new'?'sel':''}" onclick="pickMode('new')"><div class="pick-label">Nouveau scénario</div><div class="pick-desc">Créez un nouveau prospect à partir de zéro.</div></button><button class="pick ${ws.mode==='continue'?'sel':''}" onclick="pickMode('continue')"><div class="pick-label">Continuer</div><div class="pick-desc">Reprenez le même prospect après un Cold Call ou un RDV.</div></button></div><div class="w-err" id="wErr"></div>`;
   if(ws.step===4)return renderInterviewStep();
   if(ws.mode==='continue')return renderContinueStep();
   return renderNewScenarioStep();
@@ -1536,7 +1507,7 @@ function renderContinueStep(){
 function renderInterviewStep(){
   const isCC=ws.interview==='cold_call',isRdv=ws.interview==='rdv';
   const canCreate=isCC||(isRdv&&ws.phase);
-  let h=`<div class="pick-grid"><button class="pick ${isCC?'sel':''}" onclick="pickInterviewType('cold_call')"><div class="pick-icon">📞</div><div class="pick-label">Cold Call</div><div class="pick-desc">Le prospect découvre tout au fil de la conversation.</div></button><button class="pick ${isRdv?'sel':''}" onclick="pickInterviewType('rdv')"><div class="pick-icon">🤝</div><div class="pick-label">Rendez-vous</div><div class="pick-desc">Le prospect sait pourquoi vous vous parlez.</div></button></div>`;
+  let h=`<div class="pick-grid"><button class="pick ${isCC?'sel':''}" onclick="pickInterviewType('cold_call')"><div class="pick-label">Cold Call</div><div class="pick-desc">Le prospect découvre tout au fil de la conversation.</div></button><button class="pick ${isRdv?'sel':''}" onclick="pickInterviewType('rdv')"><div class="pick-label">Rendez-vous</div><div class="pick-desc">Le prospect sait pourquoi vous vous parlez.</div></button></div>`;
   if(isRdv){h+=`<div class="f-block"><label class="f-label-2">Phase à travailler</label><select class="f-select" onchange="pickRdvPhase(this.value)"><option value="">Choisir…</option>${[['complet','Entretien complet'],['decouverte','Découverte'],['demo','Démo produit'],['objections_closing','Objections & Closing'],['nego','Négociation']].map(([v,l])=>`<option value="${v}" ${ws.phase===v?'selected':''}>${l}</option>`).join('')}</select></div>`;}
   h+=`<button class="btn-create" id="btnCreateFinal" onclick="createSim()" ${canCreate?'':'style="display:none"'}>Créer la simulation</button><div class="w-err" id="wErr"></div>`;
   return h;
@@ -1571,7 +1542,6 @@ $('wizBack').addEventListener('click',()=>{if(ws.step>1){ws.step--;renderWizardS
 function showWErr(m){const e=$('wErr');if(e){e.textContent=m;e.classList.add('show');}}
 function isCompatAny(s){if(s.b2b_b2c&&s.b2b_b2c!==ws.b2b_b2c)return false;if(s.type_entretien==='cold_call')return true;if(s.type_entretien==='rdv')return ['decouverte','demo','objections_closing','nego','complet'].includes(s.phase_choisie);return false;}
 
-// ═══ FIX BUG — createSim appelle bien la création + exercice pré-simu ═══
 async function createSim(){
   const err=$('wErr');if(err)err.classList.remove('show');
   if(ws.mode==='new'){
@@ -1619,8 +1589,6 @@ async function createSim(){
   }
 
   closeWizard();
-  const sessionId=payload.sessionId||('s_'+Date.now());
-  await runPreSimExercise(sessionId);
 
   try{
     const{code,simulationId,status}=await simPromise;
@@ -1648,200 +1616,6 @@ async function waitForPersona(sid){
   }
   return false;
 }
-
-// EXERCICES
-const PRE_SIM_EXERCISES=['deviens_prospect','coherence_cardiaque','ancrage','visualisation'];
-const PRE_DEBRIEF_EXERCISES=['trois_moments','auto_notation','pensee_prospect'];
-let preSimResolve=null;
-let preDebriefResolve=null;
-
-function pickNextExercise(pool,lastKey){
-  const idx=pool.indexOf(lastKey);
-  const next=(idx+1)%pool.length;
-  return pool[next];
-}
-
-async function runPreSimExercise(sessionId){
-  const lastKey=localStorage.getItem('kk_last_presim')||null;
-  const exKey=pickNextExercise(PRE_SIM_EXERCISES,lastKey);
-  localStorage.setItem('kk_last_presim',exKey);
-  const config=buildPreSimExercise(exKey);
-  return openExerciseModal('pre_sim',exKey,config,sessionId,null);
-}
-
-async function runPreDebriefExercise(simulationId){
-  const lastKey=localStorage.getItem('kk_last_predebrief')||null;
-  const exKey=pickNextExercise(PRE_DEBRIEF_EXERCISES,lastKey);
-  localStorage.setItem('kk_last_predebrief',exKey);
-  const config=buildPreDebriefExercise(exKey);
-  return openExerciseModal('pre_debrief',exKey,config,null,simulationId);
-}
-
-function buildPreSimExercise(key){
-  const map={
-    deviens_prospect:{
-      title:'Deviens le prospect',
-      sub:'Mets-toi à sa place. Pas pour deviner son script — pour comprendre ce qu\'il attend vraiment.',
-      counter:'Tu peux passer, mais c\'est 30 secondes.',
-      fields:[
-        {id:'attentes',q:'Tu es [Prénom du prospect]. Qu\'est-ce que tu attends concrètement de cet appel ?',hint:'Pas une envie vague. Une attente précise. Ex : « Savoir si ça marche avec mon logiciel actuel », « Vérifier que ce n\'est pas un vendeur de plus ».',type:'textarea'},
-        {id:'raccrochage',q:'Qu\'est-ce qui te ferait raccrocher ou dire non dans les 2 premières minutes ?',hint:'Un fait précis. Ex : « Il me parle de lui », « Il me demande mon budget tout de suite ».',type:'textarea'}
-      ]
-    },
-    coherence_cardiaque:{
-      title:'Cohérence cardiaque',
-      sub:'2 minutes pour réguler ton rythme. Inspirez 5 secondes, expirez 5 secondes, pendant 6 cycles.',
-      counter:'Fais-le sans écran si tu peux, puis reviens valider.',
-      fields:[
-        {id:'ressenti',q:'Comment te sens-tu après les 6 cycles ?',hint:'Un mot ou une phrase. Ex : « plus posé », « le souffle court mais calme ».',type:'textarea'}
-      ]
-    },
-    ancrage:{
-      title:'Ancrage',
-      sub:'Rappelle-toi une victoire commerciale précise. Pas un succès en général — un moment exact, avec un lieu, une odeur, une phrase. Ressens-le 10 secondes. Puis reviens.',
-      counter:'Un souvenir vécu, pas imaginé.',
-      fields:[
-        {id:'victoire',q:'Décris ce moment en une phrase.',hint:'Où, quand, avec qui, qu\'est-ce qui s\'est dit ?',type:'textarea'},
-        {id:'sensation',q:'Qu\'est-ce que tu ressentais physiquement à ce moment-là ?',hint:'Ex : « poitrine ouverte », « voix posée », « jambes stables ».',type:'textarea'}
-      ]
-    },
-    visualisation:{
-      title:'Visualisation',
-      sub:'Ferme les yeux 20 secondes. Visualise la fin du rendez-vous qui se termine par un oui. Pas un triomphe — un oui calme, posé, mérité.',
-      counter:'Puis reviens ici.',
-      fields:[
-        {id:'scene',q:'Décris ce qui se passe dans les dernières secondes.',hint:'Ce que tu dis, ce que le prospect répond, l\'énergie de la pièce.',type:'textarea'},
-        {id:'emotion',q:'Quelle émotion te traverse ?',hint:'Un mot. Ex : « soulagement », « fierté calme ».',type:'textarea'}
-      ]
-    }
-  };
-  return map[key]||map.deviens_prospect;
-}
-
-function buildPreDebriefExercise(key){
-  const map={
-    trois_moments:{
-      title:'Les 3 moments',
-      sub:'Avant de voir l\'analyse, refais le fil dans ta tête. Où as-tu senti que ça basculait ?',
-      counter:'Un seul t\'a marqué ? Note-en un. Cinq ? Garde les trois plus forts.',
-      fields:[
-        {id:'m1',q:'Moment 1',hint:'À quel moment (début/milieu/fin), ce qui s\'est passé, dans quel sens ça a basculé.',type:'textarea'},
-        {id:'m2',q:'Moment 2',hint:'Même logique.',type:'textarea'},
-        {id:'m3',q:'Moment 3',hint:'Même logique.',type:'textarea'}
-      ]
-    },
-    auto_notation:{
-      title:'Auto-notation',
-      sub:'Avant le verdict, évalue-toi. Pas pour être gentil — pour être juste.',
-      counter:'On comparera avec l\'IA ensuite.',
-      fields:[
-        {id:'decouverte',q:'Découverte',hint:'As-tu compris son besoin réel, ou es-tu resté en surface ?',type:'scale3'},
-        {id:'objections',q:'Objections',hint:'As-tu traité ce qu\'il a soulevé, ou l\'as-tu contourné ?',type:'scale3'},
-        {id:'closing',q:'Closing',hint:'As-tu fait avancer vers une suite concrète ?',type:'scale3'}
-      ]
-    },
-    pensee_prospect:{
-      title:'Ce que tu as pensé du prospect',
-      sub:'Ce prospect ressemblait-il à ce que tu imaginais ?',
-      counter:'Ça nous aide à rendre les prochains prospects plus réalistes.',
-      fields:[
-        {id:'conformite',q:'À quel point était-il conforme à ce que tu attendais ?',hint:'Pas de bonne ou mauvaise réponse.',type:'scale3'},
-        {id:'surprise',q:'Qu\'est-ce qui t\'a le plus surpris chez lui ?',hint:'Un comportement, une phrase, un silence.',type:'textarea'}
-      ]
-    }
-  };
-  return map[key]||map.trois_moments;
-}
-
-function openExerciseModal(kind,exKey,config,sessionId,simulationId){
-  return new Promise(resolve=>{
-    if(kind==='pre_sim')preSimResolve=resolve;
-    else preDebriefResolve=resolve;
-    $('exKindLbl').textContent=kind==='pre_sim'?'Avant la simulation':'Avant le débrief';
-    $('exTitle').textContent=config.title;
-    $('exSub').textContent=config.sub;
-    $('exCounter').textContent=config.counter||'';
-    let h='';
-    config.fields.forEach((f,i)=>{
-      if(f.type==='textarea'){
-        h+=`<div class="ex-card"><div class="ex-q"><span class="ex-num">${i+1}</span>${esc(f.q)}</div><div class="ex-hint">${esc(f.hint||'')}</div><textarea class="f-textarea" data-ex-field="${esc(f.id)}" placeholder="Ta réponse…"></textarea></div>`;
-      } else if(f.type==='scale3'){
-        h+=`<div class="ex-axis-row"><div class="ex-axis-label">${esc(f.q)}</div><div class="ex-axis-hint">${esc(f.hint||'')}</div><div class="ex-scale"><button class="ex-scale-btn" data-scale-field="${esc(f.id)}" data-scale-val="faible" type="button">Faible</button><button class="ex-scale-btn" data-scale-field="${esc(f.id)}" data-scale-val="moyen" type="button">Moyen</button><button class="ex-scale-btn" data-scale-field="${esc(f.id)}" data-scale-val="fort" type="button">Fort</button></div></div>`;
-      }
-    });
-    $('exBody').innerHTML=h;
-    $('exerciseOverlay').classList.add('open');
-    const cleanup=()=>{$('exerciseOverlay').classList.remove('open');$('exSubmit').onclick=null;};
-
-    $('exBody').querySelectorAll('[data-scale-field]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const field=btn.dataset.scaleField;
-        $('exBody').querySelectorAll(`[data-scale-field="${field}"]`).forEach(b=>b.classList.remove('sel'));
-        btn.classList.add('sel');
-      });
-    });
-
-    $('exSubmit').onclick=async()=>{
-      const answers={};
-      $('exBody').querySelectorAll('[data-ex-field]').forEach(t=>{answers[t.dataset.exField]=t.value.trim();});
-      $('exBody').querySelectorAll('[data-scale-field]').forEach(btn=>{
-        if(btn.classList.contains('sel'))answers[btn.dataset.scaleField]=btn.dataset.scaleVal;
-      });
-      const btn=$('exSubmit');btn.disabled=true;btn.textContent='…';
-      try{
-        await sb.from('user_reflections').insert({
-          user_id:me.id,
-          simulation_id:simulationId||null,
-          session_id:sessionId||null,
-          kind,
-          exercise_type:exKey,
-          payload:answers
-        });
-      }catch(e){console.warn('Reflection save failed:',e);}
-      if(kind==='pre_debrief'&&exKey==='auto_notation'){
-        try{
-          const{data:met}=await sb.from('metriques').select('radar_decouverte,radar_objections,radar_closing').eq('simulation_id',simulationId).maybeSingle();
-          if(met){
-            const mapScale=v=>v==='faible'?30:v==='moyen'?60:v==='fort'?90:null;
-            const payload2={
-              user_id:me.id,
-              simulation_id:simulationId,
-              kind:'perception_gap',
-              exercise_type:'auto_vs_ia',
-              payload:{
-                auto:{decouverte:mapScale(answers.decouverte),objections:mapScale(answers.objections),closing:mapScale(answers.closing)},
-                ia:{decouverte:Number(met.radar_decouverte)||null,objections:Number(met.radar_objections)||null,closing:Number(met.radar_closing)||null}
-              }
-            };
-            await sb.from('user_reflections').insert(payload2);
-          }
-        }catch(e){console.warn('Perception gap save failed:',e);}
-      }
-      btn.disabled=false;btn.textContent='Valider';
-      cleanup();
-      const r=kind==='pre_sim'?preSimResolve:preDebriefResolve;
-      if(r)r();
-    };
-
-    $('exerciseOverlay').onclick=e=>{
-      if(e.target===$('exerciseOverlay')){cleanup();const r=kind==='pre_sim'?preSimResolve:preDebriefResolve;if(r)r();}
-    };
-  });
-}
-
-async function afterPreDebrief(simulationId){
-  await openSimulationDebrief(simulationId);
-}
-
-const _origRunPreDebrief=runPreDebriefExercise;
-runPreDebriefExercise=async function(simulationId){
-  const lastKey=localStorage.getItem('kk_last_predebrief')||null;
-  const exKey=pickNextExercise(PRE_DEBRIEF_EXERCISES,lastKey);
-  localStorage.setItem('kk_last_predebrief',exKey);
-  const config=buildPreDebriefExercise(exKey);
-  await openExerciseModal('pre_debrief',exKey,config,null,simulationId);
-  await openSimulationDebrief(simulationId);
-};
 
 // DEBRIEF PANEL
 $('panelBack').addEventListener('click',closeDebrief);
