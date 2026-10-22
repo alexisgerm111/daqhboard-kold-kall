@@ -929,7 +929,6 @@ $('invSubmitBtn').addEventListener('click',async()=>{
 });
 
 document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>{
-  // Barre latérale : Apprendre ouvre l'application dédiée ; S'entraîner reste dans le dashboard.
   if(b.id==='navLearn'){handleOpenLearning();return;}
   document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
@@ -1892,152 +1891,385 @@ function switchDebriefTab(t){
   else renderPerfTab();
 }
 
-async function openSimulationDebrief(simId){
-  currentDebriefKind='simulation';
-  currentDebriefSimId=simId;
-  currentDebriefTab='perf';
+// ════════════════════════════════════════════════════════════════════
+// BLOC E — openSimulationDebrief — VERSION RÉFÉRENTIEL (remplace l'ancienne)
+// ════════════════════════════════════════════════════════════════════
+async function openSimulationDebrief(simId) {
+  currentDebriefKind = 'simulation';
+  currentDebriefSimId = simId;
+  currentDebriefTab = 'perf';
   $('panelTabs').classList.add('hidden');
-  $('panelActions').innerHTML='';
+  $('panelActions').innerHTML = '';
   $('audioBar').classList.remove('visible');
-  $('panelBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Chargement…</div>';
+  $('panelBody').innerHTML = '<div style="padding:60px;text-align:center;color:var(--muted)">Chargement…</div>';
   $('panelOverlay').classList.add('open');
 
-  const[sR,tR,bR,mR]=await Promise.all([
-    sb.from('simulations').select('*').eq('id',simId).single(),
-    sb.from('transcriptions').select('*').eq('simulation_id',simId).order('horodatage_secondes',{ascending:true}),
-    sb.from('bilans').select('*').eq('simulation_id',simId).maybeSingle(),
-    sb.from('metriques').select('*').eq('simulation_id',simId).maybeSingle()
+  const [sR, tR, bR, mR, crR, parR] = await Promise.all([
+    sb.from('simulations').select('*').eq('id', simId).single(),
+    sb.from('transcriptions').select('*').eq('simulation_id', simId).order('horodatage_secondes', { ascending: true }),
+    sb.from('bilans').select('*').eq('simulation_id', simId).maybeSingle(),
+    sb.from('metriques').select('*').eq('simulation_id', simId).maybeSingle(),
+    sb.from('debrief_criteres').select('*').eq('simulation_id', simId),
+    sb.from('parcours_apprentissage').select('*').eq('simulation_id', simId).maybeSingle()
   ]);
-  if(sR.error){$('panelBody').innerHTML=`<div style="padding:60px;text-align:center;color:var(--danger)">${esc(sR.error.message)}</div>`;return;}
-  const sim=sR.data;
-  if(sim.statut==='preparation'){$('panelBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">Préparation en cours…</div>';return;}
-  if(sim.statut==='erreur_preparation'){$('panelBody').innerHTML='<div style="padding:60px;text-align:center;color:var(--danger)">Préparation échouée.</div>';return;}
-  if(sim.statut==='en_cours'||sim.statut==='en_pause'){
-    $('panelBody').innerHTML=`<div style="padding:60px;text-align:center"><p style="color:var(--muted);font-size:13px;margin-bottom:16px">Cette simulation est ${sim.statut==='en_pause'?'en pause':'en cours'}.</p>${sim.statut==='en_pause'?`<button class="btn btn-primary" onclick="closeDebrief();resumeSimulation('${esc(simId)}')">Reprendre</button>`:''}</div>`;
+
+  if (sR.error) {
+    $('panelBody').innerHTML = `<div style="padding:60px;text-align:center;color:var(--danger)">${esc(sR.error.message)}</div>`;
     return;
   }
 
-  const tr=tR.data||[],bilan=bR.data,met=mR.data||{},ql=bilan?.analyse_qualitative||{};
-  const note=bilan?.note_globale!=null?Number(bilan.note_globale):null;
-  const sc=note==null?'none':ncls(note);
-  const avgR=await avgRadar(simId);
-  const duration=Number(sim.audio_duree_secondes)||Number(sim.duree_secondes)||0;
+  const sim = sR.data;
+  if (['preparation','erreur_preparation','en_cours','en_pause'].includes(sim.statut)) {
+    $('panelBody').innerHTML = `<div style="padding:60px;text-align:center"><p style="color:var(--muted);font-size:13px">Simulation ${sim.statut}.</p></div>`;
+    return;
+  }
 
-  $('panelActions').innerHTML=`<button class="btn-ghost" id="dlTransBtn">Transcription</button><button class="btn-ghost" id="dlPdfBtn">PDF</button>`;
+  const tr = tR.data || [], bilan = bR.data, met = mR.data || {};
+  const ql = bilan?.analyse_qualitative || {};
+  const criteres = crR.data || [];
+  const parcours = parR.data;
+  const note = bilan?.note_globale != null ? Number(bilan.note_globale) : null;
+  const duration = Number(sim.audio_duree_secondes) || Number(sim.duree_secondes) || 0;
+  const avgR = await avgRadar(simId);
 
-  const{data:gapData}=await sb.from('user_reflections').select('payload').eq('simulation_id',simId).eq('exercise_type','auto_vs_ia').maybeSingle();
-  const{data:userMoments}=await sb.from('user_reflections').select('payload').eq('simulation_id',simId).eq('exercise_type','trois_moments').maybeSingle();
+  $('panelActions').innerHTML = `<button class="btn-ghost" id="dlTransBtn">Transcription</button><button class="btn-ghost" id="dlPdfBtn">PDF</button>`;
 
-  const curR=buildRadar(met,tr);
-  const axesLabels=['Questions','Objections','Découverte','Closing','Rythme','Engagement'];
-  const qualiVals=[met.radar_questions,met.radar_objections,met.radar_decouverte,met.radar_closing,met.radar_rythme,met.radar_pratiques];
-  let axesLegend='<div class="radar-axes">';
-  axesLabels.forEach((lbl,i)=>{const q=qualiVals[i];const v=q!=null?`${Math.round(q)}/100`:'—';axesLegend+=`<div class="item"><div class="k">${esc(lbl)}</div><div class="v">${v}</div></div>`;});
-  axesLegend+='</div>';
+  const scoreColor = n => n == null ? 'var(--muted-2)' : n >= 70 ? 'var(--success)' : n >= 50 ? 'var(--warning)' : 'var(--danger)';
 
-  let h=`<div class="panel-hero"><div class="panel-score-row"><div><div class="panel-tagline">${esc(ql.tagline||'Bilan à générer')}</div><div class="panel-meta">${esc(simLabel(sim))} · ${sim.b2b_b2c?sim.b2b_b2c.toUpperCase():'—'}${sim.mode_inversion?' · <strong>Inversion</strong>':''} · ${fmtDur(duration)} · ${fmtDate(sim.created_at)}</div></div><div class="big-score"><div class="big-score-number" style="color:${note==null?'var(--muted-2)':note>=70?'var(--success)':note>=50?'var(--warning)':'var(--danger)'}">${note==null?'—':note}</div><div class="big-score-label">${note==null?'En attente':'/ 100'}</div></div></div></div>`;
+  let h = `
+  <div class="panel-hero">
+    <div class="panel-score-row">
+      <div>
+        <div class="panel-tagline">${esc(ql.tagline || 'Bilan à générer')}</div>
+        <div class="panel-meta">${esc(simLabel(sim))} · ${sim.b2b_b2c?.toUpperCase() || '—'} · ${fmtDur(duration)} · ${fmtDate(sim.created_at)}</div>
+      </div>
+      <div class="big-score">
+        <div class="big-score-number" style="color:${scoreColor(note)}">${note ?? '—'}</div>
+        <div class="big-score-label">${note != null ? '/ 100' : 'En attente'}</div>
+      </div>
+    </div>
+  </div>`;
 
-  if(gapData?.payload){
-    const p=gapData.payload;
-    h+=`<div class="db-section"><div class="db-section-head"><div class="db-section-title">Perception Gap</div><div style="font-size:10px;color:var(--muted)">Ton auto-évaluation vs. l'IA</div></div><div class="db-section-body"><div class="metrics-grid">`;
-    ['decouverte','objections','closing'].forEach(k=>{
-      const auto=p.auto?.[k];const ia=p.ia?.[k];
-      const gap=auto!=null&&ia!=null?auto-ia:null;
-      const lbl={decouverte:'Découverte',objections:'Objections',closing:'Closing'}[k];
-      h+=`<div class="metric"><div class="metric-value">${gap!=null?(gap>0?'+'+gap:gap):'—'}</div><div class="metric-label">${lbl}</div><div class="metric-sub">Auto ${auto??'—'} · IA ${ia??'—'}</div></div>`;
+  // ════════════════════════════════════════
+  // SECTION RÉFÉRENTIEL
+  // ════════════════════════════════════════
+  if (criteres.length) {
+    const present = criteres.filter(c => c.present);
+    const absents = criteres.filter(c => !c.present);
+    const faibles = criteres.filter(c => c.present && c.score_critere < 40);
+    const bons = criteres.filter(c => c.present && c.score_critere >= 70);
+
+    h += `
+    <div class="db-section">
+      <div class="db-section-head">
+        <div class="db-section-title">Référentiel — ${criteres.length} critères évalués</div>
+        <div style="font-size:10px;color:var(--muted)">${bons.length} maîtrisés · ${faibles.length} à améliorer · ${absents.length} absents</div>
+      </div>
+      <div class="db-section-body">
+        <div class="metrics-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
+          <div class="metric" style="background:rgba(19,135,103,.06);border-color:rgba(19,135,103,.20)">
+            <div class="metric-value" style="color:var(--success)">${bons.length}</div>
+            <div class="metric-label">Maîtrisés</div>
+            <div class="metric-sub">score ≥ 70</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" style="color:var(--warning)">${faibles.length}</div>
+            <div class="metric-label">À améliorer</div>
+            <div class="metric-sub">score 1-69</div>
+          </div>
+          <div class="metric" style="background:rgba(200,68,72,.04);border-color:rgba(200,68,72,.15)">
+            <div class="metric-value" style="color:var(--danger)">${absents.length}</div>
+            <div class="metric-label">Absents</div>
+            <div class="metric-sub">non réalisés</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">${present.length}/${criteres.length}</div>
+            <div class="metric-label">Couverture</div>
+            <div class="metric-sub">${Math.round(present.length/criteres.length*100)}% du référentiel</div>
+          </div>
+        </div>`;
+
+    const byCat = {};
+    criteres.forEach(c => {
+      const cat = c.critere_code?.split('.')?.[1] 
+        ? c.critere_code.replace(/^[^.]+\./,'').replace(/\.[^.]+$/,'') 
+        : 'Autre';
+      if (!byCat[cat]) byCat[cat] = [];
+      byCat[cat].push(c);
     });
-    h+='</div></div></div>';
+
+    h += `<div style="display:flex;flex-direction:column;gap:6px">`;
+    criteres.sort((a, b) => (a.score_critere || 0) - (b.score_critere || 0))
+      .forEach(c => {
+        const s = c.score_critere || 0;
+        const color = !c.present ? 'var(--danger)' : s >= 70 ? 'var(--success)' : s >= 40 ? 'var(--warning)' : 'var(--danger)';
+        const bgColor = !c.present ? 'rgba(200,68,72,.06)' : s >= 70 ? 'rgba(19,135,103,.06)' : s >= 40 ? 'rgba(184,121,37,.06)' : 'rgba(200,68,72,.06)';
+        const label = c.critere_code?.replace(/^[^.]+\./, '') || c.critere_code || '—';
+        h += `
+        <div style="background:${bgColor};border:1px solid ${color}22;border-radius:8px;padding:10px 12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px">
+            <div style="font-size:11px;font-weight:600;color:var(--ink)">${esc(label.replace(/_/g,' '))}</div>
+            <div style="font-size:13px;font-weight:800;color:${color};flex-shrink:0">${c.present ? s : '✗'}</div>
+          </div>
+          <div style="height:4px;background:var(--rule-strong);border-radius:99px;overflow:hidden;margin-bottom:${c.feedback_ia ? '6px' : '0'}">
+            <div style="height:100%;width:${c.present ? s : 0}%;background:${color};border-radius:99px;transition:width .4s"></div>
+          </div>
+          ${c.feedback_ia ? `<div style="font-size:10px;color:var(--muted-2);line-height:1.5">${esc(c.feedback_ia)}</div>` : ''}
+          ${c.extrait ? `<div style="margin-top:5px;padding:4px 8px;background:var(--surface);border-left:2px solid ${color};font-size:10px;font-style:italic;color:var(--muted)">"${esc(c.extrait.slice(0, 200))}"</div>` : ''}
+        </div>`;
+      });
+    h += `</div></div></div>`;
   }
 
-  h+=`<div class="db-section"><div class="db-section-head"><div class="db-section-title">Radar de performance</div></div><div class="db-section-body"><div class="radar-wrap">${radarSVG(curR,avgR)}</div><div class="radar-legend"><span><i class="rdot"></i>Cette session</span><span><i class="rdot avg"></i>Ta moyenne</span></div>${axesLegend}</div></div>`;
+  // ════════════════════════════════════════
+  // SECTION PARCOURS PERSONNALISÉ
+  // ════════════════════════════════════════
+  if (parcours) {
+    const etapes = Array.isArray(parcours.etapes) ? parcours.etapes : [];
+    const critiques = etapes.filter(e => e.priorite === 'critique');
+    const importantes = etapes.filter(e => e.priorite === 'important');
+    const utiles = etapes.filter(e => e.priorite === 'utile');
 
-  h+=`<div class="db-section"><div class="db-section-head"><div class="db-section-title">Métriques</div></div><div class="db-section-body"><div class="metrics-grid"><div class="metric"><div class="metric-value">${fmtM(met.ratio_parole_commercial,'%')}</div><div class="metric-label">Parole commercial</div><div class="metric-sub">vs ${fmtM(met.ratio_parole_prospect,'%')}</div></div><div class="metric"><div class="metric-value">${fmtM(met.nb_questions_total)}</div><div class="metric-label">Questions</div><div class="metric-sub">${fmtM(met.nb_questions_ouvertes)} ouvertes</div></div><div class="metric"><div class="metric-value">${fmtM(met.taux_resolution_objections,'%')}</div><div class="metric-label">Objections résolues</div></div><div class="metric"><div class="metric-value">${fmtM(met.nb_interruptions)}</div><div class="metric-label">Interruptions</div></div><div class="metric"><div class="metric-value">${fmtM(met.nb_signaux_exploites)}/${fmtM(met.nb_signaux_achat)}</div><div class="metric-label">Signaux exploités</div></div><div class="metric"><div class="metric-value">${fmtM(met.score_engagement_final)}</div><div class="metric-label">Engagement final</div></div></div></div></div>`;
+    h += `
+    <div class="db-section" style="border-color:rgba(56,91,255,.25);background:linear-gradient(130deg,rgba(56,91,255,.04),rgba(140,89,246,.03))">
+      <div class="db-section-head" style="background:linear-gradient(110deg,rgba(56,91,255,.08),rgba(140,89,246,.05))">
+        <div>
+          <div class="db-section-title" style="color:var(--cobalt)">🎯 Ton parcours personnalisé</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">${esc(parcours.titre)}</div>
+        </div>
+        <div style="font-size:10px;color:var(--cobalt);font-weight:700">${parcours.progression}% complété</div>
+      </div>
+      <div class="db-section-body">
+        <div style="margin-bottom:10px">
+          <div style="height:5px;background:var(--rule-strong);border-radius:99px;overflow:hidden">
+            <div style="height:100%;width:${parcours.progression}%;background:linear-gradient(90deg,var(--cobalt),var(--violet));border-radius:99px"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">${etapes.length} étapes · Note de départ : ${parcours.score_depart}/100</div>
+        </div>`;
 
-  if(userMoments?.payload){
-    const moments=[userMoments.payload.m1,userMoments.payload.m2,userMoments.payload.m3].filter(Boolean);
-    if(moments.length){
-      h+=`<details class="acc"><summary><div class="acc-title">Tes 3 moments</div><span class="acc-arrow">+</span></summary><div class="acc-body">`;
-      moments.forEach((m,i)=>{h+=`<div class="qi"><div class="qi-chips"><span class="q-chip q-chip-neutral">Moment ${i+1}</span></div><div class="qi-text">${esc(m)}</div></div>`;});
-      h+='</div></details>';
-    }
+    const renderEtapes = (list, label, color) => {
+      if (!list.length) return '';
+      let out = `<div style="margin-bottom:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:${color};margin-bottom:6px">${label}</div>`;
+      list.forEach(e => {
+        const typeIcon = e.type === 'mini_sim' ? '🎙️' : e.type === 'module' ? '📖' : '✍️';
+        const typeLabel = e.type === 'mini_sim' ? 'Mini-simulation' : e.type === 'module' ? 'Leçon' : 'Exercice';
+        const moduleLabels = { discovery: 'Découverte', objections: 'Objections', value: 'Argumentation', urgency: 'Coût de l\'inaction', closing: 'Conclusion', pressure: 'Pression', eloquence: 'Élocution' };
+        const modLabel = e.module_id ? (moduleLabels[e.module_id] || e.module_id) : '';
+        out += `
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;margin-bottom:6px">
+          <div style="font-size:16px;flex-shrink:0;margin-top:1px">${typeIcon}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:11px;font-weight:700;color:var(--ink)">${esc(e.label)}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">${typeLabel}${modLabel ? ' · ' + esc(modLabel) : ''} · ~${e.duree_estimee_min} min</div>
+            ${e.raison ? `<div style="font-size:10px;color:var(--muted-2);margin-top:3px;font-style:italic">${esc(e.raison)}</div>` : ''}
+          </div>
+          ${e.type !== 'mini_sim' ? `
+          <button class="btn-ghost" style="flex-shrink:0;font-size:10px;padding:5px 10px"
+            onclick="openLearningStep('${esc(e.module_id || '')}','${esc(e.type)}','${e.lesson_index ?? ''}','${esc(e.exercise_kind || '')}')">
+            Ouvrir
+          </button>` : `
+          <button class="btn-ghost" style="flex-shrink:0;font-size:10px;padding:5px 10px;color:var(--cobalt);border-color:rgba(56,91,255,.25)"
+            onclick="launchMiniSim('${esc(e.critere_code || '')}','${esc((e.mini_sim_prompt || e.label || '').replace(/'/g, "\\'"))}')">
+            Rejouer
+          </button>`}
+        </div>`;
+      });
+      out += '</div>';
+      return out;
+    };
+
+    h += renderEtapes(critiques, '🔴 Critique — à travailler en priorité', 'var(--danger)');
+    h += renderEtapes(importantes, '🟠 Important', 'var(--warning)');
+    h += renderEtapes(utiles, '🟢 Pour aller plus loin', 'var(--success)');
+    h += `</div></div>`;
+  } else if (bilan) {
+    h += `
+    <div class="db-section">
+      <div class="db-section-body" style="display:flex;align-items:center;gap:14px">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;margin-bottom:3px">Parcours personnalisé</div>
+          <div style="font-size:11px;color:var(--muted)">Génère ou regénère le bilan pour créer ton parcours d'apprentissage.</div>
+        </div>
+        <button class="btn btn-primary" id="genBilan">${bilan ? 'Regénérer' : 'Générer le bilan'}</button>
+      </div>
+    </div>`;
   }
 
-  const nats=ql.comportements_naturels||[];
-  h+=`<details class="acc" open><summary><div class="acc-title">Ce qu'il fait naturellement</div><span class="acc-arrow">+</span></summary><div class="acc-body">`;
-  if(!nats.length)h+='<div style="font-size:12px;color:var(--muted)">Aucun comportement identifié.</div>';
-  nats.forEach(i=>{
-    const fw=(i.frameworks_associes||[]).map(f=>`<span class="q-chip q-chip-neutral">${esc(f)}</span>`).join('');
-    const scoreChip=i.score!=null?`<span class="q-chip q-chip-score">${Math.round(i.score)}/100</span>`:'';
-    h+=`<div class="qi"><div class="qi-chips"><span class="q-chip q-chip-neutral">${fmtSec(i.horodatage_secondes)}</span>${scoreChip}${fw}</div>`;
-    if(i.initiateur==='prospect'&&i.extrait_initiateur)h+=`<div class="qi-quote">« ${esc(i.extrait_initiateur)} »</div>`;
-    if(i.action_commercial)h+=`<div class="qi-text"><strong>Ce que tu as fait :</strong> ${esc(i.action_commercial)}</div>`;
-    else if(i.description)h+=`<div class="qi-text">${esc(i.description)}</div>`;
-    if(i.impact_prospect)h+=`<div class="qi-impact pos">Impact : ${esc(i.impact_prospect)}</div>`;
-    if(i.principe_nomme)h+=`<div class="qi-note">${esc(i.principe_nomme)}</div>`;
-    h+='</div>';
+  // ════════════════════════════════════════
+  // RADAR + MÉTRIQUES (inchangés)
+  // ════════════════════════════════════════
+  const curR = buildRadar(met, tr);
+  const axesLabels = ['Questions','Objections','Découverte','Closing','Rythme','Engagement'];
+  const qualiVals = [met.radar_questions,met.radar_objections,met.radar_decouverte,met.radar_closing,met.radar_rythme,met.radar_pratiques];
+  let axesLegend = '<div class="radar-axes">';
+  axesLabels.forEach((lbl, i) => {
+    const v = qualiVals[i] != null ? `${Math.round(qualiVals[i])}/100` : '—';
+    axesLegend += `<div class="item"><div class="k">${esc(lbl)}</div><div class="v">${v}</div></div>`;
   });
-  h+='</div></details>';
+  axesLegend += '</div>';
 
-  const ecarts=ql.ecarts||[];
-  h+=`<details class="acc"><summary><div class="acc-title">Ses écarts</div><span class="acc-arrow">+</span></summary><div class="acc-body">`;
-  if(!ecarts.length)h+='<div style="font-size:12px;color:var(--muted)">Aucun écart.</div>';
-  ecarts.forEach(i=>{
-    const tp=['adaptatif','instinctif','manquant'].includes(i.type)?i.type:'manquant';
-    const scoreChip=i.score!=null?`<span class="q-chip q-chip-score">${Math.round(i.score)}/100</span>`:'';
-    h+=`<div class="qi"><div class="qi-chips"><span class="q-chip q-chip-neg">${tp}</span><span class="q-chip q-chip-neutral">${fmtSec(i.horodatage_secondes)}</span>${scoreChip}</div>`;
-    if(i.initiateur==='prospect'&&i.extrait_initiateur)h+=`<div class="qi-quote">« ${esc(i.extrait_initiateur)} »</div>`;
-    if(i.action_commercial)h+=`<div class="qi-text"><strong>Ce que tu as fait :</strong> ${esc(i.action_commercial)}</div>`;
-    else if(i.description)h+=`<div class="qi-text">${esc(i.description)}</div>`;
-    if(i.impact_prospect)h+=`<div class="qi-impact neg">Impact : ${esc(i.impact_prospect)}</div>`;
-    h+='</div>';
-  });
-  h+='</div></details>';
+  h += `
+  <div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Radar de performance</div></div>
+    <div class="db-section-body"><div class="radar-wrap">${radarSVG(curR, avgR)}</div>
+    <div class="radar-legend"><span><i class="rdot"></i>Cette session</span><span><i class="rdot avg"></i>Ta moyenne</span></div>
+    ${axesLegend}</div>
+  </div>`;
 
-  const moments=ql.moments_bascule||[];
-  if(moments.length){
-    h+=`<details class="acc"><summary><div class="acc-title">Moments de bascule</div><span class="acc-arrow">+</span></summary><div class="acc-body">`;
-    moments.forEach(i=>{
-      h+=`<div class="qi"><div class="qi-chips"><span class="q-chip q-chip-neutral">${fmtSec(i.horodatage_secondes)}</span></div>`;
-      if(i.extrait_initiateur)h+=`<div class="qi-quote">« ${esc(i.extrait_initiateur)} »</div>`;
-      if(i.action_commercial)h+=`<div class="qi-text">${esc(i.action_commercial)}</div>`;
-      if(i.impact_prospect)h+=`<div class="qi-impact ${(Number(i.score)||0)>=60?'pos':'neg'}">Impact : ${esc(i.impact_prospect)}</div>`;
-      if(i.declencheur)h+=`<div class="qi-note"><strong>Déclencheur :</strong> ${esc(i.declencheur)}</div>`;
-      h+='</div>';
+  h += `
+  <div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Métriques</div></div>
+    <div class="db-section-body"><div class="metrics-grid">
+      <div class="metric"><div class="metric-value">${fmtM(met.ratio_parole_commercial,'%')}</div><div class="metric-label">Parole commercial</div></div>
+      <div class="metric"><div class="metric-value">${fmtM(met.nb_questions_total)}</div><div class="metric-label">Questions</div><div class="metric-sub">${fmtM(met.nb_questions_ouvertes)} ouvertes</div></div>
+      <div class="metric"><div class="metric-value">${fmtM(met.taux_resolution_objections,'%')}</div><div class="metric-label">Objections résolues</div></div>
+      <div class="metric"><div class="metric-value">${fmtM(met.nb_signaux_exploites)}/${fmtM(met.nb_signaux_achat)}</div><div class="metric-label">Signaux exploités</div></div>
+    </div></div>
+  </div>`;
+
+  const nats = ql.comportements_naturels || [];
+  const ecarts = ql.ecarts || [];
+  if (nats.length) {
+    h += `<details class="acc" open><summary><div class="acc-title">Ce qu'il fait naturellement (${nats.length})</div><span class="acc-arrow">+</span></summary><div class="acc-body">`;
+    nats.forEach(i => {
+      h += `<div class="qi">`;
+      if (i.extrait_initiateur) h += `<div class="qi-quote">« ${esc(i.extrait_initiateur.slice(0,200))} »</div>`;
+      if (i.action_commercial) h += `<div class="qi-text">${esc(i.action_commercial)}</div>`;
+      if (i.impact_prospect) h += `<div class="qi-impact pos">${esc(i.impact_prospect)}</div>`;
+      h += '</div>';
     });
-    h+='</div></details>';
+    h += '</div></details>';
+  }
+  if (ecarts.length) {
+    h += `<details class="acc"><summary><div class="acc-title">Ses écarts (${ecarts.length})</div><span class="acc-arrow">+</span></summary><div class="acc-body">`;
+    ecarts.forEach(i => {
+      h += `<div class="qi"><div class="qi-chips"><span class="q-chip q-chip-neg">${i.type || 'manquant'}</span></div>`;
+      if (i.extrait_initiateur) h += `<div class="qi-quote">« ${esc(i.extrait_initiateur.slice(0,200))} »</div>`;
+      if (i.action_commercial) h += `<div class="qi-text">${esc(i.action_commercial)}</div>`;
+      if (i.impact_prospect) h += `<div class="qi-impact neg">${esc(i.impact_prospect)}</div>`;
+      h += '</div>';
+    });
+    h += '</div></details>';
   }
 
-  h+=`<div class="db-section"><div class="db-section-body" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;margin-bottom:4px">Sensibilité aux correspondances</div><div style="font-size:11px;color:var(--muted)">0 = très solides · 100 = larges</div></div><button class="btn btn-primary" id="genBilan">${bilan?'Regénérer':'Générer le bilan'}</button></div></div>`;
+  h += `
+  <div class="db-section">
+    <div class="db-section-body" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px">${bilan ? 'Regénérer le bilan' : 'Générer le bilan'}</div>
+        <div style="font-size:11px;color:var(--muted)">Lance l'analyse IA par référentiel et crée le parcours personnalisé.</div>
+      </div>
+      <button class="btn btn-primary" id="genBilan">${bilan ? 'Regénérer' : 'Générer le bilan'}</button>
+    </div>
+  </div>`;
 
-  h+=`<div class="db-section"><div class="db-section-head"><div class="db-section-title">Transcription</div><div style="font-size:11px;color:var(--muted)">${tr.length} tours</div></div><div class="db-section-body" style="padding:12px">`;
-  if(!tr.length)h+='<div style="padding:20px;text-align:center;font-size:12px;color:var(--muted)">Aucune transcription.</div>';
-  else{
-    h+='<div class="t-list">';
-    tr.forEach(ln=>{
-      const isC=ln.locuteur==='commercial';
-      h+=`<div class="t-row" data-t="${Number(ln.horodatage_secondes)||0}"><div class="t-time">${fmtSec(ln.horodatage_secondes)}</div><div class="t-who ${isC?'commercial':''}">${isC?'COMM.':'PROSP.'}</div><div class="t-text">${esc(ln.texte||'')}</div></div>`;
-    });
-    h+='</div>';
-  }
-  h+='</div></div>';
+  h += `
+  <div class="db-section">
+    <div class="db-section-head"><div class="db-section-title">Transcription</div><div style="font-size:11px;color:var(--muted)">${tr.length} tours</div></div>
+    <div class="db-section-body" style="padding:12px">
+      ${tr.length ? '<div class="t-list">' + tr.map(ln => {
+        const isC = ln.locuteur === 'commercial';
+        return `<div class="t-row" data-t="${Number(ln.horodatage_secondes)||0}"><div class="t-time">${fmtSec(ln.horodatage_secondes)}</div><div class="t-who ${isC?'commercial':''}">${isC?'COMM.':'PROSP.'}</div><div class="t-text">${esc(ln.texte||'')}</div></div>`;
+      }).join('') + '</div>' : '<div style="padding:20px;text-align:center;font-size:12px;color:var(--muted)">Aucune transcription.</div>'}
+    </div>
+  </div>`;
 
-  $('panelBody').innerHTML=h;
+  $('panelBody').innerHTML = h;
 
   await loadAudioSticky(simId);
 
-  $('dlTransBtn').addEventListener('click',()=>exportTranscriptionPdf(sim,tr));
-  $('dlPdfBtn').addEventListener('click',()=>openPdfPreview(sim,bilan,met,ql,tr));
-  $('genBilan').addEventListener('click',async()=>{
-    const btn=$('genBilan');btn.disabled=true;btn.textContent='Analyse…';
-    try{
-      const r=await apiCall('/api/bilan',{method:'POST',body:JSON.stringify({simulationId:simId,surAttributionScore:50})});
-      const d=await r.json();if(!r.ok)throw new Error(d.error||'Erreur');
-      await openSimulationDebrief(simId);
-    }catch(e){showToast('Erreur bilan : '+e.message,'error');btn.disabled=false;btn.textContent=bilan?'Regénérer':'Générer le bilan';}
-  });
-  $('panelBody').querySelectorAll('.t-row').forEach(r=>r.addEventListener('click',()=>{if(!currentAudio)return;currentAudio.currentTime=Number(r.dataset.t)||0;currentAudio.play().catch(()=>{});}));
+  $('dlTransBtn').addEventListener('click', () => exportTranscriptionPdf(sim, tr));
+  $('dlPdfBtn').addEventListener('click', () => openPdfPreview(sim, bilan, met, ql, tr));
+
+  const genBtn = $('genBilan');
+  if (genBtn) {
+    genBtn.addEventListener('click', async () => {
+      genBtn.disabled = true;
+      genBtn.textContent = 'Analyse en cours…';
+      try {
+        const r = await apiCall('/api/bilan', { method: 'POST', body: JSON.stringify({ simulationId: simId }) });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Erreur');
+        await openSimulationDebrief(simId);
+      } catch (e) {
+        showToast('Erreur bilan : ' + e.message, 'error');
+        genBtn.disabled = false;
+        genBtn.textContent = bilan ? 'Regénérer' : 'Générer le bilan';
+      }
+    });
+  }
+
+  $('panelBody').querySelectorAll('.t-row').forEach(r => r.addEventListener('click', () => {
+    if (!currentAudio) return;
+    currentAudio.currentTime = Number(r.dataset.t) || 0;
+    currentAudio.play().catch(() => {});
+  }));
 }
 
+// ════════════════════════════════════════════════════════════════════
+// BLOC F — openLearningStep + launchMiniSim (nouvelles fonctions)
+// ════════════════════════════════════════════════════════════════════
+async function openLearningStep(moduleId, type, lessonIndex, exerciseKind) {
+  const btn = event.target;
+  if (btn.disabled) return;
+  btn.disabled = true;
+  btn.textContent = 'Connexion…';
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session?.access_token || !session?.refresh_token) throw new Error('Session expirée.');
+    const hR = await fetch(`${SIM_URL}/api/auth/handshake`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+      body: JSON.stringify({ refresh_token: session.refresh_token })
+    });
+    if (!hR.ok) throw new Error('Handshake impossible.');
+    const { code } = await hR.json();
+    let url = `${LEARN_URL}?code=${encodeURIComponent(code)}`;
+    if (moduleId) url += `&module=${encodeURIComponent(moduleId)}`;
+    if (type === 'module' && lessonIndex !== '') url += `&lesson=${encodeURIComponent(lessonIndex)}`;
+    if (type === 'exercice' && exerciseKind) url += `&exercise=${encodeURIComponent(moduleId)}_${encodeURIComponent(exerciseKind)}`;
+    window.location.href = url;
+  } catch (e) {
+    showToast('Impossible d\'ouvrir Apprendre : ' + e.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Ouvrir';
+  }
+}
+window.openLearningStep = openLearningStep;
+
+async function launchMiniSim(critereCode, promptContext) {
+  const btn = event.target;
+  if (btn.disabled) return;
+  btn.disabled = true;
+  btn.textContent = 'Préparation…';
+  try {
+    showToast(`Lancement du rejeu : ${critereCode.replace(/_/g, ' ')}`, 'success', 3000);
+    const typeFromCode = critereCode.startsWith('cold_call') ? 'cold_call' :
+      critereCode.startsWith('nego') ? 'rdv' : 'rdv';
+    const phaseFromCode = critereCode.startsWith('cold_call') ? null :
+      critereCode.startsWith('nego') ? 'nego' :
+      critereCode.startsWith('decouverte') ? 'decouverte' :
+      critereCode.startsWith('objections') || critereCode.startsWith('closing') ? 'objections_closing' :
+      critereCode.startsWith('demo') ? 'demo' : 'decouverte';
+    resetWS();
+    ws.interview = typeFromCode;
+    ws.phase = phaseFromCode;
+    ws.b2b_b2c = 'b2b';
+    ws.mode = 'new';
+    btn.disabled = false;
+    btn.textContent = 'Rejouer';
+    openWizard();
+  } catch (e) {
+    showToast('Erreur : ' + e.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Rejouer';
+  }
+}
+window.launchMiniSim = launchMiniSim;
+
+// ───────────────────────────────────────────────────────────
+// buildRadar, avgRadar, radarSVG (inchangés)
+// ───────────────────────────────────────────────────────────
 function buildRadar(met,tr){
   const hasAny=met&&Object.keys(met).length>0&&['ratio_questions_affirmations','taux_resolution_objections','nb_interruptions','score_engagement_final','nb_signaux_achat'].some(k=>met[k]!=null);
   if(!hasAny)return[null,null,null,null,null,null];
