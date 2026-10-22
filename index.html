@@ -59,8 +59,8 @@ button{cursor:pointer;border:none;background:none}
 .invitation-badge{display:inline-block;padding:4px 10px;background:rgba(56,91,255,.10);color:var(--cobalt);border-radius:99px;font-size:11px;font-weight:600;margin-bottom:12px}
 
 .app{display:none;min-height:100vh}
-.app.visible{display:grid;grid-template-columns:218px minmax(0,1fr);padding:0;background:var(--paper)}
-.sidebar{background:linear-gradient(160deg,#12182D 0%,#161B37 62%,#29203F 100%);color:#F5F5FF;display:flex;flex-direction:column;padding:25px 15px 15px 19px;position:relative;overflow:hidden;min-height:100vh}
+.app.visible{display:grid;grid-template-columns:218px minmax(0,1fr);grid-template-rows:minmax(0,1fr);height:100vh;height:100dvh;min-height:0;padding:0;background:var(--paper);overflow:hidden}
+.sidebar{background:linear-gradient(160deg,#12182D 0%,#161B37 62%,#29203F 100%);color:#F5F5FF;display:flex;flex-direction:column;padding:25px 15px 15px 19px;position:relative;overflow:hidden;height:100%;min-height:0;min-width:0}
 .sidebar:before{content:"";position:absolute;pointer-events:none;width:250px;height:270px;right:-165px;top:4%;border-radius:50%;background:radial-gradient(circle,rgba(117,100,255,.16),transparent 70%)}
 .sidebar>*{position:relative;z-index:1}
 .brand{display:flex;align-items:center;gap:11px;padding:0 8px 39px}
@@ -86,7 +86,7 @@ button{cursor:pointer;border:none;background:none}
 .user-role{font-size:10px;color:#909ABB;margin-top:1px;text-transform:capitalize}
 .user-caret{color:#909ABB;font-size:12px}
 
-.main{min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.main{min-width:0;min-height:0;height:100%;display:flex;flex-direction:column;overflow:hidden}
 .topbar{height:66px;flex-shrink:0;background:rgba(246,242,234,.78);border-bottom:1px solid var(--rule);backdrop-filter:blur(22px);display:flex;align-items:center;padding:0 38px;gap:16px;position:sticky;top:0;z-index:50}
 .breadcrumbs{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:11px}
 .breadcrumbs b{color:var(--ink);font-weight:700;font-size:15px;letter-spacing:-.02em}
@@ -104,7 +104,7 @@ button{cursor:pointer;border:none;background:none}
 .btn-ghost:hover{background:var(--surface);color:var(--ink)}
 .btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
 
-.content{flex:1;min-height:0;overflow:auto}
+.content{flex:1;min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain}
 .view{display:none;padding:28px 38px 64px;animation:viewIn .4s var(--ease)}
 .view.active{display:block}
 @keyframes viewIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -415,11 +415,15 @@ input[type=range]{width:100%;accent-color:var(--cobalt);margin-bottom:6px}
   .stats .stat{padding:12px 16px}
 }
 @media(max-width:850px){
-  .app{grid-template-columns:1fr;padding:0}
-  .sidebar{position:relative;height:auto;min-height:auto;flex-direction:row;align-items:center;flex-wrap:wrap;padding:12px 16px;gap:12px;background:linear-gradient(110deg,#12182D,#1C2041)}
+  .app.visible{height:100vh;height:100dvh;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .sidebar{position:relative;height:auto;min-height:0;flex-direction:row;align-items:center;flex-wrap:wrap;padding:12px 16px;gap:12px;background:linear-gradient(110deg,#12182D,#1C2041)}
   .brand{padding:0;margin-right:auto}
   .nav{flex-direction:row;gap:3px;flex-wrap:wrap}
-  .nav-caption,.sidebar-spacer,.sidebar-foot{display:none}
+  .nav-caption,.sidebar-spacer{display:none}
+  .sidebar-foot{display:block;margin:0 0 0 auto;padding:0;border:0}
+  .sidebar-foot .user-card{padding:4px 6px}
+  .sidebar-foot .user-info,.sidebar-foot .user-caret{display:none}
+  .main{height:100%;min-height:0}
   .nav-btn{padding:8px 10px;font-size:11px}
   .nav-btn svg{width:15px;height:15px}
   .hero{grid-template-columns:1fr}
@@ -501,11 +505,15 @@ input[type=range]{width:100%;accent-color:var(--cobalt);margin-bottom:6px}
     <nav class="nav">
       <button class="nav-btn active" data-view="sessions">
         <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 9h8M8 13h5M8 17h7"/></svg>
-        <span>Sessions</span>
+        <span>Apprendre</span>
+      </button>
+      <button class="nav-btn" data-action="launch-sim" id="navTrain">
+        <svg viewBox="0 0 14 14"><path d="M3 2.5l8 4.5-8 4.5z" fill="currentColor" stroke="none"/></svg>
+        <span>S'entraîner</span>
       </button>
       <button class="nav-btn" data-view="coaching">
         <svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0v3a3 3 0 0 1-3 3h-1v-7h4M4 12h4v7H7a3 3 0 0 1-3-3z"/><path d="M10 21h4"/></svg>
-        <span>Coaching live</span>
+        <span>Vendre</span>
       </button>
       <button class="nav-btn" data-view="pipe">
         <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
@@ -549,13 +557,17 @@ input[type=range]{width:100%;accent-color:var(--cobalt);margin-bottom:6px}
         <b id="crumb">Mes sessions</b>
       </div>
       <div class="top-actions">
+        <button class="btn btn-soft" id="learnAppBtn">
+          <svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M8 7h8M8 11h8"/></svg>
+          Apprendre
+        </button>
         <button class="btn btn-live" id="liveCoachingBtn">
           <svg viewBox="0 0 24 24" style="stroke-width:2"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/><path d="M4 12a8 8 0 0 1 16 0"/></svg>
-          Nouveau coaching live
+          Vendre
         </button>
         <button class="btn btn-primary" id="launchBtn">
           <svg viewBox="0 0 14 14"><path d="M3 2.5l8 4.5-8 4.5z" fill="currentColor" stroke="none"/></svg>
-          Nouvelle simulation
+          S'entraîner
         </button>
       </div>
     </header>
@@ -571,11 +583,11 @@ input[type=range]{width:100%;accent-color:var(--cobalt);margin-bottom:6px}
             <div class="hero-actions">
               <button class="btn btn-primary" id="heroSim" style="padding:11px 18px">
                 <svg viewBox="0 0 14 14"><path d="M3 2.5l8 4.5-8 4.5z" fill="currentColor" stroke="none"/></svg>
-                Lancer une simulation
+                S'entraîner
               </button>
               <button class="btn btn-soft" id="heroLive" style="padding:11px 18px">
                 <svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0v3a3 3 0 0 1-3 3h-1v-7h4M4 12h4v7H7a3 3 0 0 1-3-3z"/></svg>
-                Coaching en direct
+                Vendre
               </button>
             </div>
           </div>
@@ -811,6 +823,7 @@ const SUPABASE_URL='https://vjvyzbojcbwmfudkamlh.supabase.co';
 const SUPABASE_KEY='sb_publishable_H-wuFrWTNgDEP0fwSWnqNg_c8dJMQZM';
 const SIM_URL='https://agent-vocal-39hz.onrender.com';
 const LIVECOACH_URL='https://alexisgerm111.github.io/live-kold-kall-F2F/';
+const LEARN_URL='https://alexisgerm111.github.io/kold-kall-apprendre/';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 const INTENSITE_DESCS={1:'Très ouvert, facile à convaincre',2:'Plutôt ouvert, quelques réserves',3:'Neutre : ni ouvert ni fermé',4:'Méfiant, demande à être convaincu',5:'Très difficile, exigeant voire agressif'};
@@ -916,6 +929,7 @@ $('invSubmitBtn').addEventListener('click',async()=>{
 });
 
 document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.action==='launch-sim'){openWizard();return;}
   document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
   renderView(b.dataset.view);
@@ -937,6 +951,25 @@ async function renderView(v){
 
 $('liveCoachingBtn').addEventListener('click',handleLiveCoaching);
 $('heroLive').addEventListener('click',handleLiveCoaching);
+$('learnAppBtn').addEventListener('click',handleOpenLearning);
+async function handleOpenLearning(){
+  const btn=$('learnAppBtn');
+  if(btn.disabled)return;
+  btn.disabled=true;const original=btn.innerHTML;btn.textContent='Connexion…';
+  try{
+    const{data:{session}}=await sb.auth.getSession();
+    if(!session?.access_token||!session?.refresh_token)throw new Error('Session expirée, reconnecte-toi.');
+    const hR=await fetch(`${SIM_URL}/api/auth/handshake`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({refresh_token:session.refresh_token})});
+    if(!hR.ok){const err=await hR.json().catch(()=>({}));throw new Error(err.error||'Handshake impossible.');}
+    const{code}=await hR.json();
+    if(!code)throw new Error('Code de connexion manquant.');
+    window.location.href=`${LEARN_URL}?code=${encodeURIComponent(code)}`;
+  }catch(e){
+    console.error('[Apprendre]',e);
+    showToast('Impossible d’ouvrir Apprendre : '+e.message,'error',8000);
+    btn.disabled=false;btn.innerHTML=original;
+  }
+}
 async function handleLiveCoaching(){
   const btn=$('liveCoachingBtn');
   if(btn.disabled)return;
