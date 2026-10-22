@@ -503,12 +503,12 @@ input[type=range]{width:100%;accent-color:var(--cobalt);margin-bottom:6px}
     </div>
     <div class="nav-caption">Entraînement</div>
     <nav class="nav">
-      <button class="nav-btn active" data-view="sessions">
-        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 9h8M8 13h5M8 17h7"/></svg>
+      <button class="nav-btn" data-action="open-learning" id="navLearn">
+        <svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M8 7h8M8 11h8"/></svg>
         <span>Apprendre</span>
       </button>
-      <button class="nav-btn" data-action="launch-sim" id="navTrain">
-        <svg viewBox="0 0 14 14"><path d="M3 2.5l8 4.5-8 4.5z" fill="currentColor" stroke="none"/></svg>
+      <button class="nav-btn active" data-view="sessions" id="navTrain">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 9h8M8 13h5M8 17h7"/></svg>
         <span>S'entraîner</span>
       </button>
       <button class="nav-btn" data-view="coaching">
@@ -929,9 +929,12 @@ $('invSubmitBtn').addEventListener('click',async()=>{
 });
 
 document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>{
-  if(b.dataset.action==='launch-sim'){openWizard();return;}
+  // Barre latérale : Apprendre ouvre l'application dédiée ; S'entraîner reste dans le dashboard.
+  if(b.id==='navLearn'){handleOpenLearning();return;}
   document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
+  if(b.id==='navTrain'){renderView('sessions');return;}
+  if(b.dataset.action==='launch-sim'){openWizard();return;}
   renderView(b.dataset.view);
 }));
 
